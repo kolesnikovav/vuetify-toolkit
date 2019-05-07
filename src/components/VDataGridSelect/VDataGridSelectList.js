@@ -1,4 +1,5 @@
 import { mixins, VDataTable, VListTile, VListTileContent, VListTileTitle, Themeable, Colorable } from '../../../vuetify-import'
+import { VSelectHeader } from '../VSelectorHeader'
 
 export default mixins(
   Themeable, Colorable
@@ -57,6 +58,39 @@ export default mixins(
           domProps: { innerHTML }
         })]
       )
+    },
+    genHeader () {
+      /** @type {ToolbarCommand[]} */
+      const toolbarCommands = []
+      toolbarCommands.push({
+        icon: 'clear',
+        text: 'Close',
+        tooltip: 'Close menu',
+        commandHandler: 'Close'
+      })
+      toolbarCommands.push({
+        icon: 'done',
+        text: 'OK',
+        commandHandler: 'OK'
+      })
+      toolbarCommands.push({
+        icon: 'check_box',
+        text: 'Select All',
+        tooltip: 'Select all items',
+        commandHandler: 'OK'
+      })
+      toolbarCommands.push({
+        icon: 'check_box_outline_blank',
+        text: 'Unselect All',
+        tooltip: 'Unselect all items',
+        commandHandler: 'OK'
+      })
+      return this.$createElement(VSelectHeader,{
+        props: {
+          toolbarCommands: toolbarCommands,
+          dense: true
+        }
+      })
     }
   },
   render () {
@@ -73,6 +107,7 @@ export default mixins(
       'class': this.themeClasses
     }, [
       children,
+      this.genHeader(),
       this.$createElement(VDataTable, {
         props: {
           selected: true,

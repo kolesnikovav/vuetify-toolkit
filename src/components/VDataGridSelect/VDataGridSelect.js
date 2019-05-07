@@ -1,5 +1,6 @@
 import { VAutocomplete, VSelect, VDataTable, DataIterable, consoleError } from '../../../vuetify-import'
 import VDataGridSelectList from './VDataGridSelectList'
+import VSelectHeader from '../VSelectorHeader'
 
 export default VAutocomplete.extend({
   name: 'v-data-grid-select',
@@ -67,7 +68,14 @@ export default VAutocomplete.extend({
       if (this.$slots['no-data'] || this.$slots['prepend-item'] || this.$slots['append-item']) {
         consoleError('assert: staticList should not be called if slots are used')
       }
-      return this.$createElement(VDataGridSelectList, this.listData, this.$scopedSlots['items'])
+      const slots = []
+      slots.push(this.$createElement(VSelectHeader,{
+        props: {
+          toolbarCommands: []
+        }
+      }))
+      slots.push(this.$scopedSlots['items'])
+      return this.$createElement(VDataGridSelectList, this.listData, slots)
     }
   },
   methods: {
