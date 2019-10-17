@@ -2,14 +2,15 @@
 
 The set of additional vuetify components, that not included in vuetify.js library
 Working  in progress now.
+## status 
+Current status is pre-alpha. Not ready for production use!
+
 ## components
 
  - VDataGridSelect
  The selector with Tabular items presentation
- - VDataIteratorSelect
- The selector with Card items presentation
- - VStepSelect
- Sequental selector for one or more selection steps
+ - VCascader
+ Cascade selection box
  - VTreeSelect
  Selector for nested & tree like items
 

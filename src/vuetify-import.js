@@ -3,8 +3,10 @@ import VAutocomplete from 'vuetify/lib/components/VAutocomplete/VAutocomplete'
 import VBtn from 'vuetify/lib/components/VBtn/VBtn'
 import VIcon from 'vuetify/lib/components/VIcon/VIcon'
 import VSelect from 'vuetify/lib/components/VSelect/VSelect'
-import { VListTile, VListTileContent, VListTileTitle } from 'vuetify/lib/components/VList'
+import { VListItem, VListItemContent, VListItemTitle } from 'vuetify/lib/components/VList'
 import VDataTable from 'vuetify/lib/components/VDataTable/VDataTable'
+import { VSlideGroup, VSlideItem } from 'vuetify/lib/components/VSlideGroup'
+
 import VDataIterator from 'vuetify/lib/components/VDataIterator/VDataIterator'
 import VDatePicker from 'vuetify/lib/components/VDatePicker/VDatePicker'
 import VTimePicker from 'vuetify/lib/components/VTimePicker/VTimePicker'
@@ -21,7 +23,6 @@ import mixins from 'vuetify/lib/util/mixins'
 
 /* mixins */
 import Colorable from 'vuetify/lib/mixins/colorable'
-import DataIterable from 'vuetify/lib/mixins/data-iterable'
 import Themeable from 'vuetify/lib/mixins/themeable'
 
 export {
@@ -29,15 +30,16 @@ export {
   VBtn,
   VIcon,
   VSelect,
-  VListTile,
-  VListTileContent,
-  VListTileTitle,
+  VListItem,
+  VListItemContent,
+  VListItemTitle,
   VDataIterator,
   VDataTable,
-  DataIterable,
   VDatePicker,
   VTimePicker,
   VCard,
+  VSlideGroup,
+  VSlideItem,
   VTreeview,
   VTreeviewNodeProps,
   VToolbar,

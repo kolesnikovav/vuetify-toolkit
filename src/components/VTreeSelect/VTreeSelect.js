@@ -1,18 +1,22 @@
-import { VAutocomplete, VSelect, VTreeviewNodeProps, consoleError } from '../../../vuetify-import'
+import { VAutocomplete, VSelect, VTreeviewNodeProps, consoleError } from '../../vuetify-import'
 import VTreeSelectList from './VTreeSelectList'
-
+import DefaultMenuProps from '../../utils/MenuProps'
 
 export default VAutocomplete.extend({
   name: 'v-tree-select',
   props: {
+    ...VSelect.options.props,
+    ...VAutocomplete.options.props,
+    ...VTreeviewNodeProps,
     autocomplete: {
       type: Boolean,
       default: false
     },
-    openAll: Boolean,
-    ...VSelect.options.props,
-    ...VAutocomplete.options.props,
-    ...VTreeviewNodeProps
+    menuProps: {
+      type: [String, Array, Object],
+      default: () => DefaultMenuProps
+    },
+    openAll: Boolean
   },
   data: () => ({
     selectedItems: []
@@ -32,9 +36,20 @@ export default VAutocomplete.extend({
       const data = VSelect.options.computed.listData.call(this)
       Object.assign(data.props, { ...VTreeviewNodeProps })
       /* to remove console warns and type conflicts */
+      /*
+      this.$options._propKeys.forEach(element => {
+        let o = {}
+        if (typeof this[element] === 'function') {
+          o[element] = this[element]()
+        } else {
+          o[element] = this[element]
+        }
+        Object.assign(data.props, o)
+      }) */
       Object.assign(data.props, {
         activatable: this.activatable,
         activeClass: this.activeClass,
+        color: this.color,
         selectable: true,
         selectedColor: this.selectedColor,
         indeterminateIcon: this.indeterminateIcon,
@@ -45,10 +60,16 @@ export default VAutocomplete.extend({
         itemKey: this.itemKey,
         itemText: this.itemText,
         itemChildren: this.itemChildren,
+        itemDisabled: this.itemDisabled,
         transition: this.transition,
         selectedItems: this.selectedItems,
+        shaped: this.shaped,
+        rounded: this.rounded,
         openAll: this.openAll,
-        openOnClick: this.openOnClick })
+        openOnClick: this.openOnClick,
+        useDefaultToolbarCommand: this.useDefaultToolbarCommand,
+        toolbarCommands: this.toolbarCommands
+      })
       Object.assign(data.on, {
         select: e => {
           this.selectItems(e)

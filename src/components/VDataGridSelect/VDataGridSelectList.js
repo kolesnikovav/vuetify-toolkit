@@ -1,5 +1,5 @@
-import { mixins, VDataTable, VListTile, VListTileContent, VListTileTitle, Themeable, Colorable } from '../../../vuetify-import'
-import { VSelectHeader } from '../VSelectorHeader'
+// import { mixins, VDataTable, VListTile, VListTileContent, VListTileTitle, Themeable, Colorable } from '../../vuetify-import'
+import { mixins, VDataTable, VListItem, VListItemContent, VListItemTitle, Themeable, Colorable } from '../../vuetify-import'
 
 export default mixins(
   Themeable, Colorable
@@ -14,14 +14,6 @@ export default mixins(
     noDataText: String,
     dense: Boolean,
     multiple: Boolean,
-    items: {
-      type: Array,
-      default: () => ([])
-    },
-    itemKey: {
-      type: String,
-      default: 'id'
-    },
     openAll: Boolean,
     returnObject: {
       type: Boolean,
@@ -36,7 +28,11 @@ export default mixins(
       type: Function,
       default: undefined
     },
-    ...VDataTable.props
+    headers: {
+      type: Array,
+      default: () => []
+    },
+    ...VDataTable.options.props
   },
   computed: {
     staticNoDataTile () {
@@ -45,7 +41,7 @@ export default mixins(
           mousedown: e => e.preventDefault() // Prevent onBlur from being called
         }
       }
-      return this.$createElement(VListTile, tile, [
+      return this.$createElement(VListItem, tile, [
         this.genTileNoDataContent()
       ])
     }
@@ -53,44 +49,11 @@ export default mixins(
   methods: {
     genTileNoDataContent () {
       const innerHTML = this.noDataText
-      return this.$createElement(VListTileContent,
-        [this.$createElement(VListTileTitle, {
+      return this.$createElement(VListItemContent,
+        [this.$createElement(VListItemTitle, {
           domProps: { innerHTML }
         })]
       )
-    },
-    genHeader () {
-      /** @type {ToolbarCommand[]} */
-      const toolbarCommands = []
-      toolbarCommands.push({
-        icon: 'clear',
-        text: 'Close',
-        tooltip: 'Close menu',
-        commandHandler: 'Close'
-      })
-      toolbarCommands.push({
-        icon: 'done',
-        text: 'OK',
-        commandHandler: 'OK'
-      })
-      toolbarCommands.push({
-        icon: 'check_box',
-        text: 'Select All',
-        tooltip: 'Select all items',
-        commandHandler: 'OK'
-      })
-      toolbarCommands.push({
-        icon: 'check_box_outline_blank',
-        text: 'Unselect All',
-        tooltip: 'Unselect all items',
-        commandHandler: 'OK'
-      })
-      return this.$createElement(VSelectHeader,{
-        props: {
-          toolbarCommands: toolbarCommands,
-          dense: true
-        }
-      })
     }
   },
   render () {
@@ -107,18 +70,14 @@ export default mixins(
       'class': this.themeClasses
     }, [
       children,
-      this.genHeader(),
+      // this.genHeader(),
       this.$createElement(VDataTable, {
         props: {
           selected: true,
           dense: this.dense,
           items: this.items,
           itemKey: this.itemKey,
-          selectable: true,
-          returnObject: true,
-          selectOnly: true,
-          selectedItems: this.selectedItems,
-          openAll: this.openAll,
+          returnObject: false,
           itemText: this.itemText,
           headers: this.headers,
           headersLength: this.headersLength,
@@ -127,11 +86,17 @@ export default mixins(
           hideHeaders: this.hideHeaders,
           rowsPerPageText: this.rowsPerPageText,
           customFilter: this.customFilter,
-          selectAll: true
+          showSelect: true,
+          singleSelect: !this.multiple
         },
         scopedSlots: {
           items: props => this.$scopedSlots['items'](props)
         },
+        on: {
+          'input': e => {
+            this.$emit('input', e)
+          }
+        }
       }), childrenAppend
     ])
   }

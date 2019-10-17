@@ -1,66 +1,89 @@
 <template>
-  <div id="app">
-    <v-app>
-    <h3>v-data-grid-select example</h3>
-    <v-data-grid-select
-    v-model="selected"
-    :headers="dataGridHeaders"
-    :items="desserts"
-    :pagination.sync="pagination"
-    select-all
-    item-key="name"
-    >
-    <template v-slot:items="props">
-      <tr :active="props.selected" @click="props.selected = !props.selected">
-        <td>
-          <v-checkbox
-            :input-value="props.selected"
-            primary
-            hide-details
-          ></v-checkbox>
-        </td>
-        <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.calories }}</td>
-        <td class="text-xs-right">{{ props.item.fat }}</td>
-        <td class="text-xs-right">{{ props.item.carbs }}</td>
-        <td class="text-xs-right">{{ props.item.protein }}</td>
-        <td class="text-xs-right">{{ props.item.iron }}</td>
-      </tr>
-    </template>
-    </v-data-grid-select>
-    <!-- <h3>v-data-iterator-select example</h3>
-    <v-data-iterator-select></v-data-iterator-select> -->
-    <!-- <h3>v-step-select-select example</h3>
-    <v-step-select></v-step-select> -->
-    <h3>v-tree-select-select example (comma selections)</h3>
-    <v-tree-select :items = "items" clearable></v-tree-select>
-    <h3>v-tree-select-select example (async loading)</h3>
-    <v-tree-select :items = "items" clearable></v-tree-select>
-    </v-app>
-  </div>
+  <v-app>
+    <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" app v-model="drawer">
+      <v-list>
+        <v-list-item>
+          <v-list-item-action>
+            <v-btn text :to="{path: '/'}">Quick Start</v-btn>
+          </v-list-item-action>
+        </v-list-item>
+        <v-divider />
+        <v-subheader>Components</v-subheader>
+        <v-list-item>
+          <v-list-item-action>
+            <v-btn text :to="{path: '/treeselect'}">VTreeSelect</v-btn>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
+            <v-btn text :to="{path: '/cascader'}">VCascader</v-btn>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
+            <v-btn text :to="{path: '/datagridselect'}">VDataGridSelect</v-btn>
+          </v-list-item-action>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title class="headline text-uppercase">
+        <span class="font-weight-light">VUETIFY-TOOLKIT Components examples & usage</span>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-app-bar>
+
+    <v-content>
+      <router-view />
+    </v-content>
+  </v-app>
 </template>
 
-<script>
-import VDataGridSelect from './components/VDataGridSelect'
-// import VDataIteratorSelect from './components/VDataIteratorSelect'
-// import VStepSelect from './components/VStepSelect'
-import VTreeSelect from './components/VTreeSelect'
+<script lang="ts">
+import Vue from 'vue'
 
-import { staticitems, dataGridHeaders, desserts } from './example-data'
-
-export default {
-  name: 'app',
-  components: {
-    VDataGridSelect,
-    // VDataIteratorSelect,
-    // VStepSelect,
-    VTreeSelect
-  },
+export default Vue.extend({
+  name: 'App',
   data: () => ({
-    items: staticitems,
-    dataGridHeaders: dataGridHeaders,
-    desserts: desserts
-
+    drawer: null
   })
-}
+})
 </script>
+
+<style >
+ .v-content__wrap {
+   padding-top: 22px;
+   padding-left: 100px;
+   padding-right: 100px;
+   padding-bottom: 22px;
+   line-height: 1.5;
+ }
+ .v-markup {
+    align-items: center;
+    box-shadow: none;
+    display: flex;
+    border-radius: 4px;
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-bottom: 16px;
+    background: #2d2d2d;
+    color: #fff;
+}
+.v-markup code {
+    position: relative;
+    box-shadow: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    word-break: break-word;
+    flex-wrap: wrap;
+    align-items: center;
+    vertical-align: middle;
+    white-space: pre-wrap;
+}
+.component-parameters {
+    font-size: 18px;
+    color: blue
+}
+</style>

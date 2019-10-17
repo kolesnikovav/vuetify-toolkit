@@ -1,4 +1,5 @@
-import { mixins, VTreeviewNodeProps, VListTile, VListTileTitle, VListTileContent, Themeable, Colorable } from '../../../vuetify-import'
+import { mixins, VTreeviewNodeProps, VListItem, VListItemContent, VListItemTitle, Themeable, Colorable } from '../../vuetify-import'
+
 import VTreeViewSelector from './VTreeViewSelector'
 
 export default mixins(
@@ -32,6 +33,15 @@ export default mixins(
       type: Function,
       default: undefined
     },
+    useDefaultToolbarCommand: {
+      type: Boolean,
+      default: false
+    },
+    // custom commands
+    toolbarCommands: {
+      type: Array,
+      default: () => []
+    },
     ...VTreeviewNodeProps
   },
   computed: {
@@ -41,7 +51,7 @@ export default mixins(
           mousedown: e => e.preventDefault() // Prevent onBlur from being called
         }
       }
-      return this.$createElement(VListTile, tile, [
+      return this.$createElement(VListItem, tile, [
         this.genTileNoDataContent()
       ])
     }
@@ -49,8 +59,8 @@ export default mixins(
   methods: {
     genTileNoDataContent () {
       const innerHTML = this.noDataText
-      return this.$createElement(VListTileContent,
-        [this.$createElement(VListTileTitle, {
+      return this.$createElement(VListItemContent,
+        [this.$createElement(VListItemTitle, {
           domProps: { innerHTML }
         })]
       )

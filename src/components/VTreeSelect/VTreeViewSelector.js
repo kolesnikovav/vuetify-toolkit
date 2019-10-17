@@ -1,4 +1,4 @@
-import { VTreeview } from '../../../vuetify-import'
+import { VTreeview } from '../../vuetify-import'
 
 export default VTreeview.extend({
   name: 'v-tree-view-selector',
@@ -23,6 +23,13 @@ export default VTreeview.extend({
       this.selectedCache.clear()
       Object.keys(this.nodes).forEach(key => {
         this.nodes[key].isSelected = false
+        this.nodes[key].isIndeterminate = false
+      })
+    },
+    selectAll () {
+      this.selectedCache.clear()
+      Object.keys(this.nodes).forEach(key => {
+        this.nodes[key].isSelected = true
         this.nodes[key].isIndeterminate = false
       })
     }

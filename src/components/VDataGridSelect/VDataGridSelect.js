@@ -1,19 +1,26 @@
-import { VAutocomplete, VSelect, VDataTable, DataIterable, consoleError } from '../../../vuetify-import'
+import { VAutocomplete, VSelect, VDataTable, consoleError } from '../../vuetify-import'
 import VDataGridSelectList from './VDataGridSelectList'
-import VSelectHeader from '../VSelectorHeader'
+import DefaultMenuProps from '../../utils/MenuProps'
 
 export default VAutocomplete.extend({
   name: 'v-data-grid-select',
   props: {
+    ...VSelect.options.props,
+    ...VAutocomplete.options.props,
+    ...VDataTable.options.props,
     autocomplete: {
       type: Boolean,
       default: false
     },
     openAll: Boolean,
-    ...VSelect.options.props,
-    ...VAutocomplete.options.props,
-    ...VDataTable.props,
-    ...DataIterable.props
+    menuProps: {
+      type: [String, Array, Object],
+      default: () => DefaultMenuProps
+    },
+    itemText: {
+      type: [String, Array, Function],
+      default: 'text'
+    }
   },
   data: () => ({
     selectedItems: []
@@ -43,7 +50,7 @@ export default VAutocomplete.extend({
         loadingIcon: this.loadingIcon,
         itemKey: this.itemKey,
         itemText: this.itemText,
-        itemChildren: this.itemChildren,
+        multiple: this.multiple,
         transition: this.transition,
         selectedItems: this.selectedItems,
         openAll: this.openAll,
@@ -54,14 +61,18 @@ export default VAutocomplete.extend({
         headerKey: this.headerKey,
         hideHeaders: this.hideHeaders,
         rowsPerPageText: this.rowsPerPageText,
-        customFilter: this.customFilter
+        customFilter: this.customFilter,
+        useDefaultCommands: this.useDefaultCommands
       })
       Object.assign(data.on, {
         select: e => {
           this.selectItems(e)
+        },
+        input: e => {
+          this.selectItems(e)
         }
       })
-      Object.assign(data.scopedSlots, {items: this.$scopedSlots['items']})
+      Object.assign(data.scopedSlots, { items: this.$scopedSlots['items'] })
       return data
     },
     staticList () {
@@ -69,11 +80,6 @@ export default VAutocomplete.extend({
         consoleError('assert: staticList should not be called if slots are used')
       }
       const slots = []
-      slots.push(this.$createElement(VSelectHeader,{
-        props: {
-          toolbarCommands: []
-        }
-      }))
       slots.push(this.$scopedSlots['items'])
       return this.$createElement(VDataGridSelectList, this.listData, slots)
     }
