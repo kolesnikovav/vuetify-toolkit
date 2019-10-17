@@ -1,11 +1,12 @@
-// import Vue from 'vue'
-import VTreeSelect from '..VTreeSelect/VTreeSelect'
+import Vue from 'vue'
 import {
   mount,
   shallowMount,
   Wrapper,
   MountOptions,
 } from '@vue/test-utils'
+
+import VTreeSelect from '@/components/VTreeSelect/VTreeSelect'
 
 Vue.prototype.$vuetify = {
   icons: {

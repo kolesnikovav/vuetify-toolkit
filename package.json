@@ -8,24 +8,24 @@
   },
   "scripts": {
     "serve": "vue-cli-service serve",
-    "lib": "vue-cli-service build --target lib --inline-vue 'src/components/index.js'",
     "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit --no-cache",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "lib": "vue-cli-service build --target lib --inline-vue 'src/components/index.js'"
   },
   "dependencies": {
-    "core-js": "^2.6.5",
+    "core-js": "^3.1.2",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuetify": "^2.1.0"
   },
   "devDependencies": {
     "@types/jest": "^23.1.4",
-    "@vue/cli-plugin-babel": "^3.11.0",
-    "@vue/cli-plugin-eslint": "^3.11.0",
-    "@vue/cli-plugin-typescript": "^3.11.0",
-    "@vue/cli-plugin-unit-jest": "^3.11.0",
-    "@vue/cli-service": "^3.11.0",
+    "@vue/cli-plugin-babel": "^4.0.3",
+    "@vue/cli-plugin-eslint": "^4.0.3",
+    "@vue/cli-plugin-typescript": "^4.0.3",
+    "@vue/cli-plugin-unit-jest": "^4.0.3",
+    "@vue/cli-service": "^4.0.3",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/eslint-config-typescript": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
@@ -38,7 +38,7 @@
     "sass-loader": "^7.1.0",
     "ts-jest": "^23.0.0",
     "typescript": "^3.4.3",
-    "vue-cli-plugin-vuetify": "^1.0.0",
+    "vue-cli-plugin-vuetify": "^1.1.0",
     "vue-template-compiler": "^2.6.10",
     "vuetify-loader": "^1.2.2"
   }
