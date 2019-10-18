@@ -2,17 +2,26 @@
 
 The set of additional vuetify components, that not included in vuetify.js library
 Working  in progress now.
+
 ## status 
 Current status is pre-alpha. Not ready for production use!
 
-## components
+## Live demo
+
+See [Live demo & documentation](https://kolesnikovav.github.io/vuetify-toolkit/).
+
+
+## Components
 
  - VDataGridSelect
  The selector with Tabular items presentation
+ [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit/datagridselect)
  - VCascader
  Cascade selection box
+ [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit/cascader)
  - VTreeSelect
  Selector for nested & tree like items
+  [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit/treeselect)
 
 ## Project setup
 
