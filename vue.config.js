@@ -2,6 +2,9 @@ module.exports = {
   'transpileDependencies': [
     'vuetify'
   ],
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/vuetify-toolkit/docs'
+    : '/',  
   configureWebpack: {
     ...(process.env.NODE_ENV === 'production'
       ? {
