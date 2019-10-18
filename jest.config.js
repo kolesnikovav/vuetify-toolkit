@@ -1,6 +1,6 @@
 module.exports = {
   preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',
-  transformIgnorePatterns: ['/node_modules/(?!vuetify)']  
+  transformIgnorePatterns: ['/node_modules/(?!vuetify)']
 }
 
 // module.exports = {
