@@ -9,6 +9,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:docs": "vue-cli-service build --mode development --dest ./docs",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "lib": "vue-cli-service build --target lib --inline-vue 'src/components/index.js'"
@@ -21,11 +22,11 @@
   },
   "devDependencies": {
     "@types/jest": "^23.1.4",
-    "@vue/cli-plugin-babel": "^4.0.3",
-    "@vue/cli-plugin-eslint": "^4.0.3",
-    "@vue/cli-plugin-typescript": "^4.0.3",
-    "@vue/cli-plugin-unit-jest": "^4.0.3",
-    "@vue/cli-service": "^4.0.3",
+    "@vue/cli-plugin-babel": "^4.0.4",
+    "@vue/cli-plugin-eslint": "^4.0.4",
+    "@vue/cli-plugin-typescript": "^4.0.4",
+    "@vue/cli-plugin-unit-jest": "^4.0.4",
+    "@vue/cli-service": "^4.0.4",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/eslint-config-typescript": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
