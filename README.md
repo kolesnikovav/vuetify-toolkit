@@ -1,5 +1,7 @@
 # vuetify-toolkit
 
+![Travis (.com) branch](https://img.shields.io/travis/com/kolesnikovav/vuetify-toolkit/master)
+
 The set of additional vuetify components, that not included in vuetify.js library
 Working  in progress now.
 
