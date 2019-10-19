@@ -1,16 +1,21 @@
 // Libraries
 import Vue from 'vue'
-import Vuetify from 'vuetify'
-
+import Vuetify from 'vuetify/lib'
 // Utilities
 import {
   mount,
   createLocalVue
 } from '@vue/test-utils'
+// component to be tested
+import { VTreeSelect } from '@/components'
 
-import VTreeSelect from '@/components/VTreeSelect/VTreeSelect'
+Vue.use(Vuetify)
 
-// console.log(vuetify)
+const vuetify = new Vuetify({
+  icons: {
+    iconfont: 'mdi'
+  }
+})
 
 const localVue = createLocalVue()
 
@@ -23,24 +28,7 @@ const threeLevels = [
 ]
 
 describe('VTreeSelect.js', () => {
-  // let vuetify
-
-  // beforeEach(() => {
-  //   vuetify = new Vuetify()
-  // })
-  // console.log(vuetify)
-
-  let vuetify = new Vuetify({
-      $vuetify: {
-        lang: {
-          t: (val) => val
-        }
-      }
-  })
-
-  console.log(vuetify)
-
-  it('renders all items', () => {
+  it('renders', () => {
     const wrapper = mount(VTreeSelect, {
       vuetify,
       propsData: {

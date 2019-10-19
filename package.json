@@ -6,6 +6,12 @@
     "name": "Aleksandr Kolesnikov",
     "email": "alex.v.kolesnikov72@gmail.com"
   },
+  "license": "MIT",
+  "homepage": "https://github.com/kolesnikovav/vuetify-toolkit",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kolesnikovav/vuetify-toolkit.git"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
