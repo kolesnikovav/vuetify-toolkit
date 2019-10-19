@@ -32,6 +32,9 @@
         <span class="font-weight-light">VUETIFY-TOOLKIT Components examples & usage</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn text large href = "https://github.com/kolesnikovav/vuetify-toolkit">
+        GitHub
+      </v-btn>
     </v-app-bar>
 
     <v-content>
