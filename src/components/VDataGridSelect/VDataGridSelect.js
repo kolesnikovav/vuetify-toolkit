@@ -41,6 +41,7 @@ export default VAutocomplete.extend({
       Object.assign(data.props, {
         activatable: this.activatable,
         activeClass: this.activeClass,
+        dark: this.dark,
         selectable: true,
         selectedColor: this.selectedColor,
         indeterminateIcon: this.indeterminateIcon,

@@ -35,6 +35,7 @@ export default VAutocomplete.extend({
         } : null,
         props: {
           action: this.multiple && !this.isHidingSelected,
+          dark: this.dark,
           color: this.color,
           dense: this.dense,
           hideSelected: this.hideSelected,

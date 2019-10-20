@@ -50,6 +50,7 @@ export default VAutocomplete.extend({
         activatable: this.activatable,
         activeClass: this.activeClass,
         color: this.color,
+        dark: this.dark,
         selectable: true,
         selectedColor: this.selectedColor,
         indeterminateIcon: this.indeterminateIcon,

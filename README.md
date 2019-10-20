@@ -1,6 +1,6 @@
 # vuetify-toolkit
 
-![Travis (.com) branch](https://img.shields.io/travis/com/kolesnikovav/vuetify-toolkit/master)
+[![Build Status](https://travis-ci.org/kolesnikovav/vuetify-toolkit.svg?branch=master)](https://travis-ci.org/kolesnikovav/vuetify-toolkit)
 
 The set of additional vuetify components, that not included in vuetify.js library
 Working  in progress now.
@@ -17,41 +17,57 @@ See [Live demo & documentation](https://kolesnikovav.github.io/vuetify-toolkit/)
 
  - VDataGridSelect
  The selector with Tabular items presentation
- [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit/datagridselect)
+ [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit)
  - VCascader
  Cascade selection box
- [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit/cascader)
+ [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit)
  - VTreeSelect
  Selector for nested & tree like items
-  [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit/treeselect)
+  [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit)
 
-## Project setup
-
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
+## Installation
 
 ```
-yarn run serve
+yarn add vuetify-toolkit
 ```
-### Compiles and minifies for production
+or
+```
+npm i vuetify-toolkit --save
+```
+
+### Basic usage
+
+Change your src/plugins/vuetify.js file as follows
+```
+      import Vue from 'vue';
+      import Vuetify from 'vuetify/lib';
+
+      import {VTreeSelect, VCascader, VDataGridSelect } from 'vuetify-toolkit/vuetify-toolkit.umd'
+      Vue.use(Vuetify,{
+          VTreeSelect,
+          VCascader,
+          VDataGridSelect
+      });
+      export default new Vuetify({
+        icons: {
+        iconfont: 'mdi',
+        },
+      });
+```
+Then, you can use this components as 
 
 ```
-yarn run build
+<template>
+  <div>
+    <v-tree-select>
+      <!--  -->
+    </v-tree-select>
+    <v-cascader>
+      <!--  -->
+    </v-cascader> 
+    <v-data-grid-select>
+      <!--  -->
+    </v-data-grid-select>       
+  </div>
+</template>
 ```
-
-### Run your tests
-
-```
-yarn run test
-```
-### Lints and fixes files
-
-```
-yarn run lint
-```
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
