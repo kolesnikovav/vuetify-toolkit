@@ -5,7 +5,7 @@ exports[`VCascader.js renders 1`] = `
   <div class="v-input__control">
     <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-1" class="v-input__slot">
       <div class="v-select__slot">
-        <div class="v-select__selections"><input id="input-1" type="text" autocomplete="disabled"></div>
+        <div class="v-select__selections"><input id="input-1" readonly="readonly" type="text" aria-readonly="true"></div>
         <div class="v-input__append-inner">
           <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
         </div>
