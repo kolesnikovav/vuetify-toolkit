@@ -9,6 +9,10 @@ export default VAutocomplete.extend({
       type: [String, Function],
       default: 'children'
     },
+    autocomplete: {
+      type: Boolean,
+      default: false
+    },
     ...VSelect.options.props,
     ...VAutocomplete.options.props,
     menuProps: {
@@ -26,6 +30,18 @@ export default VAutocomplete.extend({
   computed: {
     allItems () {
       return this.filterDuplicates(this.cachedItems.concat(this.items))
+    },
+    internalSearch: {
+      get () {
+        const result = this.autocomplete ? VAutocomplete.options.computed.internalSearch.get.call(this)
+          : ''
+        return result
+      },
+      set (val) {
+        if (this.autocomplete) {
+          VAutocomplete.options.computed.internalSearch.set.call(this, val)
+        }
+      }
     },
     listData () {
       const scopeId = this.$vnode && this.$vnode.context.$options._scopeId
@@ -95,6 +111,10 @@ export default VAutocomplete.extend({
       } else {
         return this.itemText
       }
+    },
+    genInput () {
+      return this.autocomplete ? VAutocomplete.options.methods.genInput.call(this)
+        : VSelect.options.methods.genInput.call(this)
     },
     genSelections () {
       let length = this.selectedItems.length

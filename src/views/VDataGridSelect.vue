@@ -16,13 +16,14 @@
       <v-card :dark="dark">
         <v-card-text>
           <v-row justify="space-around">
+          <v-switch v-model="autocomplete" class="ma-2" label="autocomplete"></v-switch>
           <v-switch v-model="multiple" class="ma-2" label="multiple"></v-switch>
           <v-switch v-model="chips" class="ma-2"    label="chips"></v-switch>
           <v-switch v-model="dense" class="ma-2"    label="dense"></v-switch>
           <v-switch v-model="clearable" class="ma-2"    label="clearable"></v-switch>
           <v-switch v-model="dark" class="ma-2"    label="dark"></v-switch>
           </v-row>
-          <v-data-grid-select :chips = "chips" :dense = "dense" :multiple = "multiple" :items="items" :clearable = "clearable"
+          <v-data-grid-select :autocomplete = "autocomplete" :chips = "chips" :dense = "dense" :multiple = "multiple" :items="items" :clearable = "clearable"
             :headers="dataGridHeaders" item-key = "name" item-text = "name" :dark = "dark"
           ></v-data-grid-select>
         </v-card-text>
@@ -58,6 +59,7 @@ export default Vue.extend({
     dense: false,
     clearable: false,
     dark: false,
+    autocomplete: false,
     //
     componentProps: [
       { name: 'autocomplete',

@@ -36,6 +36,18 @@ export default VAutocomplete.extend({
         return Object.assign({}, VSelect.options.computed.classes.call(this), {})
       }
     },
+    internalSearch: {
+      get () {
+        const result = this.autocomplete ? VAutocomplete.options.computed.internalSearch.get.call(this)
+          : ''
+        return result
+      },
+      set (val) {
+        if (this.autocomplete) {
+          VAutocomplete.options.computed.internalSearch.set.call(this, val)
+        }
+      }
+    },
     listData () {
       const data = VSelect.options.computed.listData.call(this)
       Object.assign(data.props, {
@@ -87,6 +99,10 @@ export default VAutocomplete.extend({
   },
   methods: {
     register () {},
+    genInput () {
+      return this.autocomplete ? VAutocomplete.options.methods.genInput.call(this)
+        : VSelect.options.methods.genInput.call(this)
+    },
     genList () {
       // If there's no slots, we can use a cached VNode to improve performance
       if (this.$slots['no-data'] || this.$slots['prepend-item'] || this.$slots['append-item']) {
@@ -104,6 +120,9 @@ export default VAutocomplete.extend({
       return this.$createElement(VDataGridSelectList, {
         ...this.listData
       }, slots)
+    },
+    genSelections () {
+      return VSelect.options.methods.genSelections.call(this)
     },
     selectItems (items) {
       this.selectedItems = items
