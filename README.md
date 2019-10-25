@@ -1,6 +1,17 @@
 # vuetify-toolkit
 
-[![Build Status](https://travis-ci.org/kolesnikovav/vuetify-toolkit.svg?branch=master)](https://travis-ci.org/kolesnikovav/vuetify-toolkit)
+
+<p align="left">
+  <a href="https://travis-ci.org/kolesnikovav/vuetify-toolkit/master">
+    <img alt="Travis (.org) branch" src="https://img.shields.io/travis/kolesnikovav/vuetify-toolkit/master?logo=travis">
+  </a>
+  <a href="https://www.npmjs.com/package/vuetify-toolkit">
+    <img alt="npm" src="https://img.shields.io/npm/v/vuetify-toolkit?color=blue&logo=npm">
+  </a>
+  <a href="https://www.npmjs.com/package/vuetify-toolkit">
+    <img alt="npm" src="https://img.shields.io/npm/dm/vuetify-toolkit?logo=npm">
+  </a>
+</p>
 
 The set of additional vuetify components, that not included in vuetify.js library
 Working  in progress now.

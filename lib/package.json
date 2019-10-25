@@ -1,0 +1,25 @@
+{
+  "name": "vuetify-toolkit",
+  "version": "0.1.2",
+  "description": "Vuetify.js Additional components set",
+  "author": {
+    "name": "Aleksandr Kolesnikov",
+    "email": "alex.v.kolesnikov72@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/kolesnikovav/vuetify-toolkit",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kolesnikovav/vuetify-toolkit.git"
+  },
+  "keywords": [
+    "vuetify",
+    "treeselect",
+    "datagridselect",
+    "cascader"
+  ],
+  "peerDependencies": {
+    "vue": "^2.6.10",
+    "vuetify": "^2.1.0"
+  }
+}
