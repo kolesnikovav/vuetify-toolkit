@@ -4,6 +4,7 @@ import QuickStart from './views/QuickStart.vue'
 import VTreeSelect from './views/VTreeSelect.vue'
 import VCascader from './views/VCascader.vue'
 import VDataGridSelect from './views/VDataGridSelect.vue'
+import VMdView from './views/VMdView.vue'
 
 Vue.use(Router)
 
@@ -30,6 +31,11 @@ export default new Router({
       path: '/datagridselect',
       name: 'vdatagridselect',
       component: VDataGridSelect
+    },
+    {
+      path: '/mdview',
+      name: 'vmdview',
+      component: VMdView
     }
   ]
 })

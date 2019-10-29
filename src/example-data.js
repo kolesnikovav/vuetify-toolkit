@@ -192,3 +192,12 @@ export const ofices = [
     ]
   }
 ]
+
+export const mdvHeaders = [
+  {
+    text: 'id',
+    align: 'left',
+    value: 'id'
+  },
+  { text: 'name', value: 'name' }
+]
