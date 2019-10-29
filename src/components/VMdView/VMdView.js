@@ -7,11 +7,13 @@ export default Vue.extend({
   props: {
     ...VDataTable.options.props,
     ...VTreeviewNodeProps,
-    ...VCard.options.props
+    ...VCard.options.props,
+    multiple: {
+      type: Boolean,
+      default: false
+    }
   },
   data: () => ({
-    // selectedItems: [],
-    // treeviewItems: [],
     currentNode: null,
     treeviewCashe: new Map()
   }),
@@ -74,10 +76,9 @@ export default Vue.extend({
             headers: this.headers,
             items: this.tableItems,
             hideDefaultFooter: true,
-            selectable: this.selectable,
-            multiple: this.multiple,
             showSelect: this.selectable,
             singleSelect: !this.multiple
+            // !this.multiple
           }
         }),
         this.genPagination()
