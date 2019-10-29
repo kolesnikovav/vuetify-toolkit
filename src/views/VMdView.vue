@@ -48,10 +48,20 @@ export default Vue.extend({
     dark: false,
     //
     componentProps: [
-      { name: 'autocomplete',
-        type: 'boolean',
-        default: 'true',
-        describtion: ' enable or disable text typing for autocomplete behavior'
+      { name: 'items',
+        type: 'array',
+        default: '[]',
+        describtion: ' The array of items to display'
+      },
+      { name: 'item-key',
+        type: 'string',
+        default: 'id',
+        describtion: 'The field on each item object that designates a unique key. The value of this property has to be unique for each item.'
+      },
+      { name: 'item-text',
+        type: 'string',
+        default: 'name',
+        describtion: 'The field of item object that uses for displaying item'
       },
       { name: 'dense',
         type: 'boolean',
