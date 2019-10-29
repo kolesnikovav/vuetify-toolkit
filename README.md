@@ -13,10 +13,10 @@
   </a>
 </p>
 
-The set of additional vuetify components, that not included in vuetify.js library
+The set of additional vuetify components, that not included in [vuetify.js](https://vuetifyjs.com/) library
 Working  in progress now.
 
-## status 
+## status
 Current status is pre-alpha. Not ready for production use!
 
 ## Live demo
@@ -34,6 +34,9 @@ See [Live demo & documentation](https://kolesnikovav.github.io/vuetify-toolkit/)
  [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit)
  - VTreeSelect
  Selector for nested & tree like items
+  [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit)
+ - VMdView
+ Displaying any hierarchical data (like file explorer)
   [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit)
 
 ## Installation
@@ -53,11 +56,16 @@ Change your src/plugins/vuetify.js file as follows
       import Vue from 'vue';
       import Vuetify from 'vuetify/lib';
 
-      import {VTreeSelect, VCascader, VDataGridSelect } from 'vuetify-toolkit/vuetify-toolkit.umd'
+      import {
+        VTreeSelect,
+        VCascader,
+        VDataGridSelect,
+        VMdView } from 'vuetify-toolkit/vuetify-toolkit.umd'
       Vue.use(Vuetify,{
           VTreeSelect,
           VCascader,
-          VDataGridSelect
+          VDataGridSelect,
+          VMdView
       });
       export default new Vuetify({
         icons: {
@@ -65,7 +73,7 @@ Change your src/plugins/vuetify.js file as follows
         },
       });
 ```
-Then, you can use this components as 
+Then, you can use this components as
 
 ```
 <template>
@@ -75,10 +83,17 @@ Then, you can use this components as
     </v-tree-select>
     <v-cascader>
       <!--  -->
-    </v-cascader> 
+    </v-cascader>
     <v-data-grid-select>
       <!--  -->
-    </v-data-grid-select>       
+    </v-data-grid-select>
+    <v-md-view>
+      <!--  -->
+    </v-md-view>
   </div>
 </template>
 ```
+
+### Hello word example
+
+[Here](https://github.com/kolesnikovav/testapp) is the sample project with vuetify-toolkit, built with [vue cli](https://cli.vuejs.org/)
