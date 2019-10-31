@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import { VCard, VDivider, VDataTable, VTreeview, VTreeviewNodeProps, VPagination, VRow, VCol, getObjectValueByPath } from '../../vuetify-import'
+import treeviewScopedSlots from '../../utils/TreeviewScopedSlots'
+import tableScopedSlots from '../../utils/TableScopedSlots'
 
 /* @vue/component */
 export default Vue.extend({
@@ -24,6 +26,16 @@ export default Vue.extend({
     tableItems () {
       const currentItem = this.treeviewCashe.get(this.currentNode)
       return getObjectValueByPath(currentItem, this.itemChildren, [])
+    },
+    scopedPropsTreeview (item) {
+      return {
+        item: item,
+        leaf: !item.children,
+        selected: item.isSelected,
+        indeterminate: item.isIndeterminate,
+        active: item.isActive,
+        open: item.isOpen
+      }
     }
   },
   methods: {
@@ -78,8 +90,8 @@ export default Vue.extend({
             hideDefaultFooter: true,
             showSelect: this.selectable,
             singleSelect: !this.multiple
-            // !this.multiple
-          }
+          },
+          scopedSlots: tableScopedSlots(this.$scopedSlots)
         }),
         this.genPagination()
       ])
@@ -120,6 +132,7 @@ export default Vue.extend({
             shaped: this.shaped,
             transition: this.transition
           },
+          scopedSlots: treeviewScopedSlots(this.$scopedSlots),
           on: {
             'update:active': this.updateTable
           }

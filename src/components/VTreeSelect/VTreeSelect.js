@@ -1,6 +1,7 @@
 import { VAutocomplete, VSelect, VTreeviewNodeProps, consoleError } from '../../vuetify-import'
 import VTreeSelectList from './VTreeSelectList'
 import DefaultMenuProps from '../../utils/MenuProps'
+import treeviewScopedSlots from '../../utils/TreeviewScopedSlots'
 
 export default VAutocomplete.extend({
   name: 'v-tree-select',
@@ -78,6 +79,7 @@ export default VAutocomplete.extend({
           this.selectItems(e)
         }
       })
+      Object.assign(data.scopedSlots, treeviewScopedSlots(this.$scopedSlots))
       return data
     },
     staticList () {

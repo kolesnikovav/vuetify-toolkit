@@ -91,6 +91,7 @@ export default mixins(
           openAll: this.openAll,
           itemText: this.itemText
         },
+        scopedSlots: this.$scopedSlots,
         on: {
           input: e => {
             this.$emit('select', e)
