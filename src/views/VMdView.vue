@@ -20,6 +20,7 @@
           <v-switch v-model="dense" class="ma-2" label="dense"></v-switch>
           <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
           <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
+          <v-switch v-model="hierarchy" class="ma-2" label="hierarchy"></v-switch>
         </v-row>
         <v-md-view
           :items="items"
@@ -28,9 +29,10 @@
           :selectable="selectable"
           :multiple="multiple"
           :dense="dense"
+          :hierarchy = "hierarchy"
         >
           <template v-if="customSlots" v-slot:prependTree="{ item, open }">
-            <v-icon>{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
+            <v-icon >{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
           </template>
           <template v-if="customSlots" v-slot:itemTable.data-table-select="{ isSelected, select }">
             <v-simple-checkbox color="green" :value="isSelected" @input="select($event)"></v-simple-checkbox>
@@ -67,6 +69,7 @@ export default Vue.extend({
     dense: false,
     dark: false,
     customSlots: false,
+    hierarchy: true,
     //
     componentProps: [
       {

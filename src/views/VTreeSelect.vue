@@ -33,7 +33,8 @@
           :dark="dark"
         >
           <template v-if="customSlots" v-slot:prependTree="{ item, open }">
-            <v-icon>{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
+            <v-icon v-if = "item.children">{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
+            <v-icon v-else>mdi-file</v-icon>
           </template>
         </v-tree-select>
       </v-card-text>

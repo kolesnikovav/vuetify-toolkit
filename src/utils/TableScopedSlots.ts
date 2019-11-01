@@ -1,10 +1,12 @@
 export default function tableScopedSlots (slots: any):object {
   let result = {}
-  if (slots.itemTable) {
-    result = Object.assign(result, { item: (props: any) => slots.itemTable(props) })
-  }
-  if (slots['itemTable.data-table-select']) {
-    result = Object.assign(result, { 'item.data-table-select': (props: any) => slots['itemTable.data-table-select'](props) })
+  for (var slot in slots) {
+    if (slot.startsWith('itemTable')) {
+      let slotName = slot.replace('itemTable', 'item')
+      let slotnew = {} as any
+      slotnew[slotName] = (props: any) => slots[slot](props)
+      result = Object.assign(result, slotnew)
+    }
   }
   return result
 }

@@ -13,6 +13,10 @@ export default Vue.extend({
     multiple: {
       type: Boolean,
       default: false
+    },
+    hierarchy: {
+      type: Boolean,
+      default: true
     }
   },
   data: () => ({
@@ -24,8 +28,14 @@ export default Vue.extend({
       return this.buildTree(this.items)
     },
     tableItems () {
-      const currentItem = this.treeviewCashe.get(this.currentNode)
-      return getObjectValueByPath(currentItem, this.itemChildren, [])
+      if (this.hierarchy) {
+        const currentItem = this.treeviewCashe.get(this.currentNode)
+        return getObjectValueByPath(currentItem, this.itemChildren, [])
+      } else {
+        const allItems = []
+        this.getAllItems(this.items, allItems)
+        return allItems
+      }
     },
     scopedPropsTreeview (item) {
       return {
@@ -54,8 +64,20 @@ export default Vue.extend({
       })
       return newItems
     },
+    getAllItems (items, allItems) {
+      items.map(item => {
+        const localChildren = getObjectValueByPath(item, this.itemChildren, [])
+        if (localChildren.length > 0) {
+          this.getAllItems(localChildren, allItems)
+        } else {
+          allItems.push(item)
+        }
+      })
+    },
     updateTable (e) {
-      this.currentNode = e[0]
+      if (this.hierarchy) {
+        this.currentNode = e[0]
+      }
     },
     genDivider () {
       return this.$createElement(VDivider, {
