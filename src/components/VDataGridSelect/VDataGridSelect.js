@@ -85,7 +85,7 @@ export default VAutocomplete.extend({
           this.selectItems(e)
         }
       })
-      Object.assign(data.scopedSlots, { items: this.$scopedSlots['items'] })
+      Object.assign(data.scopedSlots, this.$scopedSlots)
       return data
     },
     staticList () {

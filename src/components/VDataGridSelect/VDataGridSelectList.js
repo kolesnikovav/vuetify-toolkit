@@ -1,6 +1,6 @@
 // import { mixins, VDataTable, VListTile, VListTileContent, VListTileTitle, Themeable, Colorable } from '../../vuetify-import'
 import { mixins, VDataTable, VListItem, VListItemContent, VListItemTitle, Themeable, Colorable } from '../../vuetify-import'
-
+import tableScopedSlots from '../../utils/TableScopedSlots'
 export default mixins(
   Themeable, Colorable
   /* @vue/component */
@@ -89,9 +89,7 @@ export default mixins(
           showSelect: true,
           singleSelect: !this.multiple
         },
-        scopedSlots: {
-          items: props => this.$scopedSlots['items'](props)
-        },
+        scopedSlots: tableScopedSlots(this.$scopedSlots),
         on: {
           'input': e => {
             this.$emit('input', e)

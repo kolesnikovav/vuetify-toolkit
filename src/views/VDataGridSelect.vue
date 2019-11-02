@@ -22,10 +22,21 @@
           <v-switch v-model="dense" class="ma-2"    label="dense"></v-switch>
           <v-switch v-model="clearable" class="ma-2"    label="clearable"></v-switch>
           <v-switch v-model="dark" class="ma-2"    label="dark"></v-switch>
+          <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
           </v-row>
           <v-data-grid-select :autocomplete = "autocomplete" :chips = "chips" :dense = "dense" :multiple = "multiple" :items="items" :clearable = "clearable"
             :headers="dataGridHeaders" item-key = "name" item-text = "name" :dark = "dark"
-          ></v-data-grid-select>
+          >
+          <template v-if="customSlots" v-slot:headerTable.fat="{ header }">
+            <v-icon color ="red">mdi-cake</v-icon>
+          </template>
+          <template v-if="customSlots" v-slot:itemTable.calories="{ item }">
+            <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip>
+          </template>
+          <template v-if="customSlots" v-slot:itemTable.fat="{ item }">
+            <v-chip :color="getColorFat(item.fat)" dark>{{ item.fat }}</v-chip>
+          </template>
+          </v-data-grid-select>
         </v-card-text>
       </v-card>
       <h2>Examples</h2>
@@ -60,6 +71,7 @@ export default Vue.extend({
     clearable: false,
     dark: false,
     autocomplete: false,
+    customSlots: false,
     //
     componentProps: [
       { name: 'autocomplete',
@@ -81,6 +93,18 @@ export default Vue.extend({
         value: ''
       }
     ]
-  })
+  }),
+  methods: {
+    getColor (calories: any) {
+      if (calories > 400) return 'red'
+      else if (calories > 200) return 'orange'
+      else return 'green'
+    },
+    getColorFat (fat: any) {
+      if (fat > 20) return 'red'
+      else if (fat > 10) return 'orange'
+      else return 'green'
+    }
+  }
 })
 </script>
