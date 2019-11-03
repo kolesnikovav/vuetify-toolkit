@@ -30,6 +30,7 @@
           :multiple="multiple"
           :dense="dense"
           :hierarchy = "hierarchy"
+          :items-per-page = 5
         >
           <template v-if="customSlots" v-slot:prependTree="{ item, open }">
             <v-icon >{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>

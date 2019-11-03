@@ -1,6 +1,6 @@
 {
   "name": "vuetify-toolkit",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Vuetify.js Additional components set",
   "author": {
     "name": "Aleksandr Kolesnikov",
@@ -14,9 +14,11 @@
   },
   "keywords": [
     "vuetify",
+    "vue",
     "treeselect",
     "datagridselect",
-    "cascader"
+    "cascader",
+    "master-detail"
   ],
   "scripts": {
     "serve": "vue-cli-service serve",

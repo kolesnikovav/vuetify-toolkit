@@ -21,7 +21,8 @@ export default Vue.extend({
   },
   data: () => ({
     currentNode: null,
-    treeviewCashe: new Map()
+    treeviewCashe: new Map(),
+    page: 1
   }),
   computed: {
     treeItems () {
@@ -37,15 +38,15 @@ export default Vue.extend({
         return allItems
       }
     },
-    scopedPropsTreeview (item) {
-      return {
-        item: item,
-        leaf: !item.children,
-        selected: item.isSelected,
-        indeterminate: item.isIndeterminate,
-        active: item.isActive,
-        open: item.isOpen
+    pageCount () {
+      if (this.itemsPerPage && Array.isArray(this.tableItems)) {
+        if (this.itemsPerPage < this.tableItems.length) {
+          let res = Math.floor(this.tableItems.length / this.itemsPerPage)
+          res += (this.tableItems.length % this.itemsPerPage) > 0 ? 1 : 0
+          return res
+        }
       }
+      return 0
     }
   },
   methods: {
@@ -87,14 +88,51 @@ export default Vue.extend({
       })
     },
     genPagination () {
-      return this.$createElement(VPagination, {
-        ref: 'data-table-pagination',
-        style: {
-          'vertical-align': 'bottom'
+      if (this.itemsPerPage && Array.isArray(this.tableItems)) {
+        if (this.itemsPerPage < this.tableItems.length) {
+          return [
+            this.$createElement(VDivider, {
+              props: {
+                vertical: false
+              }
+            }),
+            this.$createElement(VPagination, {
+              ref: 'data-table-pagination',
+              props: {
+                length: this.pageCount,
+                dark: this.dark,
+                value: this.page
+              },
+              style: {
+                'vertical-align': 'bottom'
+              },
+              on: {
+                input: (e) => { this.page = e }
+              }
+            })
+          ]
         }
-      }, [])
+      }
+      return undefined
     },
     genTable () {
+      const slots = [
+        'body',
+        'body.append',
+        'body.prepend',
+        'footer',
+        'loading',
+        'no-data',
+        'no-results',
+        'header',
+        'progress',
+        'top'
+      ]
+        .filter(slotName => this.$slots[slotName])
+        .map(slotName => this.$createElement('template', {
+          slot: slotName
+        }, this.$slots[slotName]))
+
       return this.$createElement(VCol, {
         props: {
           alignSelf: 'stretch',
@@ -109,13 +147,14 @@ export default Vue.extend({
             dense: this.dense,
             headers: this.headers,
             items: this.tableItems,
+            itemsPerPage: this.itemsPerPage,
+            page: this.page,
             hideDefaultFooter: true,
             showSelect: this.selectable,
             singleSelect: !this.multiple
           },
           scopedSlots: tableScopedSlots(this.$scopedSlots)
-        }),
-        this.genPagination()
+        }, slots)
       ])
     },
     genTreeView () {
@@ -172,7 +211,8 @@ export default Vue.extend({
         this.genTreeView(),
         this.genDivider(),
         this.genTable()
-      ])
+      ]),
+      this.genPagination()
     ])
   }
 })
