@@ -4,12 +4,13 @@ import Vuetify from 'vuetify/lib'
 // Utilities
 import {
   mount,
+  shallowMount,
   createLocalVue
 } from '@vue/test-utils'
 // component to be tested
 import { VTreeSelect } from '@/components'
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {VTreeSelect})
 
 const vuetify = new Vuetify({
   icons: {
@@ -35,6 +36,8 @@ describe('VTreeSelect.js', () => {
         items: singleRootTwoChildren
       }
     })
+    let q = document.getElementsByTagName('input')
+    console.log(q[0])
     expect(wrapper.html()).toMatchSnapshot()
   })
 })
