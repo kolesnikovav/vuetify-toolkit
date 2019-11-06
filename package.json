@@ -34,10 +34,11 @@
     "vuetify": "^2.1.0"
   },
   "optionalDependencies": {
-    "highlight.js": "^9.15.10",
+    "highlight.js": "^9.16.2",
     "vue-router": "^3.0.3"
   },
   "devDependencies": {
+    "@types/highlight.js": "^9.12.3",
     "@types/jest": "^23.1.4",
     "@vue/cli-plugin-babel": "^4.0.4",
     "@vue/cli-plugin-eslint": "^4.0.4",
@@ -62,6 +63,7 @@
   },
   "dependencies": {
     "vue": "^2.6.10",
+    "vue-highlight.js": "^3.1.0",
     "vuetify": "^2.1.5"
   }
 }
