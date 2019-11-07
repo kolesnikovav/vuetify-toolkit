@@ -1,18 +1,36 @@
 <template>
   <div>
-      <h1>VDataGridSelect</h1>
-      <span></span>
-      <p>VDataGridSelect is the component that uses for selection from tabular data.
-        You can use this component when requires additional info before selection.
-      </p>
-      <h2>API</h2>
-      <v-card>
-        <v-api :PROPS="componentProps" :SLOTS="componentSlots" :EVENTS="componentEvents">
-        </v-api>
-      </v-card>
-      <span/>
-      <h2>Sandbox</h2>
-      <span/>
+    <h1>VDataGridSelect</h1>
+    <span></span>
+    <p>
+      VDataGridSelect is the component that uses for selection from tabular data.
+      It allows display full information for users. This component can be highly customized.
+    </p>
+    <p>
+      This component extends <a href = "https://vuetifyjs.com/ru/components/autocompletes">VAutocomplete</a> component.
+      The part of VDataGridSelect component is <a href = "https://vuetifyjs.com/en/components/data-tables">VDataTable</a>. Properties and events are repeated.
+      Scoped slots of <a href = "https://vuetifyjs.com/en/components/data-tables">VDataTable</a> are transformed:
+        <ul>
+          <li>item = itemTable</li>
+          <li>header = headerTable</li>
+        </ul>
+    </p>
+    <p>Added properties are below</p>
+    <table class="v-card__text v-data-table elevation-1 theme--light">
+        <thead>
+           <tr>
+            <th>Name</th> <th>Type</th> <th>Default</th><th>Describtion</th>
+           </tr>
+        </thead>
+        <tbody>
+           <tr>
+            <td>autocomplete</td> <td>boolean</td> <td>true</td>
+            <td>Switch between autocomplete/select behavior</td>
+           </tr>
+        </tbody>
+    </table>
+    <span />
+    <h2>Sandbox</h2>
       <v-card :dark="dark">
         <v-card-text>
           <v-row justify="space-around">
@@ -52,13 +70,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import VDataGridSelect from '../components/VDataGridSelect'
-import VApi from './API.vue'
 import { dataGridHeaders, desserts } from '../example-data'
 
 export default Vue.extend({
   components: {
-    VDataGridSelect,
-    VApi
+    VDataGridSelect
   },
   data: () => ({
     items: desserts,

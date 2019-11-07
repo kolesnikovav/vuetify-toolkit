@@ -4,12 +4,33 @@
     <span></span>
     <p>
       VTreeSelect is the component that provide tree-like data selection. This combines original Vuetify components VAutocomplete and VTreeview in one.
-      You can use any nested data like item source.
+      You can use any nested data as item source.
     </p>
-    <h2>API</h2>
-    <v-card>
-      <v-api :PROPS="componentProps" :SLOTS="componentSlots" :EVENTS="componentEvents"></v-api>
-    </v-card>
+    <p>
+      This component extends <a href = "https://vuetifyjs.com/ru/components/autocompletes">VAutocomplete</a> component.
+      It contains all properties, slots, events of extended component.
+      The part of VTreeSelect component is <a href = "https://vuetifyjs.com/ru/components/treeview">VTreeview</a>. Properties and events are repeated.
+      Scoped slots of <a href = "https://vuetifyjs.com/ru/components/treeview">VTreeview</a> are transformed:
+        <ul>
+          <li>prepend = prependTree</li>
+          <li>apend = apendTree</li>
+          <li>label = labelTree</li>
+        </ul>
+    </p>
+    <p>Added properties are below</p>
+    <table class="v-card__text v-data-table elevation-1 theme--light">
+        <thead>
+           <tr>
+            <th>Name</th> <th>Type</th> <th>Default</th><th>Describtion</th>
+           </tr>
+        </thead>
+        <tbody>
+           <tr>
+            <td>autocomplete</td> <td>boolean</td> <td>true</td>
+            <td>Switch between autocomplete/select behavior</td>
+           </tr>
+        </tbody>
+    </table>
     <span />
     <h2>Sandbox</h2>
     <v-card :dark="dark">
@@ -58,8 +79,7 @@ import { staticitems, dataGridHeaders, desserts } from '../example-data'
 
 export default Vue.extend({
   components: {
-    VTreeSelect,
-    VApi
+    VTreeSelect
   },
   data: () => ({
     items: staticitems,

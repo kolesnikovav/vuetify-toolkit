@@ -1,16 +1,36 @@
 <template>
   <div>
-      <h1>VCascader</h1>
-      <span></span>
-      <p>VCascader is cascade selection box. Use this when you need multi-stage selection.
-      </p>
-      <h2>API</h2>
-      <v-card>
-        <v-api :PROPS="componentProps" :SLOTS="componentSlots" :EVENTS="componentEvents">
-        </v-api>
-      </v-card>
-      <span/>
-      <h2>Sandbox</h2>
+    <h1>VCascader</h1>
+    <span></span>
+    <p>
+      VCascader is the cascade selection box. Use this when you need multi-stage selection.
+      It made for reducing items and simplifying user choice.
+    </p>
+    <p>
+      This component extends <a href = "https://vuetifyjs.com/ru/components/autocompletes">VAutocomplete</a> component.
+      It contains all properties, slots, events of extended component. Because items can be nested, component includes some properties,
+      similiar as VTreeSelect component.
+    </p>
+    <p>Added properties are below</p>
+    <table class="v-card__text v-data-table elevation-1 theme--light">
+        <thead>
+           <tr>
+            <th>Name</th> <th>Type</th> <th>Default</th><th>Describtion</th>
+           </tr>
+        </thead>
+        <tbody>
+           <tr>
+            <td>autocomplete</td> <td>boolean</td> <td>true</td>
+            <td>Switch between autocomplete/select behavior</td>
+           </tr>
+           <tr>
+            <td>item-children</td> <td>[String, Function]</td> <td>'children'</td>
+            <td>Is the name or function of children items property</td>
+           </tr>
+        </tbody>
+    </table>
+    <span />
+    <h2>Sandbox</h2>
       <v-card :dark="dark">
         <v-card-text>
           <v-row justify="space-around">
@@ -34,13 +54,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import VCascader from '../components/VCascader'
-import VApi from './API.vue'
 import { ofices } from '../example-data'
 
 export default Vue.extend({
   components: {
-    VCascader,
-    VApi
+    VCascader
   },
   data: () => ({
     items: ofices,

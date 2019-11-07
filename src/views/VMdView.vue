@@ -6,10 +6,40 @@
       VMdView is the component that uses for master-detail view.
       It can be used separately or as a part of your custom pickers.
     </p>
-    <h2>API</h2>
-    <v-card>
-      <v-api :PROPS="componentProps" :SLOTS="componentSlots" :EVENTS="componentEvents"></v-api>
-    </v-card>
+    <p>
+      This component consist of two parts. The left part is treeview. The right part is data table. For data table provide paginator. It appears if nessesary
+      The parts of VMdView component is <a href = "https://vuetifyjs.com/ru/components/treeview">VTreeview</a> and <a href = "https://vuetifyjs.com/ru/components/data-tables">VDataTable</a>.
+      Scoped slots of <a href = "https://vuetifyjs.com/ru/components/treeview">VTreeview</a> and  <a href = "https://vuetifyjs.com/ru/components/data-tables">VDataTable</a> are transformed:
+        <ul>
+          <li>prepend = prependTree</li>
+          <li>apend = apendTree</li>
+          <li>label = labelTree</li>
+          <li>item = itemTable</li>
+          <li>header = headerTable</li>
+        </ul>
+    </p>
+    <p>Added properties are below</p>
+    <table class="v-card__text v-data-table elevation-1 theme--light">
+        <thead>
+           <tr>
+            <th>Name</th> <th>Type</th> <th>Default</th><th>Describtion</th>
+           </tr>
+        </thead>
+        <tbody>
+           <tr>
+            <td>multiple</td> <td>boolean</td> <td>false</td>
+            <td>Allow multiple selections in table</td>
+           </tr>
+           <tr>
+            <td>hierarchy</td> <td>boolean</td> <td>true</td>
+            <td>If true, only children of left active node should be displayed, else - all items</td>
+           </tr>
+           <tr>
+            <td>item-children</td> <td>[String, Function]</td> <td>'children'</td>
+            <td>Is the name or function of children items property</td>
+           </tr>
+        </tbody>
+    </table>
     <span />
     <h2>Sandbox</h2>
     <v-card :dark="dark">
@@ -48,7 +78,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import VMdView from '../components/VMdView'
-import VApi from './API.vue'
+
 import {
   staticitems,
   dataGridHeaders,
@@ -58,8 +88,7 @@ import {
 
 export default Vue.extend({
   components: {
-    VMdView,
-    VApi
+    VMdView
   },
   data: () => ({
     items: staticitems,
@@ -70,43 +99,8 @@ export default Vue.extend({
     dense: false,
     dark: false,
     customSlots: false,
-    hierarchy: true,
-    //
-    componentProps: [
-      {
-        name: 'items',
-        type: 'array',
-        default: '[]',
-        describtion: ' The array of items to display'
-      },
-      {
-        name: 'item-key',
-        type: 'string',
-        default: 'id',
-        describtion:
-          'The field on each item object that designates a unique key. The value of this property has to be unique for each item.'
-      },
-      {
-        name: 'item-text',
-        type: 'string',
-        default: 'name',
-        describtion: 'The field of item object that uses for displaying item'
-      },
-      {
-        name: 'dense',
-        type: 'boolean',
-        default: 'true',
-        describtion: ' enable or disable text typing for autocomplete behavior'
-      }
-    ],
-    //
-    componentSlots: [
-      { name: 'default', describtion: ' default component slot ' }
-    ],
-    //
-    componentEvents: [
-      { name: 'default', describtion: ' default component slot ', value: '' }
-    ]
+    hierarchy: false
+
   })
 })
 </script>
