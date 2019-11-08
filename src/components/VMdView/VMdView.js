@@ -254,7 +254,7 @@ export default Vue.extend({
     },
     genTreeViewScopedSlots () {
       let slots = treeviewScopedSlots(this.$scopedSlots)
-      console.log(slots)
+      // console.log(slots)
 
       if (this.folderIcon || this.folderOpenIcon) {
         if (slots['prepend']) {
