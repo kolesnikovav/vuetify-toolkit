@@ -21,8 +21,10 @@ export default Vue.extend({
   },
   data: () => ({
     currentNode: null,
+    openNodes: [],
     treeviewCashe: new Map(),
-    page: 1
+    parents: new Map(),
+    currentPage: 1
   }),
   computed: {
     treeItems () {
@@ -50,17 +52,20 @@ export default Vue.extend({
     }
   },
   methods: {
-    buildTree (items) {
+    buildTree (items, parentkey) {
       const newItems = []
       items.map(item => {
         const localChildren = getObjectValueByPath(item, this.itemChildren, [])
         const itemKey = getObjectValueByPath(item, this.itemKey, [])
         if (localChildren.length > 0) {
-          const newChildren = this.buildTree(localChildren)
+          const newChildren = this.buildTree(localChildren, itemKey)
           const clone = Object.assign({}, item)
           clone[this.itemChildren] = newChildren
           newItems.push(clone)
           this.treeviewCashe.set(itemKey, item)
+          this.parents.set(itemKey, parentkey)
+        } else {
+          this.parents.set(itemKey, parentkey)
         }
       })
       return newItems
@@ -101,13 +106,13 @@ export default Vue.extend({
               props: {
                 length: this.pageCount,
                 dark: this.dark,
-                value: this.page
+                value: this.currentPage
               },
               style: {
                 'vertical-align': 'bottom'
               },
               on: {
-                input: (e) => { this.page = e }
+                input: (e) => { this.currentPage = e }
               }
             })
           ]
@@ -148,14 +153,34 @@ export default Vue.extend({
             headers: this.headers,
             items: this.tableItems,
             itemsPerPage: this.itemsPerPage,
-            page: this.page,
+            page: this.currentPage,
             hideDefaultFooter: true,
             showSelect: this.selectable,
             singleSelect: !this.multiple
           },
-          scopedSlots: tableScopedSlots(this.$scopedSlots)
+          scopedSlots: tableScopedSlots(this.$scopedSlots),
+          on: {
+            'click:row': (e) => this.synchronyzeActiveNode(e)
+          }
         }, slots)
       ])
+    },
+    getParents (key) {
+      const result = []
+      const parent = this.parents.get(key)
+      if (parent) {
+        result.push(parent)
+        const p = this.getParents(parent)
+        result.push(...p)
+      }
+      return result
+    },
+    synchronyzeActiveNode (e) {
+      const itemKey = getObjectValueByPath(e, this.itemKey, [])
+      this.currentNode = this.parents.get(itemKey)
+      const parents = this.getParents(itemKey)
+      this.openNodes.push(...parents)
+      this.$nextTick(() => {})
     },
     genTreeView () {
       return this.$createElement(VCol, {
@@ -174,6 +199,7 @@ export default Vue.extend({
             multipleActive: false,
             search: this.search,
             items: this.treeItems,
+            active: [this.currentNode],
             activatable: true,
             activeClass: this.activeClass,
             color: this.color,
@@ -186,6 +212,7 @@ export default Vue.extend({
             loadingIcon: this.loadingIcon,
             offIcon: this.offIcon,
             onIcon: this.onIcon,
+            open: this.openNodes,
             openOnClick: this.openOnClick,
             rounded: this.rounded,
             selectable: false,
@@ -195,7 +222,8 @@ export default Vue.extend({
           },
           scopedSlots: treeviewScopedSlots(this.$scopedSlots),
           on: {
-            'update:active': this.updateTable
+            'update:active': this.updateTable,
+            'update:open': (e) => { this.openNodes = e }
           }
         })
       ])
