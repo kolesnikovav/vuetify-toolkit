@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { VCard, VDivider, VDataTable, VTreeview, VTreeviewNodeProps, VPagination, VRow, VCol, getObjectValueByPath } from '../../vuetify-import'
+import { VCard, VDivider, VDataTable, VTreeview, VTreeviewNodeProps, VPagination, VRow, VCol, VIcon, getObjectValueByPath } from '../../vuetify-import'
 import treeviewScopedSlots from '../../utils/TreeviewScopedSlots'
 import tableScopedSlots from '../../utils/TableScopedSlots'
 
@@ -17,6 +17,26 @@ export default Vue.extend({
     hierarchy: {
       type: Boolean,
       default: true
+    },
+    folderIcon: {
+      type: [String, Function],
+      default: undefined
+    },
+    folderOpenIcon: {
+      type: [String, Function],
+      default: undefined
+    },
+    itemIcon: {
+      type: [String, Function],
+      default: undefined
+    },
+    folderIconColor: {
+      type: [String, Function],
+      default: undefined
+    },
+    itemIconColor: {
+      type: [String, Function],
+      default: undefined
     }
   },
   data: () => ({
@@ -29,6 +49,21 @@ export default Vue.extend({
   computed: {
     treeItems () {
       return this.buildTree(this.items)
+    },
+    tableHeaders () {
+      if (this.folderIcon || this.folderOpenIcon || this.itemIcon) {
+        const iconHeader = {
+          text: '',
+          value: 'itemIcon',
+          align: 'start',
+          sortable: false,
+          filterable: false,
+          divider: false,
+          width: 20
+        }
+        return [iconHeader, ...this.headers]
+      }
+      return this.headers
     },
     tableItems () {
       if (this.hierarchy) {
@@ -120,6 +155,34 @@ export default Vue.extend({
       }
       return undefined
     },
+    genItemIconIcon (item) {
+      const itemKey = getObjectValueByPath(item.item, this.itemKey, [])
+      let fn
+      let color
+      if (this.treeviewCashe.get(itemKey)) {
+        if (this.openNodes.indexOf(itemKey) >= 0) {
+          fn = this.folderOpenIcon
+        } else {
+          fn = this.folderIcon
+        }
+        color = this.folderIconColor
+      } else {
+        fn = this.itemIcon
+        color = this.itemIconColor
+      }
+      return this.$createElement(VIcon, {
+        props: {
+          color: color
+        }
+      }, fn)
+    },
+    genTableScopedSlots () {
+      let slots = tableScopedSlots(this.$scopedSlots)
+      if (this.folderIcon || this.folderOpenIcon || this.itemIcon) {
+        slots = Object.assign(slots, { 'item.itemIcon': this.genItemIconIcon })
+      }
+      return slots
+    },
     genTable () {
       const slots = [
         'body',
@@ -150,7 +213,7 @@ export default Vue.extend({
           props: {
             selected: this.selectable,
             dense: this.dense,
-            headers: this.headers,
+            headers: this.tableHeaders,
             items: this.tableItems,
             itemsPerPage: this.itemsPerPage,
             page: this.currentPage,
@@ -158,7 +221,7 @@ export default Vue.extend({
             showSelect: this.selectable,
             singleSelect: !this.multiple
           },
-          scopedSlots: tableScopedSlots(this.$scopedSlots),
+          scopedSlots: this.genTableScopedSlots(),
           on: {
             'click:row': (e) => this.synchronyzeActiveNode(e)
           }
@@ -181,6 +244,33 @@ export default Vue.extend({
       const parents = this.getParents(itemKey)
       this.openNodes.push(...parents)
       this.$nextTick(() => {})
+    },
+    genCombinedTreeViewSlot (props) {
+      return (props) => {
+        this.$createElement('div', {},
+          [this.genItemIconIcon(props), this.$scopedSlots['prependTree'](props)]
+        )
+      }
+    },
+    genTreeViewScopedSlots () {
+      let slots = treeviewScopedSlots(this.$scopedSlots)
+      console.log(slots)
+
+      if (this.folderIcon || this.folderOpenIcon) {
+        if (slots['prepend']) {
+          // // slots['prepend'] = this.genCombinedTreeViewSlot
+          // console.log(slots)
+          // slots = Object.assign({}, { prepend: (props) => this.genCombinedTreeViewSlot(props) })
+          // slots = Object.assign({}, { prepend: (props) => this.genCombinedTreeViewSlot(props) })
+          // slots['prepend'] = (props) => this.genCombinedTreeViewSlot(props)
+        } else {
+          slots = Object.assign(slots, { prepend: this.genItemIconIcon })
+        }
+        // slots = Object.assign(slots, { 'item.itemIcon': this.genItemIconIcon })
+      }
+      // console.log(this.$scopedSlots)
+      // console.log(slots)
+      return slots
     },
     genTreeView () {
       return this.$createElement(VCol, {
@@ -220,7 +310,7 @@ export default Vue.extend({
             shaped: this.shaped,
             transition: this.transition
           },
-          scopedSlots: treeviewScopedSlots(this.$scopedSlots),
+          scopedSlots: this.genTreeViewScopedSlots(),
           on: {
             'update:active': this.updateTable,
             'update:open': (e) => { this.openNodes = e }

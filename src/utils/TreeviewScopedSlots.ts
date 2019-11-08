@@ -4,7 +4,7 @@ export default function treeviewScopedSlots (slots: any):object {
     result = Object.assign(result, { prepend: (props: any) => slots.prependTree(props) })
   }
   if (slots.appendTree) {
-    slots = Object.assign(slots, { append: (props: any) => slots.prependTree(props) })
+    slots = Object.assign(slots, { append: (props: any) => slots.appendTree(props) })
   }
   if (slots.labelTree) {
     slots = Object.assign(slots, { label: (props: any) => slots.labelTree(props) })

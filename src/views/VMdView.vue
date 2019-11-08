@@ -38,6 +38,26 @@
             <td>item-children</td> <td>[String, Function]</td> <td>'children'</td>
             <td>Is the name or function of children items property</td>
            </tr>
+           <tr>
+            <td>folder-icon</td> <td>[String, Function]</td> <td>undefined</td>
+            <td>folder icon</td>
+           </tr>
+           <tr>
+            <td>folder-open-icon</td> <td>[String, Function]</td> <td>undefined</td>
+            <td>folder icon if folder is open</td>
+           </tr>
+           <tr>
+            <td>item-icon</td> <td>[String, Function]</td> <td>undefined</td>
+            <td>item icon</td>
+           </tr>
+           <tr>
+            <td>folder-icon-color</td> <td>[String, Function]</td> <td>undefined</td>
+            <td>Color of folder icon</td>
+           </tr>
+           <tr>
+            <td>item-icon-color</td> <td>[String, Function]</td> <td>undefined</td>
+            <td>item icon color</td>
+           </tr>
         </tbody>
     </table>
     <span />
@@ -100,10 +120,15 @@
           :multiple="multiple"
           :dense="dense"
           :hierarchy = "hierarchy"
+          :folder-icon = "folderIcon"
+          :folder-open-icon = "folderOpenIcon"
+          :item-icon = "itemIcon"
+          :folder-icon-color = "folderIconColor"
+          :item-icon-color = "itemIconColor"
           :items-per-page = 5
         >
           <template v-if="customSlots" v-slot:prependTree="{ item, open }">
-            <v-icon >{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
+            <v-icon >{{ open ? 'mdi-play' : 'mdi-pause' }}</v-icon>
           </template>
           <template v-if="customSlots" v-slot:itemTable.data-table-select="{ isSelected, select }">
             <v-simple-checkbox color="green" :value="isSelected" @input="select($event)"></v-simple-checkbox>
@@ -169,6 +194,11 @@ export default Vue.extend({
     dark: false,
     customSlots: false,
     hierarchy: false,
+    folderIcon: 'mdi-folder',
+    folderOpenIcon: 'mdi-folder-open',
+    itemIcon: 'mdi-file',
+    itemIconColor: 'cyan',
+    folderIconColor: 'amber',
 
     codeSandbox: false,
     sandboxTemplate: sandboxTemplateHTML,

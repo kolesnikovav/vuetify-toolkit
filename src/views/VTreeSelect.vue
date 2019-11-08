@@ -110,7 +110,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import VTreeSelect from '../components/VTreeSelect'
-import VApi from './API.vue'
 import { staticitems } from '../example-data'
 
 const sandboxTemplateHTML = '<v-tree-select\n' +
