@@ -7,7 +7,7 @@
       It allows display full information for users. This component can be highly customized.
     </p>
     <p>
-      This component extends <a href = "https://vuetifyjs.com/ru/components/autocompletes">VAutocomplete</a> component.
+      This component extends <a href = "https://vuetifyjs.com/en/components/autocompletes">VAutocomplete</a> component.
       The part of VDataGridSelect component is <a href = "https://vuetifyjs.com/en/components/data-tables">VDataTable</a>. Properties and events are repeated.
       Scoped slots of <a href = "https://vuetifyjs.com/en/components/data-tables">VDataTable</a> are transformed:
         <ul>
@@ -32,6 +32,46 @@
     <span />
     <h2>Sandbox</h2>
       <v-card :dark="dark">
+      <v-toolbar dense flat grey lighten-3>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="codeSandbox = !codeSandbox">
+          <v-icon>mdi-codepen</v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-tabs v-if="codeSandbox" :dark="dark" right>
+        <v-tab>Template</v-tab>
+        <v-tab>Script</v-tab>
+        <v-tab>Items</v-tab>
+        <v-tab>Headers</v-tab>
+        <v-tab-item>
+          <div class="v-markup v-card v-card--outlined v-sheet theme--light grey darken-4">
+            <pre class="language-html">
+           <code class="language-html code-text">{{sandboxTemplate}}</code>
+          </pre>
+          </div>
+        </v-tab-item>
+        <v-tab-item>
+          <div class="v-markup v-card v-card--outlined v-sheet theme--light grey darken-4">
+            <pre class="language-javascript">
+           <code class="language-javascript code-text">{{sandboxCode}}</code>
+          </pre>
+          </div>
+        </v-tab-item>
+        <v-tab-item>
+          <div class="v-markup v-card v-card--outlined v-sheet theme--light grey darken-4">
+            <pre class="language-json">
+           <code class="language-json code-text">{{items}}</code>
+          </pre>
+          </div>
+        </v-tab-item>
+        <v-tab-item>
+          <div class="v-markup v-card v-card--outlined v-sheet theme--light grey darken-4">
+            <pre class="language-json">
+           <code class="language-json code-text">{{dataGridHeaders}}</code>
+          </pre>
+          </div>
+        </v-tab-item>
+      </v-tabs>
         <v-card-text>
           <v-row justify="space-around">
           <v-switch v-model="autocomplete" class="ma-2" label="autocomplete"></v-switch>
@@ -72,6 +112,55 @@ import Vue from 'vue'
 import VDataGridSelect from '../components/VDataGridSelect'
 import { dataGridHeaders, desserts } from '../example-data'
 
+const sandboxTemplate = '<v-data-grid-select\n' +
+' :autocomplete = "autocomplete"\n' +
+' :chips = "chips"\n' +
+' :dense = "dense"\n' +
+' :multiple = "multiple"\n' +
+' :items="items"\n' +
+' :clearable = "clearable"\n' +
+' :headers="dataGridHeaders"\n' +
+' item-key = "name"\n' +
+' item-text = "name"\n' +
+' :dark = "dark"\n' +
+'          >\n' +
+'          <template v-if="customSlots" v-slot:headerTable.fat="{ header }">\n' +
+'            <v-icon color ="red">mdi-cake</v-icon>\n' +
+'          </template>\n' +
+'          <template v-if="customSlots" v-slot:itemTable.calories="{ item }">\n' +
+'            <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip>\n' +
+'          </template>\n' +
+'          <template v-if="customSlots" v-slot:itemTable.fat="{ item }">\n' +
+'            <v-chip :color="getColorFat(item.fat)" dark>{{ item.fat }}</v-chip>\n' +
+'          </template>\n' +
+'</v-data-grid-select>\n'
+
+const sandboxCode = 'export default ({\n' +
+'  data: () => ({\n' +
+'    items: desserts, // see items\n' +
+'    dataGridHeaders: dataGridHeaders, // see headers\n' +
+'    chips: false,\n' +
+'    multiple: false,\n' +
+'    dense: false,\n' +
+'    clearable: false,\n' +
+'    dark: false,\n' +
+'    autocomplete: false,\n' +
+'    customSlots: false,\n' +
+'  }),\n' +
+'  methods: {\n' +
+'    getColor (calories) {\n' +
+'      if (calories > 400) return "red"\n' +
+'      else if (calories > 200) return "orange"\n' +
+'      else return "green"\n' +
+'    },\n' +
+'    getColorFat (fat: any) {\n' +
+'      if (fat > 20) return "red"\n' +
+'      else if (fat > 10) return "orange"\n' +
+'      else return "green"\n' +
+'    }\n' +
+'  }\n' +
+'})'
+
 export default Vue.extend({
   components: {
     VDataGridSelect
@@ -89,26 +178,9 @@ export default Vue.extend({
     autocomplete: false,
     customSlots: false,
     //
-    componentProps: [
-      { name: 'autocomplete',
-        type: 'boolean',
-        default: 'true',
-        describtion: ' enable or disable text typing for autocomplete behavior'
-      }
-    ],
-    //
-    componentSlots: [
-      { name: 'default',
-        describtion: ' default component slot '
-      }
-    ],
-    //
-    componentEvents: [
-      { name: 'default',
-        describtion: ' default component slot ',
-        value: ''
-      }
-    ]
+    codeSandbox: false,
+    sandboxTemplate: sandboxTemplate,
+    sandboxCode: sandboxCode
   }),
   methods: {
     getColor (calories: any) {

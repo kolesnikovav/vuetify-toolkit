@@ -34,7 +34,6 @@
     "vuetify": "^2.1.0"
   },
   "optionalDependencies": {
-    "highlight.js": "^9.15.10",
     "vue-router": "^3.0.3"
   },
   "devDependencies": {

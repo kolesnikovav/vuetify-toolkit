@@ -7,10 +7,10 @@
       You can use any nested data as item source.
     </p>
     <p>
-      This component extends <a href = "https://vuetifyjs.com/ru/components/autocompletes">VAutocomplete</a> component.
+      This component extends <a href = "https://vuetifyjs.com/en/components/autocompletes">VAutocomplete</a> component.
       It contains all properties, slots, events of extended component.
-      The part of VTreeSelect component is <a href = "https://vuetifyjs.com/ru/components/treeview">VTreeview</a>. Properties and events are repeated.
-      Scoped slots of <a href = "https://vuetifyjs.com/ru/components/treeview">VTreeview</a> are transformed:
+      The part of VTreeSelect component is <a href = "https://vuetifyjs.com/en/components/treeview">VTreeview</a>. Properties and events are repeated.
+      Scoped slots of <a href = "https://vuetifyjs.com/en/components/treeview">VTreeview</a> are transformed:
         <ul>
           <li>prepend = prependTree</li>
           <li>apend = apendTree</li>
@@ -34,6 +34,42 @@
     <span />
     <h2>Sandbox</h2>
     <v-card :dark="dark">
+      <v-toolbar dense flat grey lighten-3>
+        <v-spacer></v-spacer>
+        <v-btn icon @click = "codeSandbox = !codeSandbox">
+          <v-icon >mdi-codepen</v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-tabs
+          v-if = "codeSandbox"
+          :dark="dark"
+          right
+      >
+      <v-tab>Template</v-tab>
+      <v-tab>Script</v-tab>
+      <v-tab>Data source</v-tab>
+      <v-tab-item>
+        <div class = "v-markup v-card v-card--outlined v-sheet theme--light grey darken-4">
+          <pre class = "language-html">
+           <code class="language-html code-text" >{{sandboxTemplate}}</code>
+          </pre>
+        </div>
+      </v-tab-item>
+      <v-tab-item>
+        <div class = "v-markup v-card v-card--outlined v-sheet theme--light grey darken-4">
+          <pre class = "language-javascript">
+           <code class="language-javascript code-text" >{{sandboxCode}}</code>
+          </pre>
+        </div>
+      </v-tab-item>
+      <v-tab-item>
+        <div class = "v-markup v-card v-card--outlined v-sheet theme--light grey darken-4">
+          <pre class = "language-json">
+           <code class="language-json code-text" >{{dataSource}}</code>
+          </pre>
+        </div>
+      </v-tab-item>
+    </v-tabs>
       <v-card-text>
         <v-row justify="space-around">
           <v-switch v-model="autocomplete" class="ma-2" label="autocomplete"></v-switch>
@@ -75,7 +111,36 @@
 import Vue from 'vue'
 import VTreeSelect from '../components/VTreeSelect'
 import VApi from './API.vue'
-import { staticitems, dataGridHeaders, desserts } from '../example-data'
+import { staticitems } from '../example-data'
+
+const sandboxTemplateHTML = '<v-tree-select\n' +
+          '  :autocomplete="autocomplete"\n' +
+          '  :chips="chips"\n' +
+          '  :dense="dense"\n' +
+          '  :multiple="multiple"\n' +
+          '  :items="items"\n' +
+          '  :clearable="clearable"\n' +
+          '  :dark="dark"\n' +
+          '>\n' +
+          '<template v-if="customSlots" v-slot:prependTree="{ item, open }">\n' +
+          '  <v-icon v-if = "item.children">{{ open ? "mdi-folder-open" : "mdi-folder" }}</v-icon>\n' +
+          '  <v-icon v-else>mdi-file</v-icon>\n' +
+          '</template>\n' +
+          '</v-tree-select>'
+
+const sandboxCode = '\n' +
+'export default ({\n' +
+'  data: () => ({\n' +
+'    items: staticitems, // see data source \n' +
+'    chips: false,\n' +
+'    multiple: false,\n' +
+'    dense: false,\n' +
+'    clearable: false,\n' +
+'    dark: false,\n' +
+'    autocomplete: false,\n' +
+'    customSlots: false\n' +
+'  })\n' +
+'})\n'
 
 export default Vue.extend({
   components: {
@@ -83,8 +148,6 @@ export default Vue.extend({
   },
   data: () => ({
     items: staticitems,
-    dataGridHeaders: dataGridHeaders,
-    desserts: desserts,
     chips: false,
     multiple: false,
     dense: false,
@@ -93,28 +156,11 @@ export default Vue.extend({
     autocomplete: false,
     customSlots: false,
     //
-    componentProps: [
-      {
-        name: 'autocomplete',
-        type: 'boolean',
-        default: 'true',
-        describtion: ' enable or disable text typing for autocomplete behavior'
-      },
-      {
-        name: 'dense',
-        type: 'boolean',
-        default: 'true',
-        describtion: ' enable or disable text typing for autocomplete behavior'
-      }
-    ],
-    //
-    componentSlots: [
-      { name: 'default', describtion: ' default component slot ' }
-    ],
-    //
-    componentEvents: [
-      { name: 'default', describtion: ' default component slot ', value: '' }
-    ]
+    codeSandbox: false,
+    sandboxTemplate: sandboxTemplateHTML,
+    sandboxCode: sandboxCode,
+    dataSource: staticitems
+
   })
 })
 </script>

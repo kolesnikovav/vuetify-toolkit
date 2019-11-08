@@ -94,4 +94,8 @@ export default Vue.extend({
     font-size: 18px;
     color: blue
 }
+.code-text {
+    background: none!important;
+    color: lightyellow!important;
+}
 </style>
