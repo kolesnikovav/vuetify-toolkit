@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { VCard, VDivider, VDataTable, VTreeview, VTreeviewNodeProps, VPagination, VRow, VCol, VIcon, getObjectValueByPath } from '../../vuetify-import'
+import { VCard, VDivider, VDataTable, VTreeview, VTreeviewNodeProps, VPagination, VRow, VIcon, getObjectValueByPath } from '../../vuetify-import'
 import treeviewScopedSlots from '../../utils/TreeviewScopedSlots'
 import tableScopedSlots from '../../utils/TableScopedSlots'
 
@@ -44,7 +44,10 @@ export default Vue.extend({
     openNodes: [],
     treeviewCashe: new Map(),
     parents: new Map(),
-    currentPage: 1
+    currentPage: 1,
+    x: 0,
+    clientwidth: 0,
+    treeWidth: 300
   }),
   computed: {
     treeItems () {
@@ -84,6 +87,9 @@ export default Vue.extend({
         }
       }
       return 0
+    },
+    tableWidth () {
+      return this.clientwidth - 10 - this.treeWidth
     }
   },
   methods: {
@@ -124,9 +130,40 @@ export default Vue.extend({
       return this.$createElement(VDivider, {
         props: {
           vertical: true
+        },
+        style: {
+          cursor: 'col-resize',
+          width: '10px'
+        },
+        on: {
+          mousedown: this.startResizing
         }
       })
     },
+    /* resising parts of component */
+    updateDimensions () {
+      const rect = this.$el.getBoundingClientRect()
+      this.x = rect.x
+      this.clientwidth = rect.width
+      this.treeWidth = Math.min(this.clientwidth - 10, this.treeWidth)
+    },
+    startResizing () {
+      this.updateDimensions()
+      this.$el.addEventListener('mousemove', this.Resizing)
+    },
+    Resizing (e) {
+      this.$el.style.cursor = 'col-resize'
+      this.$el.addEventListener('mouselive', this.endResizing)
+      this.$el.addEventListener('mouseup', this.endResizing)
+      this.treeWidth = e.x - this.x
+    },
+    endResizing () {
+      this.$el.removeEventListener('mousemove', this.Resizing)
+      this.$el.removeEventListener('mouselive', this.endResizing)
+      this.$el.removeEventListener('mouseup', this.endResizing)
+      this.$el.style.cursor = ''
+    },
+    /* resising parts of component */
     genPagination () {
       if (this.itemsPerPage && Array.isArray(this.tableItems)) {
         if (this.itemsPerPage < this.tableItems.length) {
@@ -201,32 +238,27 @@ export default Vue.extend({
           slot: slotName
         }, this.$slots[slotName]))
 
-      return this.$createElement(VCol, {
+      return this.$createElement(VDataTable, {
+        ref: 'data-table',
         props: {
-          alignSelf: 'stretch',
-          cols: 8.9
+          selected: this.selectable,
+          dense: this.dense,
+          headers: this.tableHeaders,
+          items: this.tableItems,
+          itemsPerPage: this.itemsPerPage,
+          page: this.currentPage,
+          hideDefaultFooter: true,
+          showSelect: this.selectable,
+          singleSelect: !this.multiple
+        },
+        style: {
+          width: this.tableWidth + 'px'
+        },
+        scopedSlots: this.genTableScopedSlots(),
+        on: {
+          'click:row': (e) => this.synchronyzeActiveNode(e)
         }
-      },
-      [
-        this.$createElement(VDataTable, {
-          ref: 'data-table',
-          props: {
-            selected: this.selectable,
-            dense: this.dense,
-            headers: this.tableHeaders,
-            items: this.tableItems,
-            itemsPerPage: this.itemsPerPage,
-            page: this.currentPage,
-            hideDefaultFooter: true,
-            showSelect: this.selectable,
-            singleSelect: !this.multiple
-          },
-          scopedSlots: this.genTableScopedSlots(),
-          on: {
-            'click:row': (e) => this.synchronyzeActiveNode(e)
-          }
-        }, slots)
-      ])
+      }, slots)
     },
     getParents (key) {
       const result = []
@@ -272,64 +304,68 @@ export default Vue.extend({
       return slots
     },
     genTreeView () {
-      return this.$createElement(VCol, {
+      return this.$createElement(VTreeview, {
         ref: 'treeview',
         props: {
-          alignSelf: 'stretch',
-          cols: 3
+          dense: this.dense,
+          hoverable: this.hoverable,
+          multipleActive: false,
+          search: this.search,
+          items: this.treeItems,
+          active: [this.currentNode],
+          activatable: true,
+          activeClass: this.activeClass,
+          color: this.color,
+          expandIcon: this.expandIcon,
+          itemChildren: this.itemChildren,
+          itemDisabled: this.itemDisabled,
+          itemKey: this.itemKey,
+          itemText: this.itemText,
+          loadChildren: this.loadChildren,
+          loadingIcon: this.loadingIcon,
+          offIcon: this.offIcon,
+          onIcon: this.onIcon,
+          open: this.openNodes,
+          openOnClick: this.openOnClick,
+          rounded: this.rounded,
+          selectable: false,
+          selectedColor: this.selectedColor,
+          shaped: this.shaped,
+          transition: this.transition
+        },
+        style: {
+          width: this.treeWidth + 'px',
+          padding: '16px'
+        },
+        scopedSlots: this.genTreeViewScopedSlots(),
+        on: {
+          'update:active': this.updateTable,
+          'update:open': (e) => { this.openNodes = e }
         }
-      },
-      [
-        this.$createElement(VTreeview, {
-          ref: 'treeview',
-          props: {
-            dense: this.dense,
-            hoverable: this.hoverable,
-            multipleActive: false,
-            search: this.search,
-            items: this.treeItems,
-            active: [this.currentNode],
-            activatable: true,
-            activeClass: this.activeClass,
-            color: this.color,
-            expandIcon: this.expandIcon,
-            itemChildren: this.itemChildren,
-            itemDisabled: this.itemDisabled,
-            itemKey: this.itemKey,
-            itemText: this.itemText,
-            loadChildren: this.loadChildren,
-            loadingIcon: this.loadingIcon,
-            offIcon: this.offIcon,
-            onIcon: this.onIcon,
-            open: this.openNodes,
-            openOnClick: this.openOnClick,
-            rounded: this.rounded,
-            selectable: false,
-            selectedColor: this.selectedColor,
-            shaped: this.shaped,
-            transition: this.transition
-          },
-          scopedSlots: this.genTreeViewScopedSlots(),
-          on: {
-            'update:active': this.updateTable,
-            'update:open': (e) => { this.openNodes = e }
-          }
-        })
-      ])
+      })
     }
   },
+  mounted () {
+    window.addEventListener('resize', this.updateDimensions)
+    window.addEventListener('load', this.updateDimensions)
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.updateDimensions)
+    window.removeEventListener('load', this.updateDimensions)
+  },
   render () {
-    return this.$createElement(VCard, {}, [
-      this.$createElement(VRow, {
-        props: {
-          align: 'stretch'
-        }
-      }, [
-        this.genTreeView(),
-        this.genDivider(),
-        this.genTable()
-      ]),
-      this.genPagination()
-    ])
+    return this.$createElement(VCard, {},
+      [
+        this.$createElement(VRow, {
+          props: {
+            align: 'stretch'
+          }
+        }, [
+          this.genTreeView(),
+          this.genDivider(),
+          this.genTable()
+        ]),
+        this.genPagination()
+      ])
   }
 })
