@@ -155,7 +155,7 @@ export default Vue.extend({
       }
       return undefined
     },
-    genItemIconIcon (item) {
+    genItemIcon (item) {
       const itemKey = getObjectValueByPath(item.item, this.itemKey, [])
       let fn
       let color
@@ -179,7 +179,7 @@ export default Vue.extend({
     genTableScopedSlots () {
       let slots = tableScopedSlots(this.$scopedSlots)
       if (this.folderIcon || this.folderOpenIcon || this.itemIcon) {
-        slots = Object.assign(slots, { 'item.itemIcon': this.genItemIconIcon })
+        slots = Object.assign(slots, { 'item.itemIcon': this.genItemIcon })
       }
       return slots
     },
@@ -246,30 +246,29 @@ export default Vue.extend({
       this.$nextTick(() => {})
     },
     genCombinedTreeViewSlot (props) {
-      return (props) => {
-        this.$createElement('div', {},
-          [this.genItemIconIcon(props), this.$scopedSlots['prependTree'](props)]
-        )
-      }
+      return this.$createElement('div', {},
+        [this.genItemIcon(props), this.$scopedSlots['prependTree'](props)]
+      )
     },
     genTreeViewScopedSlots () {
-      let slots = treeviewScopedSlots(this.$scopedSlots)
-      // console.log(slots)
-
-      if (this.folderIcon || this.folderOpenIcon) {
-        if (slots['prepend']) {
-          // // slots['prepend'] = this.genCombinedTreeViewSlot
-          // console.log(slots)
-          // slots = Object.assign({}, { prepend: (props) => this.genCombinedTreeViewSlot(props) })
-          // slots = Object.assign({}, { prepend: (props) => this.genCombinedTreeViewSlot(props) })
-          // slots['prepend'] = (props) => this.genCombinedTreeViewSlot(props)
-        } else {
-          slots = Object.assign(slots, { prepend: this.genItemIconIcon })
+      let slots
+      if (this.$scopedSlots['prependTree'] && (this.folderIcon || this.folderOpenIcon)) {
+        // needs combined scoped slot
+        slots = Object.assign({}, { prepend: this.genCombinedTreeViewSlot })
+        if (this.$scopedSlots['appendTree']) {
+          slots = Object.assign({}, { append: (props) => this.$scopedSlots['appendTree'](props) })
         }
-        // slots = Object.assign(slots, { 'item.itemIcon': this.genItemIconIcon })
+        if (this.$scopedSlots['labelTree']) {
+          slots = Object.assign({}, { label: (props) => this.$scopedSlots['labelTree'](props) })
+        }
+      } else {
+        slots = treeviewScopedSlots(this.$scopedSlots)
       }
-      // console.log(this.$scopedSlots)
-      // console.log(slots)
+      if (this.folderIcon || this.folderOpenIcon) {
+        if (!slots['prepend']) {
+          slots = Object.assign(slots, { prepend: this.genItemIcon })
+        }
+      }
       return slots
     },
     genTreeView () {

@@ -1,4 +1,4 @@
-export default function treeviewScopedSlots (slots: any):object {
+export default function treeviewScopedSlots (slots: any): object {
   let result = {}
   if (slots.prependTree) {
     result = Object.assign(result, { prepend: (props: any) => slots.prependTree(props) })
