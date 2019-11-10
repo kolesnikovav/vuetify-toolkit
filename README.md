@@ -93,3 +93,8 @@ Then, you can use this components as
 ### Hello world example
 
 [Here](https://github.com/kolesnikovav/testapp) is the sample project with vuetify-toolkit, built with [vue cli](https://cli.vuejs.org/)
+
+### Contributing
+
+Any help for this project are welcome.
+Please read the [Contributing Guide](./CONTRIBUTING.md)
