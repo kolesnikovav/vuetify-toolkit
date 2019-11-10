@@ -13,11 +13,7 @@
   </a>
 </p>
 
-The set of additional vuetify components, that not included in [vuetify.js](https://vuetifyjs.com/) library
-Working  in progress now.
-
-## status
-Current status is pre-alpha. Not ready for production use!
+The set of additional vuetify components, for using with [vuetify.js](https://vuetifyjs.com/) library
 
 ## Live demo
 
@@ -94,6 +90,6 @@ Then, you can use this components as
 </template>
 ```
 
-### Hello word example
+### Hello world example
 
 [Here](https://github.com/kolesnikovav/testapp) is the sample project with vuetify-toolkit, built with [vue cli](https://cli.vuejs.org/)
