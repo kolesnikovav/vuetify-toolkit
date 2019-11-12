@@ -35,7 +35,7 @@ $ yarn lib
 $ yarn publish
 ```
 
-### Progect folders
+### Project folders
 - **`src`**: contains the source code.
 
   - **`components`**: JS and TS files for components

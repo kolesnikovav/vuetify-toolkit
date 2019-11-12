@@ -61,6 +61,7 @@ export default VAutocomplete.extend({
         offIcon: this.offIcon,
         expandIcon: this.expandIcon,
         loadingIcon: this.loadingIcon,
+        loadChildren: this.loadChildren,
         itemKey: this.itemKey,
         itemText: this.itemText,
         itemChildren: this.itemChildren,

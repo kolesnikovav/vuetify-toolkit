@@ -104,6 +104,22 @@
     <v-tree-select chips clearable></v-tree-select>
     <h3>v-tree-select-select example (multiple selection)</h3>
     <v-tree-select chips :items="items" clearable multiple></v-tree-select>
+    <h3>v-tree-select disabled nodes</h3>
+    <v-tree-select chips :items="items" item-disabled="locked" clearable multiple></v-tree-select>
+    <h3>v-tree-select custom slots</h3>
+    <v-tree-select chips :items="items" clearable multiple>
+          <template v-slot:prependTree="{ item, open }">
+            <v-icon v-if = "item.children">{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
+            <v-icon v-else>mdi-file</v-icon>
+          </template>
+          <template v-slot:labelTree="{ item, open }">
+            <small>This is label slot... {{item.name}}</small>
+          </template>
+          <template v-slot:appendTree="{ item, open }">
+            <v-icon v-if = "item.children">{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
+            <v-icon v-else>mdi-file</v-icon>
+          </template>
+    </v-tree-select>
   </div>
 </template>
 

@@ -84,12 +84,18 @@ export default mixins(
         props: {
           dense: this.dense,
           items: this.items,
+          itemDisabled: this.itemDisabled,
+          itemText: this.itemText,
+          itemKey: this.itemKey,
+          itemChildren: this.itemChildren,
+          loadChildren: this.loadChildren,
           selectable: true,
           returnObject: true,
           selectOnly: true,
           selectedItems: this.selectedItems,
           openAll: this.openAll,
-          itemText: this.itemText
+          shaped: this.shaped,
+          rounded: this.rounded
         },
         scopedSlots: this.$scopedSlots,
         on: {

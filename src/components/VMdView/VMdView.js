@@ -146,6 +146,7 @@ export default Vue.extend({
       this.x = rect.x
       this.clientwidth = rect.width
       this.treeWidth = Math.min(this.clientwidth - 10, this.treeWidth)
+      this.$nextTick()
     },
     startResizing () {
       this.updateDimensions()
@@ -348,6 +349,7 @@ export default Vue.extend({
   mounted () {
     window.addEventListener('resize', this.updateDimensions)
     window.addEventListener('load', this.updateDimensions)
+    this.updateDimensions()
   },
   beforeDestroy () {
     window.removeEventListener('resize', this.updateDimensions)

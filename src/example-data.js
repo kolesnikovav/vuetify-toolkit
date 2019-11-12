@@ -2,6 +2,7 @@ export const staticitems = [
   {
     id: 1,
     name: 'Applications :',
+    locked: true,
     children: [
       { id: 2, name: 'Calendar : app' },
       { id: 3, name: 'Chrome : app' },
