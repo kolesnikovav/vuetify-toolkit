@@ -26,6 +26,11 @@
         </v-list-item>
         <v-list-item>
           <v-list-item-action>
+            <v-btn text :to="{path: '/datetimeselect'}">VDateTimeSelect</v-btn>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
             <v-btn text :to="{path: '/mdview'}">VMdView</v-btn>
           </v-list-item-action>
         </v-list-item>
