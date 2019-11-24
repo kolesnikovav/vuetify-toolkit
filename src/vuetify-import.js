@@ -4,6 +4,7 @@ import VDivider from 'vuetify/lib/components/VDivider/VDivider'
 import VBtn from 'vuetify/lib/components/VBtn/VBtn'
 import VIcon from 'vuetify/lib/components/VIcon/VIcon'
 import VSelect from 'vuetify/lib/components/VSelect/VSelect'
+import VTextField from 'vuetify/lib/components/VTextField/VTextField'
 import { VListItem, VListItemContent, VListItemTitle } from 'vuetify/lib/components/VList'
 import VDataTable from 'vuetify/lib/components/VDataTable/VDataTable'
 import { VSlideGroup, VSlideItem } from 'vuetify/lib/components/VSlideGroup'
@@ -44,6 +45,7 @@ export {
   VCard,
   VSlideGroup,
   VSlideItem,
+  VTextField,
   VTreeview,
   VTreeviewNodeProps,
   VToolbar,

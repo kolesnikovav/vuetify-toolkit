@@ -25,6 +25,9 @@ See [Live demo & documentation](https://kolesnikovav.github.io/vuetify-toolkit/)
  - VDataGridSelect
  The selector with Tabular items presentation
  [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit)
+ - VDateTimeSelect
+ Easy to use datetime selector
+ [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit)
  - VCascader
  Cascade selection box
  [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit)
@@ -56,11 +59,13 @@ Change your src/plugins/vuetify.js file as follows
         VTreeSelect,
         VCascader,
         VDataGridSelect,
+        VDateTimeSelect,
         VMdView } from 'vuetify-toolkit/vuetify-toolkit.umd'
       Vue.use(Vuetify,{
           VTreeSelect,
           VCascader,
           VDataGridSelect,
+          VDateTimeSelect,
           VMdView
       });
       export default new Vuetify({
@@ -83,6 +88,9 @@ Then, you can use this components as
     <v-data-grid-select>
       <!--  -->
     </v-data-grid-select>
+    <v-date-time-select>
+      <!--  -->
+    </v-date-time-select>
     <v-md-view>
       <!--  -->
     </v-md-view>

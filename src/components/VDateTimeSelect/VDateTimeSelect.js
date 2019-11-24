@@ -1,4 +1,4 @@
-import { VAutocomplete, VSelect, VDatePicker, VTimePicker, consoleError } from '../../vuetify-import'
+import { VAutocomplete, VTextField, VSelect, VDatePicker, VTimePicker, consoleError } from '../../vuetify-import'
 import VDateTimeSelectList from './VDateTimeSelectList'
 import DefaultMenuProps from '../../utils/MenuProps'
 
@@ -17,9 +17,10 @@ export default VAutocomplete.extend({
       type: [String, Array, Object],
       default: () => DefaultMenuProps
     },
-    itemText: {
-      type: [String, Array, Function],
-      default: 'text'
+    selectionType: {
+      type: String,
+      default: 'datetime',
+      validator: (v) => ['date', 'time', 'datetime'].includes(v)
     },
     maxDate: String,
     minDate: String,
@@ -38,25 +39,25 @@ export default VAutocomplete.extend({
   }),
   computed: {
     classes () {
-      if (this.autocomplete) {
-        return Object.assign({}, VSelect.options.computed.classes.call(this), {
-          'v-autocomplete': true,
-          'v-autocomplete--is-selecting-index': this.selectedIndex > -1
-        })
-      } else {
-        return Object.assign({}, VSelect.options.computed.classes.call(this), {})
-      }
+      // if (this.autocomplete) {
+      //   return Object.assign({}, VSelect.options.computed.classes.call(this), {
+      //     'v-autocomplete': true,
+      //     'v-autocomplete--is-selecting-index': this.selectedIndex > -1
+      //   })
+      // } else {
+      return Object.assign({}, VSelect.options.computed.classes.call(this), {})
+      // }
     },
     internalSearch: {
       get () {
-        const result = this.autocomplete ? VAutocomplete.options.computed.internalSearch.get.call(this)
-          : ''
-        return result
+        // const result = this.autocomplete ? VAutocomplete.options.computed.internalSearch.get.call(this)
+        //   : ''
+        return ''
       },
       set (val) {
-        if (this.autocomplete) {
-          VAutocomplete.options.computed.internalSearch.set.call(this, val)
-        }
+        // if (this.autocomplete) {
+        //   VAutocomplete.options.computed.internalSearch.set.call(this, val)
+        // }
       }
     },
     listData () {
@@ -64,6 +65,7 @@ export default VAutocomplete.extend({
       Object.assign(data.props, {
         dark: this.dark,
         dense: this.dense,
+        locale: this.locale,
         /* date-picker */
         allowedDates: this.allowedDates,
         dayFormat: this.dayFormat,
@@ -104,7 +106,8 @@ export default VAutocomplete.extend({
         useSeconds: this.useSeconds,
         valueTime: this.valueTime,
         ampmInTitle: this.ampmInTitle,
-        widthSelector: this.widthSelector
+        widthSelector: this.widthSelector,
+        selectionType: this.selectionType
       })
       Object.assign(data.on, {
         select: e => {
@@ -112,6 +115,9 @@ export default VAutocomplete.extend({
         },
         input: e => {
           this.selectItems(e)
+        },
+        'close-menu': e => {
+          this.isMenuActive = false
         }
       })
       Object.assign(data.scopedSlots, this.$scopedSlots)
@@ -135,9 +141,24 @@ export default VAutocomplete.extend({
   },
   methods: {
     register () {},
+    genInputAutocomplete () {
+      const input = VTextField.options.methods.genInput.call(this)
+
+      input.data = input.data || {}
+      input.data.attrs = input.data.attrs || {}
+      input.data.attrs.autocomplete = input.data.attrs.autocomplete || 'disabled'
+
+      input.data.domProps = input.data.domProps || {}
+      input.data.domProps.value = this.internalSearch
+      input.data.attrs.type = 'text'
+
+      return input
+    },
     genInput () {
-      return this.autocomplete ? VAutocomplete.options.methods.genInput.call(this)
+      const input = this.autocomplete ? this.genInputAutocomplete()
         : VSelect.options.methods.genInput.call(this)
+      // this.$refs['input'].type = 'text'
+      return input
     },
     genList () {
       // If there's no slots, we can use a cached VNode to improve performance
@@ -164,7 +185,8 @@ export default VAutocomplete.extend({
       this.widthSelector = this.$el.getBoundingClientRect().width
     },
     selectItems (items) {
-      this.selectedItems = items
+      this.selectedItems = []
+      this.selectedItems.push(items)
       if (!this.multiple) {
         this.isMenuActive = false
       }

@@ -3,18 +3,11 @@
     <h1>VDateTimeSelect</h1>
     <span></span>
     <p>
-      VDateTimeSelect is specialy designed for datetime selection.
+      VDateTimeSelect is specialy designed for date/ time / datetime selection.
     </p>
     <p>
-      This component extends <a href = "https://vuetifyjs.com/en/components/autocompletes">VAutocomplete</a> component.
-      It contains all properties, slots, events of extended component.
-      The part of VTreeSelect component is <a href = "https://vuetifyjs.com/en/components/treeview">VTreeview</a>. Properties and events are repeated.
-      Scoped slots of <a href = "https://vuetifyjs.com/en/components/treeview">VTreeview</a> are transformed:
-        <ul>
-          <li>prepend = prependTree</li>
-          <li>apend = apendTree</li>
-          <li>label = labelTree</li>
-        </ul>
+      This component consist of <a href = "https://vuetifyjs.com/en/components/date-pickers">VDatePicker</a> and <a href = "https://vuetifyjs.com/en/components/time-pickers">VTimePicker</a>. Properties are repeated when it not match.
+      In match case, properties transform by adding 'Date' or 'Time' suffix in original components properties. For example, max property becomes maxDate or maxTime in suitably context
     </p>
     <p>Added properties are below</p>
     <table class="v-card__text v-data-table elevation-1 theme--light">
@@ -67,7 +60,10 @@
           <v-switch v-model="dense" class="ma-2" label="dense"></v-switch>
           <v-switch v-model="clearable" class="ma-2" label="clearable"></v-switch>
           <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
-          <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
+        </v-row>
+        <v-row justify="space-between">
+          <v-select label = "select your locale" :items="locales" v-model="currentLocale"></v-select>
+          <v-select label = "selection type" :items="selectionTypes" v-model="selectionType"></v-select>
         </v-row>
         <v-date-time-select
           :autocomplete="autocomplete"
@@ -75,6 +71,8 @@
           :dense="dense"
           :clearable="clearable"
           :dark="dark"
+          :locale ="currentLocale"
+          :selectionType ="selectionType"
         >
         </v-date-time-select>
       </v-card-text>
@@ -86,32 +84,29 @@
 <script lang="ts">
 import Vue from 'vue'
 import VDateTimeSelect from '../components/VDateTimeSelect'
-const sandboxTemplateHTML = '<v-tree-select\n' +
+const sandboxTemplateHTML = '<v-date-time-select\n' +
           '  :autocomplete="autocomplete"\n' +
           '  :chips="chips"\n' +
           '  :dense="dense"\n' +
           '  :multiple="multiple"\n' +
-          '  :items="items"\n' +
           '  :clearable="clearable"\n' +
           '  :dark="dark"\n' +
+          '  :locale="currentLocale"\n' +
+          '  :selectionType="selectionType"\n' +
           '>\n' +
-          '<template v-if="customSlots" v-slot:prependTree="{ item, open }">\n' +
-          '  <v-icon v-if = "item.children">{{ open ? "mdi-folder-open" : "mdi-folder" }}</v-icon>\n' +
-          '  <v-icon v-else>mdi-file</v-icon>\n' +
-          '</template>\n' +
-          '</v-tree-select>'
+          '</v-date-time-select>'
 
 const sandboxCode = '\n' +
 'export default ({\n' +
 '  data: () => ({\n' +
 '    items: staticitems, // see data source \n' +
 '    chips: false,\n' +
-'    multiple: false,\n' +
 '    dense: false,\n' +
 '    clearable: false,\n' +
 '    dark: false,\n' +
 '    autocomplete: false,\n' +
-'    customSlots: false\n' +
+'    locale: \'en\',\n' +
+'    selectionType: \'datetime\',\n' +
 '  })\n' +
 '})\n'
 
@@ -128,12 +123,14 @@ export default Vue.extend({
     dark: false,
     autocomplete: false,
     customSlots: false,
-    // //
+    currentLocale: 'en',
+    selectionType: 'datetime',
+
+    locales: ['en', 'ru', 'it', 'pt', 'pl', 'zh'],
+    selectionTypes: ['date', 'time', 'datetime'],
     codeSandbox: false,
     sandboxTemplate: sandboxTemplateHTML,
     sandboxCode: sandboxCode
-    // dataSource: staticitems
-
   })
 })
 </script>

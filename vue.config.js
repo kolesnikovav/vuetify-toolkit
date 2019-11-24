@@ -22,6 +22,7 @@ module.exports = {
           'vuetify/lib/components/VDatePicker/VDatePicker': 'vuetify/lib/components/VDatePicker/VDatePicker',
           'vuetify/lib/components/VTimePicker/VTimePicker': 'vuetify/lib/components/VTimePicker/VTimePicker',
           'vuetify/lib/components/VCard/VCard': 'vuetify/lib/components/VCard/VCard',
+          'vuetify/lib/components/VTextField/VTextField': 'vuetify/lib/components/VTextField/VTextField',
           'vuetify/lib/components/VTreeview/VTreeview': 'vuetify/lib/components/VTreeview/VTreeview',
           'vuetify/lib/components/VTreeview/VTreeviewNode': 'vuetify/lib/components/VTreeview/VTreeviewNode',
           'vuetify/lib/components/VToolbar/VToolbar': 'vuetify/lib/components/VToolbar/VToolbar',

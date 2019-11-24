@@ -1,6 +1,7 @@
 import VTreeSelect from './VTreeSelect'
 import VCascader from './VCascader'
 import VDataGridSelect from './VDataGridSelect'
+import VDateTimeSelect from './VDateTimeSelect'
 import VMdView from './VMdView'
 
 import Vuetify from 'vuetify/lib'
@@ -11,6 +12,7 @@ const components = {
   VTreeSelect,
   VCascader,
   VDataGridSelect,
+  VDateTimeSelect,
   VMdView
 }
 
@@ -24,6 +26,7 @@ export default {
   VTreeSelect,
   VCascader,
   VDataGridSelect,
+  VDateTimeSelect,
   VMdView
 }
 
