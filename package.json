@@ -30,38 +30,44 @@
     "publish": "npm run lib && node postbuild.js"
   },
   "peerDependencies": {
-    "core-js": "^3.1.2",
+    "core-js": "^3.4.8",
     "vue": "^2.6.10",
-    "vuetify": "^2.1.0"
+    "vuetify": "^2.1.13"
   },
   "optionalDependencies": {
     "vue-router": "^3.0.3"
   },
   "devDependencies": {
     "@types/jest": "^23.1.4",
-    "@vue/cli-plugin-babel": "^4.0.4",
-    "@vue/cli-plugin-eslint": "^4.0.4",
-    "@vue/cli-plugin-typescript": "^4.0.4",
-    "@vue/cli-plugin-unit-jest": "^4.0.4",
-    "@vue/cli-service": "^4.0.4",
-    "@vue/eslint-config-standard": "^4.0.0",
-    "@vue/eslint-config-typescript": "^4.0.0",
+    "@vue/cli-plugin-babel": "^4.1.1",
+    "@vue/cli-plugin-eslint": "^4.1.1",
+    "@vue/cli-plugin-typescript": "^4.1.1",
+    "@vue/cli-plugin-unit-jest": "^4.1.1",
+    "@vue/cli-service": "^4.1.1",
+    "@vue/eslint-config-standard": "^5.0.1",
+    "@vue/eslint-config-typescript": "^5.0.1",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.0.1",
     "node-sass": "^4.9.0",
     "sass": "^1.17.4",
     "sass-loader": "^7.1.0",
     "ts-jest": "^23.0.0",
     "typescript": "^3.4.3",
+    "@typescript-eslint/eslint-plugin": "^2.11.0",
+    "@typescript-eslint/parser": "^2.11.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "vue-cli-plugin-vuetify": "^1.1.0",
     "vue-template-compiler": "^2.6.10",
-    "vuetify-loader": "^1.2.2"
+    "vuetify-loader": "^1.4.3"
   },
   "dependencies": {
     "vue": "^2.6.10",
-    "vuetify": "^2.1.5"
+    "vuetify": "^2.1.13"
   }
 }

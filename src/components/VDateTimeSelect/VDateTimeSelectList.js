@@ -129,7 +129,7 @@ export default mixins(
             on: {
               input: e => {
                 this.selectedDate = e
-                this.$refs['timepicker'].$data.selecting = 1
+                this.$refs.timepicker.$data.selecting = 1
               }
             }
           })
@@ -181,7 +181,7 @@ export default mixins(
 
     return this.$createElement('div', {
       staticClass: 'v-select-list v-card',
-      'class': this.themeClasses
+      class: this.themeClasses
     },
     [
       this.genHeader(),
@@ -192,7 +192,7 @@ export default mixins(
         }
       }, [
         this.selectionType === 'date' || this.selectionType === 'datetime' ? this.genDatePicker() : undefined,
-        this.selectionType === 'time' || this.selectionType === 'datetime' ? this.genTimePicker() : undefined]), [ ...childrenAppend ]
+        this.selectionType === 'time' || this.selectionType === 'datetime' ? this.genTimePicker() : undefined]), [...childrenAppend]
     ])
   }
 })

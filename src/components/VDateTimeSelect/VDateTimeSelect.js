@@ -128,7 +128,7 @@ export default VAutocomplete.extend({
         consoleError('assert: staticList should not be called if slots are used')
       }
       const slots = []
-      slots.push(this.$scopedSlots['items'])
+      slots.push(this.$scopedSlots.items)
       return this.$createElement(VDateTimeSelectList, this.listData, slots)
     }
   },

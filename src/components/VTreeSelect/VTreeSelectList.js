@@ -77,7 +77,7 @@ export default mixins(
 
     return this.$createElement('div', {
       staticClass: 'v-select-list v-card',
-      'class': this.themeClasses
+      class: this.themeClasses
     }, [
       children,
       this.$createElement(VTreeViewSelector, {

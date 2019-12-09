@@ -67,7 +67,7 @@ export default mixins(
 
     return this.$createElement('div', {
       staticClass: 'v-select-list v-card',
-      'class': this.themeClasses
+      class: this.themeClasses
     }, [
       children,
       // this.genHeader(),
@@ -91,7 +91,7 @@ export default mixins(
         },
         scopedSlots: tableScopedSlots(this.$scopedSlots),
         on: {
-          'input': e => {
+          input: e => {
             this.$emit('input', e)
           }
         }

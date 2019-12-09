@@ -144,7 +144,7 @@ export default VAutocomplete.extend({
 
     selectItem (item) {
       /* change parent item if item has children */
-      let chld = this.getChildren(item)
+      const chld = this.getChildren(item)
       if (Array.isArray(chld) && chld.length > 0) {
         this.parentItems.push(this.parentItem)
         this.parentItem = item
@@ -167,10 +167,10 @@ export default VAutocomplete.extend({
         return this.items
       }
       if (this.itemChildren && typeof this.itemChildren === 'string') {
-        let res = item ? item[this.itemChildren] : this.parentItem[this.itemChildren]
+        const res = item ? item[this.itemChildren] : this.parentItem[this.itemChildren]
         return res || []
       } else if (this.itemChildren && typeof this.itemChildren === 'function') {
-        let res = item ? this.itemChildren.call(item) : this.itemChildren.call(this.parentItem)
+        const res = item ? this.itemChildren.call(item) : this.itemChildren.call(this.parentItem)
         return res || []
       }
       return []
