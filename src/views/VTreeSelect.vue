@@ -112,7 +112,7 @@
             <v-icon v-if = "item.children">{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
             <v-icon v-else>mdi-file</v-icon>
           </template>
-          <template v-slot:labelTree="{ item, open }">
+          <template v-slot:labelTree="{ item }">
             <small>This is label slot... {{item.name}}</small>
           </template>
           <template v-slot:appendTree="{ item, open }">

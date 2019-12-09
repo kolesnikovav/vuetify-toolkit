@@ -85,7 +85,7 @@
           <v-data-grid-select :autocomplete = "autocomplete" :chips = "chips" :dense = "dense" :multiple = "multiple" :items="items" :clearable = "clearable"
             :headers="dataGridHeaders" item-key = "name" item-text = "name" :dark = "dark"
           >
-          <template v-if="customSlots" v-slot:headerTable.fat="{ header }">
+          <template v-if="customSlots" v-slot:headerTable.fat>
             <v-icon color ="red">mdi-cake</v-icon>
           </template>
           <template v-if="customSlots" v-slot:itemTable.calories="{ item }">
