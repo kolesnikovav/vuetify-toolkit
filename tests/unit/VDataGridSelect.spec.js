@@ -3,8 +3,7 @@ import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
 // Utilities
 import {
-  mount,
-  createLocalVue
+  mount
 } from '@vue/test-utils'
 // component to be tested
 import { VDataGridSelect } from '@/components'
@@ -17,14 +16,8 @@ const vuetify = new Vuetify({
   }
 })
 
-const localVue = createLocalVue()
-
 const singleRootTwoChildren = [
   { id: 0, name: 'Root', children: [{ id: 1, name: 'Child' }, { id: 2, name: 'Child 2' }] }
-]
-
-const threeLevels = [
-  { id: 0, name: 'Root', children: [{ id: 1, name: 'Child', children: [{ id: 2, name: 'Grandchild' }] }, { id: 3, name: 'Child' }] }
 ]
 
 describe('VDataGridSelect.js', () => {
