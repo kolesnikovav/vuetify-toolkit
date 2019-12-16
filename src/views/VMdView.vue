@@ -142,7 +142,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import VMdView from '../components/VMdView'
 
 import {
   staticitems,
@@ -182,9 +181,6 @@ const sandboxCode = '\n' +
 '})\n'
 
 export default Vue.extend({
-  components: {
-    VMdView
-  },
   data: () => ({
     items: staticitems,
     mdvHeaders: mdvHeaders,

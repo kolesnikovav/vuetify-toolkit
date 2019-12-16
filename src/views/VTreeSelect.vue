@@ -125,7 +125,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import VTreeSelect from '../components/VTreeSelect'
 import { staticitems } from '../example-data'
 
 const sandboxTemplateHTML = '<v-tree-select\n' +
@@ -158,9 +157,6 @@ const sandboxCode = '\n' +
 '})\n'
 
 export default Vue.extend({
-  components: {
-    VTreeSelect
-  },
   data: () => ({
     items: staticitems,
     chips: false,
@@ -175,7 +171,6 @@ export default Vue.extend({
     sandboxTemplate: sandboxTemplateHTML,
     sandboxCode: sandboxCode,
     dataSource: staticitems
-
   })
 })
 </script>

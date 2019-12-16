@@ -83,7 +83,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import VDateTimeSelect from '../components/VDateTimeSelect'
 const sandboxTemplateHTML = '<v-date-time-select\n' +
           '  :autocomplete="autocomplete"\n' +
           '  :chips="chips"\n' +
@@ -111,9 +110,6 @@ const sandboxCode = '\n' +
 '})\n'
 
 export default Vue.extend({
-  components: {
-    VDateTimeSelect
-  },
   data: () => ({
     items: [],
     chips: false,

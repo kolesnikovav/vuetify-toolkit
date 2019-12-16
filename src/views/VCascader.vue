@@ -102,7 +102,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import VCascader from '../components/VCascader'
 import { ofices } from '../example-data'
 
 const sandboxTemplateHTML = '<v-cascader\n' +
@@ -131,9 +130,6 @@ const sandboxCode = '\n' +
 '})\n'
 
 export default Vue.extend({
-  components: {
-    VCascader
-  },
   data: () => ({
     items: ofices,
     name: 'name',

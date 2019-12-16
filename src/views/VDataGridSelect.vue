@@ -109,7 +109,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import VDataGridSelect from '../components/VDataGridSelect'
 import { dataGridHeaders, desserts } from '../example-data'
 
 const sandboxTemplate = '<v-data-grid-select\n' +
@@ -162,9 +161,6 @@ const sandboxCode = 'export default ({\n' +
 '})'
 
 export default Vue.extend({
-  components: {
-    VDataGridSelect
-  },
   data: () => ({
     items: desserts,
     dataGridHeaders: dataGridHeaders,
