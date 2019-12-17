@@ -34,6 +34,11 @@
             <v-btn text :to="{path: '/mdview'}">VMdView</v-btn>
           </v-list-item-action>
         </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
+            <v-btn text :to="{path: '/propeditor'}">VPropEditor</v-btn>
+          </v-list-item-action>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app>

@@ -6,6 +6,7 @@ import VCascader from './views/VCascader.vue'
 import VDataGridSelect from './views/VDataGridSelect.vue'
 import VDateTimeSelect from './views/VDateTimeSelect.vue'
 import VMdView from './views/VMdView.vue'
+import VPropEditor from './views/VPropEditor.vue'
 
 Vue.use(Router)
 
@@ -42,6 +43,11 @@ export default new Router({
       path: '/mdview',
       name: 'vmdview',
       component: VMdView
+    },
+    {
+      path: '/propeditor',
+      name: 'vpropeditor',
+      component: VPropEditor
     }
   ]
 })

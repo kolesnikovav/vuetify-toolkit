@@ -1,6 +1,7 @@
 /* components */
 import {
   VAutocomplete,
+  VCheckbox,
   VDivider,
   VBtn,
   VIcon,
@@ -38,6 +39,7 @@ import Themeable from 'vuetify/lib/mixins/themeable'
 
 export {
   VAutocomplete,
+  VCheckbox,
   VDivider,
   VBtn,
   VIcon,
