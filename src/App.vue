@@ -47,9 +47,7 @@
         <span class="font-weight-light">VUETIFY-TOOLKIT Components examples & usage</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn text large href = "https://github.com/kolesnikovav/vuetify-toolkit">
-        GitHub
-      </v-btn>
+      <v-btn text large href="https://github.com/kolesnikovav/vuetify-toolkit">GitHub</v-btn>
     </v-app-bar>
 
     <v-content>
@@ -70,42 +68,42 @@ export default Vue.extend({
 </script>
 
 <style >
- .v-content__wrap {
-   padding-top: 22px;
-   padding-left: 100px;
-   padding-right: 100px;
-   padding-bottom: 22px;
-   line-height: 1.5;
- }
- .v-markup {
-    align-items: center;
-    box-shadow: none;
-    display: flex;
-    border-radius: 4px;
-    position: relative;
-    overflow-x: auto;
-    overflow-y: hidden;
-    margin-bottom: 16px;
-    background: #2d2d2d;
-    color: #fff;
+.v-content__wrap {
+  padding-top: 22px;
+  padding-bottom: 22px;
+  padding-left: 100px;
+  padding-right: 100px;
+  line-height: 1.5;
+}
+.v-markup {
+  align-items: center;
+  box-shadow: none;
+  display: flex;
+  border-radius: 4px;
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin-bottom: 16px;
+  background: #2d2d2d;
+  color: #fff;
 }
 .v-markup code {
-    position: relative;
-    box-shadow: none;
-    overflow-x: auto;
-    overflow-y: hidden;
-    word-break: break-word;
-    flex-wrap: wrap;
-    align-items: center;
-    vertical-align: middle;
-    white-space: pre-wrap;
+  position: relative;
+  box-shadow: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  word-break: break-word;
+  flex-wrap: wrap;
+  align-items: center;
+  vertical-align: middle;
+  white-space: pre-wrap;
 }
 .component-parameters {
-    font-size: 18px;
-    color: blue
+  font-size: 18px;
+  color: blue;
 }
 .code-text {
-    background: none!important;
-    color: lightyellow!important;
+  background: none !important;
+  color: lightyellow !important;
 }
 </style>

@@ -74,15 +74,13 @@
         <v-row justify="space-around">
           <v-switch v-model="autocomplete" class="ma-2" label="autocomplete"></v-switch>
           <v-switch v-model="multiple" class="ma-2" label="multiple"></v-switch>
-          <v-switch v-model="chips" class="ma-2" label="chips"></v-switch>
           <v-switch v-model="dense" class="ma-2" label="dense"></v-switch>
-          <v-switch v-model="clearable" class="ma-2" label="clearable"></v-switch>
           <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
           <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
         </v-row>
-          <v-data-table :items="items" :headers="dataGridHeaders" item-key = "name" item-text = "name" :dark = "dark"
+          <v-data-table-editable :items="items" :headers="dataGridHeaders" item-key = "name" item-text = "name" :dark = "dark" :dense = "dense"
           >
-          </v-data-table>
+          </v-data-table-editable>
       </v-card-text>
     </v-card>
     <span />
@@ -94,31 +92,25 @@
 import Vue from 'vue'
 import { dataGridHeaders, desserts } from '../example-data'
 
-const sandboxTemplateHTML = '<v-data-table\n' +
-          '  :autocomplete="autocomplete"\n' +
-          '  :chips="chips"\n' +
+const sandboxTemplateHTML = '<v-data-table-editable\n' +
           '  :dense="dense"\n' +
           '  :multiple="multiple"\n' +
           '  :items="items"\n' +
-          '  :clearable="clearable"\n' +
           '  :dark="dark"\n' +
           '>\n' +
           '<template v-if="customSlots" v-slot:prependTree="{ item, open }">\n' +
           '  <v-icon v-if = "item.children">{{ open ? "mdi-folder-open" : "mdi-folder" }}</v-icon>\n' +
           '  <v-icon v-else>mdi-file</v-icon>\n' +
           '</template>\n' +
-          '</v-data-table>'
+          '</v-data-table-editable>'
 
 const sandboxCode = '\n' +
 'export default ({\n' +
 '  data: () => ({\n' +
 '    items: staticitems, // see data source \n' +
-'    chips: false,\n' +
 '    multiple: false,\n' +
 '    dense: false,\n' +
-'    clearable: false,\n' +
 '    dark: false,\n' +
-'    autocomplete: false,\n' +
 '    customSlots: false\n' +
 '  })\n' +
 '})\n'

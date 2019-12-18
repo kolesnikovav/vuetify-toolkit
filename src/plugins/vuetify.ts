@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
-import { VTreeSelect, VCascader, VDataGridSelect, VDateTimeSelect, VMdView, VPropEditor } from '../components'
+import { VTreeSelect, VCascader, VDataGridSelect, VDateTimeSelect, VMdView, VPropEditor, VDataTableEditable } from '../components'
 
 Vue.use(Vuetify,
   {
@@ -10,7 +10,8 @@ Vue.use(Vuetify,
       VDataGridSelect,
       VDateTimeSelect,
       VMdView,
-      VPropEditor
+      VPropEditor,
+      VDataTableEditable
     }
   })
 

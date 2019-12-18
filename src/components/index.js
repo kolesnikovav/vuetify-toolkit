@@ -4,6 +4,7 @@ import VDataGridSelect from './VDataGridSelect'
 import VDateTimeSelect from './VDateTimeSelect'
 import VMdView from './VMdView'
 import VPropEditor from './VPropEditor'
+import VDataTableEditable from './VDataTableEditable'
 
 export default {
   VTreeSelect,
@@ -11,7 +12,8 @@ export default {
   VDataGridSelect,
   VDateTimeSelect,
   VMdView,
-  VPropEditor
+  VPropEditor,
+  VDataTableEditable
 }
 
 export {
@@ -20,5 +22,6 @@ export {
   VDataGridSelect,
   VDateTimeSelect,
   VMdView,
-  VPropEditor
+  VPropEditor,
+  VDataTableEditable
 }
