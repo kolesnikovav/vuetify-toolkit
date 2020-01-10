@@ -191,6 +191,7 @@ export default Vue.extend({
       on: {
         input: () => this.deactivateMenu()
       },
+      slot: 'header.data-table-settings',
       scopedSlots: {
         'activator' (on) {
           return self.genActivator(on)

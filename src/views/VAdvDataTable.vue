@@ -107,12 +107,11 @@
       </v-tabs>
       <v-card-text>
         <v-row justify="space-around">
-          <v-switch v-model="selectable" class="ma-2" label="selectable"></v-switch>
-          <v-switch v-model="multiple" class="ma-2" label="multiple"></v-switch>
+          <v-switch v-model="showSelect" class="ma-2" label="showSelect"></v-switch>
+          <v-switch v-model="singleSelect" class="ma-2" label="singleSelect"></v-switch>
           <v-switch v-model="dense" class="ma-2" label="dense"></v-switch>
           <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
           <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
-          <v-switch v-model="hierarchy" class="ma-2" label="hierarchy"></v-switch>
         </v-row>
         <v-adv-data-table
           :items="items"
@@ -120,10 +119,9 @@
           :headers="headers"
           headerIcon = "mdi-settings"
           headerIconColor = "error"
-          :selectable="selectable"
-          :multiple="multiple"
-          :dense="dense"
-          :hierarchy = "hierarchy"
+          :showSelect = "showSelect"
+          :singleSelect = "singleSelect"
+          :dense = "dense"
           :folder-icon = "folderIcon"
           :folder-open-icon = "folderOpenIcon"
           :item-icon = "itemIcon"
@@ -143,14 +141,13 @@ import Vue from 'vue'
 
 import { dataGridHeaders, desserts } from '../example-data'
 
-const sandboxTemplateHTML = '<v-md-view\n' +
+const sandboxTemplateHTML = '<v-adv-data-table\n' +
 '          :items="items"\n' +
 '          :dark="dark"\n' +
-'          :headers="mdvHeaders"\n' +
-'          :selectable="selectable"\n' +
-'          :multiple="multiple"\n' +
+'          :headers="headers"\n' +
+'          :showSelect="showSelect"\n' +
+'          :singleSelect="singleSelect"\n' +
 '          :dense="dense"\n' +
-'          :hierarchy = "hierarchy"\n' +
 '          :items-per-page = 5\n' +
 '        >\n' +
 '          <template v-if="customSlots" v-slot:prependTree="{ item, open }">\n' +
@@ -159,7 +156,7 @@ const sandboxTemplateHTML = '<v-md-view\n' +
 '          <template v-if="customSlots" v-slot:itemTable.data-table-select="{ isSelected, select }">\n' +
 '            <v-simple-checkbox color="green" :value="isSelected" @input="select($event)"></v-simple-checkbox>\n' +
 '          </template>\n' +
-'</v-md-view>'
+'</v-adv-data-table>'
 
 const sandboxCode = '\n' +
 'export default ({\n' +
@@ -179,12 +176,11 @@ export default Vue.extend({
   data: () => ({
     items: desserts,
     headers: dataGridHeaders,
-    selectable: true,
-    multiple: false,
+    showSelect: true,
+    singleSelect: false,
     dense: false,
     dark: false,
     customSlots: false,
-    hierarchy: false,
     folderIcon: 'mdi-folder',
     folderOpenIcon: 'mdi-folder-open',
     itemIcon: 'mdi-file',
