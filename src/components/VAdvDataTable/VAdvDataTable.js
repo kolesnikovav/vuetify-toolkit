@@ -24,28 +24,50 @@ export default Vue.extend({
     ...VDataTable.options.props
   },
   data: () => ({
-    isMenuActive: false
+    isMenuActive: false,
+    dataHeaders: []
   }),
   computed: {
     computedHeadersTable () {
-      if (!this.headers) return []
-      const headers = this.headers
+      if (!this.dataHeaders) return []
+      const headers = this.dataHeaders
       const defaultHeader = { text: '', sortable: false, width: '18px' }
       const index = headers.findIndex(h => h.value === 'data-table-settings')
       if (index < 0) headers.push({ ...defaultHeader, value: 'data-table-settings' })
       return headers
+    },
+    editedHeaders () {
+      return this.dataHeaders.filter(v => v.value !== 'data-table-settings')
     }
   },
+  created () {
+    this.refreshHeaders()
+  },
   methods: {
+    refreshHeaders () {
+      this.dataHeaders = []
+      if (this.headers && this.headers.length > 0) {
+        for (let i = 0; i < this.headers.length; i++) {
+          const hdr = Object.assign({}, this.headers[i])
+          hdr.visible = true
+          hdr.order = i
+          this.dataHeaders.push(hdr)
+        }
+      }
+    },
     genHeaderSettings () {
-      const editedHeaders = this.headers.filter(v => v.value !== 'data-table-settings')
       return this.$createElement(VColumnEditor, {
         props: {
-          headers: editedHeaders,
+          headers: this.editedHeaders,
           headerIcon: this.headerIcon,
           headerIconColor: this.headerIconColor,
           dark: this.dark,
           dense: this.dense
+        },
+        on: {
+          'headers-changed': (newHeaders) => {
+            this.dataHeaders = newHeaders
+          }
         }
       })
     },
@@ -56,7 +78,7 @@ export default Vue.extend({
     }
   },
   render () {
-    const currentProps = this.$props
+    const currentProps = Object.assign({}, this.$props)
     currentProps.headers = this.computedHeadersTable
 
     const scopedSlots = this.genTableScopedSlots()
