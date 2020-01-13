@@ -63,10 +63,15 @@ export default Vue.extend({
     dataHeaders: undefined
   }),
   methods: {
-    deactivateMenu (payload) {
-      this.isMenuActive = false
-      if (payload === 'OK') {
-        this.$emit('headers-changed', this.resultHeaders)
+    deactivateMenu (e, payload) {
+      if (payload === 'CLOSE') {
+        this.isMenuActive = true
+      } else {
+        e.stopPropagation()
+        this.isMenuActive = false
+        if (payload === 'OK') {
+          this.$emit('headers-changed', this.resultHeaders)
+        }
       }
     },
     genActivator (listeners) {
@@ -94,6 +99,23 @@ export default Vue.extend({
         }
       }, [this.headerIcon])
     },
+    genVisibleCheckbox (header) {
+      return this.$createElement(VCheckbox, {
+        props: {
+          value: header.visible,
+          inputValue: header.visible,
+          trueValue: true,
+          falseValue: false
+        },
+        on: {
+          click: (e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            header.visible = !header.visible
+          }
+        }
+      })
+    },
     genMenuItem (header) {
       return this.$createElement(VListItem, {
         props: {
@@ -101,14 +123,7 @@ export default Vue.extend({
         }
       }, [
         this.$createElement(VListItemAction, {}, [
-          this.$createElement(VCheckbox, {
-            props: {
-              value: header.visible,
-              inputValue: header.visible,
-              trueValue: true,
-              falseValue: false
-            }
-          })
+          this.genVisibleCheckbox(header)
         ]),
         this.$createElement(VListItemAction, {}, [
           this.$createElement(VBtn, {
@@ -218,7 +233,7 @@ export default Vue.extend({
               innerHTML: 'Cancel'
             },
             on: {
-              click: () => this.deactivateMenu('CANSEL')
+              click: (e) => this.deactivateMenu(e, 'CANCEL')
             }
           }),
           this.$createElement(VBtn, {
@@ -226,7 +241,7 @@ export default Vue.extend({
               text: true
             },
             on: {
-              click: () => this.deactivateMenu('OK')
+              click: (e) => this.deactivateMenu(e, 'OK')
             },
             domProps: {
               innerHTML: 'OK'
@@ -246,7 +261,7 @@ export default Vue.extend({
         value: this.isMenuActive
       },
       on: {
-        input: () => this.deactivateMenu('CLOSE')
+        input: (e) => this.deactivateMenu(e, 'CLOSE')
       },
       slot: 'header.data-table-settings',
       scopedSlots: {

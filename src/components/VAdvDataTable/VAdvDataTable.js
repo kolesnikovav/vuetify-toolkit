@@ -67,6 +67,7 @@ export default Vue.extend({
         on: {
           'headers-changed': (newHeaders) => {
             this.dataHeaders = newHeaders
+            this.$nextTick()
           }
         }
       })
@@ -79,8 +80,8 @@ export default Vue.extend({
   },
   render () {
     const currentProps = Object.assign({}, this.$props)
-    currentProps.headers = this.computedHeadersTable
-
+    const visibleHeaders = this.computedHeadersTable.filter(v => v.visible || v.value === 'data-table-settings')
+    currentProps.headers = visibleHeaders
     const scopedSlots = this.genTableScopedSlots()
     return this.$createElement(VDataTable, {
       props: currentProps,
