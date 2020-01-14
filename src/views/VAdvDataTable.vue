@@ -3,22 +3,8 @@
     <h1>VAdvDataTable</h1>
     <span></span>
     <p>
-      VAdvDataTable means "Advanced Data Table"
-      It extends <a href = "https://vuetifyjs.com/en/components/data-tables">VDataTable</a> and add new possibilities in this component.
-      1. User can select table columns order and visibility.
-      2. Added easy to use filter.
-    </p>
-    <p>
-      This component consist of two parts. The left part is treeview. The right part is data table. For data table provide paginator. It appears if nessesary
-      The parts of VMdView component is <a href = "https://vuetifyjs.com/en/components/treeview">VTreeview</a> and <a href = "https://vuetifyjs.com/en/components/data-tables">VDataTable</a>.
-      Scoped slots of <a href = "https://vuetifyjs.com/en/components/treeview">VTreeview</a> and  <a href = "https://vuetifyjs.com/en/components/data-tables">VDataTable</a> are transformed:
-        <ul>
-          <li>prepend = prependTree</li>
-          <li>apend = apendTree</li>
-          <li>label = labelTree</li>
-          <li>item = itemTable</li>
-          <li>header = headerTable</li>
-        </ul>
+      VAdvDataTable means "Advanced Data Table". This component wraps <a href = "https://vuetifyjs.com/en/components/data-tables">VDataTable</a> and add new possibilities in this component.
+      User can select table columns order and visibility.
     </p>
     <p>Added properties are below</p>
     <table class="v-card__text v-data-table elevation-1 theme--light">
@@ -29,36 +15,20 @@
         </thead>
         <tbody>
            <tr>
-            <td>multiple</td> <td>boolean</td> <td>false</td>
-            <td>Allow multiple selections in table</td>
+            <td>headerIcon</td> <td>string</td> <td>undefined</td>
+            <td>Determines header settings icon</td>
            </tr>
            <tr>
-            <td>hierarchy</td> <td>boolean</td> <td>true</td>
-            <td>If true, only children of left active node should be displayed, else - all items</td>
+            <td>headerIconColor</td> <td>string</td> <td>undefined</td>
+            <td>Settings icon color</td>
            </tr>
            <tr>
-            <td>item-children</td> <td>[String, Function]</td> <td>'children'</td>
-            <td>Is the name or function of children items property</td>
+            <td>upIcon</td> <td>String</td> <td>'expand_more'</td>
+            <td>The button icon to move header up</td>
            </tr>
            <tr>
-            <td>folder-icon</td> <td>[String, Function]</td> <td>undefined</td>
-            <td>folder icon</td>
-           </tr>
-           <tr>
-            <td>folder-open-icon</td> <td>[String, Function]</td> <td>undefined</td>
-            <td>folder icon if folder is open</td>
-           </tr>
-           <tr>
-            <td>item-icon</td> <td>[String, Function]</td> <td>undefined</td>
-            <td>item icon</td>
-           </tr>
-           <tr>
-            <td>folder-icon-color</td> <td>[String, Function]</td> <td>undefined</td>
-            <td>Color of folder icon</td>
-           </tr>
-           <tr>
-            <td>item-icon-color</td> <td>[String, Function]</td> <td>undefined</td>
-            <td>item icon color</td>
+            <td>downIcon</td> <td>string</td> <td>'expand_less'</td>
+            <td>The button icon to move header down</td>
            </tr>
         </tbody>
     </table>
@@ -129,6 +99,15 @@
           :item-icon-color = "itemIconColor"
           :items-per-page = 5
         >
+          <template v-if="customSlots" v-slot:header.fat>
+            <v-icon color ="red">mdi-cake</v-icon>
+          </template>
+          <template v-if="customSlots" v-slot:item.calories="{ item }">
+            <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip>
+          </template>
+          <template v-if="customSlots" v-slot:item.fat="{ item }">
+            <v-chip :color="getColorFat(item.fat)" dark>{{ item.fat }}</v-chip>
+          </template>
         </v-adv-data-table>
       </v-card-text>
     </v-card>
@@ -142,35 +121,45 @@ import Vue from 'vue'
 import { dataGridHeaders, desserts } from '../example-data'
 
 const sandboxTemplateHTML = '<v-adv-data-table\n' +
-'          :items="items"\n' +
-'          :dark="dark"\n' +
-'          :headers="headers"\n' +
-'          :showSelect="showSelect"\n' +
-'          :singleSelect="singleSelect"\n' +
-'          :dense="dense"\n' +
-'          :items-per-page = 5\n' +
-'        >\n' +
-'          <template v-if="customSlots" v-slot:prependTree="{ item, open }">\n' +
-'            <v-icon >{{ open ? "mdi-folder-open" : "mdi-folder" }}</v-icon>\n' +
+' :dense = "dense"\n' +
+' :showSelect = "showSelect"\n' +
+' :items="items"\n' +
+' :headers="dataGridHeaders"\n' +
+' :dark = "dark"\n' +
+'          >\n' +
+'          <template v-if="customSlots" v-slot:header.fat="{ header }">\n' +
+'            <v-icon color ="red">mdi-cake</v-icon>\n' +
 '          </template>\n' +
-'          <template v-if="customSlots" v-slot:itemTable.data-table-select="{ isSelected, select }">\n' +
-'            <v-simple-checkbox color="green" :value="isSelected" @input="select($event)"></v-simple-checkbox>\n' +
+'          <template v-if="customSlots" v-slot:item.calories="{ item }">\n' +
+'            <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip>\n' +
 '          </template>\n' +
-'</v-adv-data-table>'
+'          <template v-if="customSlots" v-slot:item.fat="{ item }">\n' +
+'            <v-chip :color="getColorFat(item.fat)" dark>{{ item.fat }}</v-chip>\n' +
+'          </template>\n' +
+'</v-adv-data-table>\n'
 
-const sandboxCode = '\n' +
-'export default ({\n' +
+const sandboxCode = 'export default ({\n' +
 '  data: () => ({\n' +
-'    items: staticitems, // see items\n' +
-'    mdvHeaders: mdvHeaders, // see headers\n' +
-'    selectable: true,\n' +
+'    items: desserts, // see items\n' +
+'    dataGridHeaders: dataGridHeaders, // see headers\n' +
 '    multiple: false,\n' +
 '    dense: false,\n' +
 '    dark: false,\n' +
 '    customSlots: false,\n' +
-'    hierarchy: false\n' +
-'  })\n' +
-'})\n'
+'  }),\n' +
+'  methods: {\n' +
+'    getColor (calories) {\n' +
+'      if (calories > 400) return "red"\n' +
+'      else if (calories > 200) return "orange"\n' +
+'      else return "green"\n' +
+'    },\n' +
+'    getColorFat (fat: any) {\n' +
+'      if (fat > 20) return "red"\n' +
+'      else if (fat > 10) return "orange"\n' +
+'      else return "green"\n' +
+'    }\n' +
+'  }\n' +
+'})'
 
 export default Vue.extend({
   data: () => ({
@@ -191,6 +180,18 @@ export default Vue.extend({
     sandboxTemplate: sandboxTemplateHTML,
     sandboxCode: sandboxCode
 
-  })
+  }),
+  methods: {
+    getColor (calories: any) {
+      if (calories > 400) return 'red'
+      else if (calories > 200) return 'orange'
+      else return 'green'
+    },
+    getColorFat (fat: any) {
+      if (fat > 20) return 'red'
+      else if (fat > 10) return 'orange'
+      else return 'green'
+    }
+  }
 })
 </script>
