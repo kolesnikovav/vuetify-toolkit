@@ -37,6 +37,9 @@ See [Live demo & documentation](https://kolesnikovav.github.io/vuetify-toolkit/)
  - VMdView
  Displaying any hierarchical data (like file explorer)
   [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit)
+ - VAdvDataTable
+ Data table with columns visibitity and order settings by user
+  [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit)
 
 ## Installation
 
@@ -60,12 +63,14 @@ Change your src/plugins/vuetify.js file as follows
         VCascader,
         VDataGridSelect,
         VDateTimeSelect,
+        VAdvDataTable,
         VMdView } from 'vuetify-toolkit/vuetify-toolkit.umd'
       Vue.use(Vuetify,{
           VTreeSelect,
           VCascader,
           VDataGridSelect,
           VDateTimeSelect,
+          VAdvDataTable,
           VMdView
       });
       export default new Vuetify({
@@ -91,6 +96,9 @@ Then, you can use this components as
     <v-date-time-select>
       <!--  -->
     </v-date-time-select>
+    <v-adv-data-table>
+      <!--  -->
+    </v-adv-data-table>
     <v-md-view>
       <!--  -->
     </v-md-view>
