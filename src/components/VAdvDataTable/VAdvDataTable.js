@@ -101,7 +101,9 @@ export default Vue.extend({
           filterIcon: this.filterIcon,
           filterActiveIcon: this.filterActiveIcon,
           filterIconColor: this.filterIconColor,
-          filterActiveIconColor: this.filterActiveIconColor
+          filterActiveIconColor: this.filterActiveIconColor,
+          dense: this.dense,
+          dark: this.dark
         }
       })
     },

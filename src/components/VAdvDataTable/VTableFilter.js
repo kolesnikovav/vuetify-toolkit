@@ -42,7 +42,7 @@ export default Vue.extend({
   },
   computed: {
     values () {
-      return this.getItemValues(this.header.value)
+      return [...new Set(this.getItemValues(this.header.value))]
     },
     filteredValues () {
       return (this.filterText === '' || !this.filterText) ? this.values
@@ -65,6 +65,9 @@ export default Vue.extend({
           this.$emit('headers-changed', this.resultHeaders)
         }
       }
+    },
+    changeSelection () {
+
     },
     valueFilterChange (e) {
       this.filterText = e || ''
@@ -121,8 +124,9 @@ export default Vue.extend({
             label: 'Filter by value',
             clearable: true,
             outlined: true,
+            dark: this.dark,
             dense: true,
-            appendIcon: 'place'
+            appendIcon: 'check'
           },
           style: {
             'padding-left': '16px',
@@ -130,7 +134,8 @@ export default Vue.extend({
             'padding-top': '16px'
           },
           on: {
-            input: (e) => this.valueFilterChange(e)
+            input: (e) => this.valueFilterChange(e),
+            'click:append': () => this.changeSelection()
           }
         }),
         this.$createElement(VFilterValueList, {
