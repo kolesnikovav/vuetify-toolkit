@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import { VDataTable } from '../../vuetify-import'
 import VColumnEditor from './VColumnEditor'
+// eslint-disable-next-line no-unused-vars
+import VTableFilter from './VTableFilter'
 
 export default Vue.extend({
   name: 'v-adv-data-table',
@@ -12,6 +14,22 @@ export default Vue.extend({
     headerIconColor: {
       type: String,
       default: undefined
+    },
+    filterIcon: {
+      type: String,
+      default: undefined
+    },
+    filterActiveIcon: {
+      type: String,
+      default: undefined
+    },
+    filterActiveIconColor: {
+      type: String,
+      default: undefined
+    },
+    filterOnHover: {
+      type: Boolean,
+      default: false
     },
     upIcon: {
       type: String,
@@ -72,8 +90,55 @@ export default Vue.extend({
         }
       })
     },
+    getValues (val) {
+      return this.items.map(v => v[val])
+    },
+    genFilter (header) {
+      return this.$createElement(VTableFilter, {
+        props: {
+          header: header,
+          getItemValues: this.getValues,
+          filterIcon: this.filterIcon,
+          filterActiveIcon: this.filterActiveIcon,
+          filterIconColor: this.filterIconColor,
+          filterActiveIconColor: this.filterActiveIconColor
+        }
+      })
+    },
+    genDefaultHeader (header) {
+      return this.$createElement('div', {
+        style: {
+          display: 'flex',
+          'justify-content': 'flex-start',
+          'align-content': 'center'
+        }
+      }, [
+        this.$createElement('span', {
+          style: {
+            display: 'inline-block'
+          }
+        }, [header.text]),
+        this.genFilter(header)
+      ])
+    },
+    genDefaultHeaderWithSlot (header, slot) {
+      const res = []
+      res.push(slot.call(this))
+      res.push(this.genFilter(header))
+      return res
+    },
     genTableScopedSlots () {
-      let slots = this.$scopedSlots
+      let slots = {}
+      this.headers.forEach(element => {
+        const slotName = 'header.' + element.value
+        let currentSlot
+        if (this.$scopedSlots[slotName]) {
+          currentSlot = this.genDefaultHeaderWithSlot.bind(this, element, this.$scopedSlots[slotName])
+        }
+        const slotnew = {}
+        slotnew[slotName] = currentSlot || this.genDefaultHeader.bind(this, element)
+        slots = Object.assign(slots, slotnew)
+      })
       slots = Object.assign(slots, { 'header.data-table-settings': this.genHeaderSettings })
       return slots
     }
