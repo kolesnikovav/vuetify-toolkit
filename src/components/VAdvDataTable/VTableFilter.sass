@@ -1,14 +1,21 @@
 .v-table-filter-value-list
-    max-width: none,
-    font-size: 0.8125rem,
+    display: flex,
+    max-width: 100%,
     word-wrap: normal,
+    padding-left: 16px,
+    padding-right: 16px,
+    max-height: 400px,
     overflow-y: scroll
-    // box-sizing: border-box,
-    // align-content:
 .v-table-filter-item
-    // display: inline-block,
-    // vertical-align: middle,
-    // color: green,
-    // word-wrap: none
-    &--selected:after
-        color: red
+    display: flex,
+    margin-right: auto
+    &selected
+        background: #f5f5f5
+.v-mono-select-field
+    padding-left: 16px,
+    padding-right: 16px,
+    padding-top: 16px
+.v-dual-conditions-field-row
+    margin: 0px,
+    padding-left: 16px,
+    padding-right: 16px

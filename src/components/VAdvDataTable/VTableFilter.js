@@ -2,13 +2,15 @@ import Vue from 'vue'
 import {
   VBtn,
   VIcon,
+  VSelect,
+  VTextField,
   VMenu,
   VDivider,
   VCard,
-  VCardActions
+  VCardActions,
+  VRow
 } from '../../vuetify-import'
 import VFilterValueList from './VFilterValueList'
-import { VTextField } from 'vuetify/lib'
 
 export default Vue.extend({
   name: 'v-table-filter',
@@ -44,33 +46,86 @@ export default Vue.extend({
     values () {
       return [...new Set(this.getItemValues(this.header.value))]
     },
+    conditions () {
+      const result = []
+      if (!this.header.datatype || this.header.datatype === 'string') {
+        result.push({ id: 'contains', text: 'contains' })
+        result.push({ id: 'startsWith', text: 'starts with' })
+        result.push({ id: 'endsWith', text: 'ends with' })
+      } else if (this.header.datatype === 'date' || this.header.datatype === 'number') {
+        result.push({ id: 'lessThen', text: 'less than' })
+        result.push({ id: 'moreThan', text: 'more than' })
+        result.push({ id: 'between', text: 'between' })
+        result.push({ id: 'equals', text: 'equals' })
+      }
+      return result
+    },
+    defaultCondition () {
+      if (this.header.datatype === 'date' || this.header.datatype === 'number') {
+        return { id: 'equals', text: 'equals' }
+      }
+      return { id: 'contains', text: 'contains' }
+    },
+    valueDataType () {
+      if (!this.header.datatype || this.header.datatype === 'string') {
+        return 'text'
+      } else if (this.header.datatype === 'date') {
+        return 'text'
+      } else if (this.header.datatype === 'number') {
+        return 'number'
+      }
+      return 'text'
+    },
     filteredValues () {
-      return (this.filterText === '' || !this.filterText) ? this.values
-        : this.values.filter(v => v.toString().toLocaleLowerCase().indexOf(this.filterText.toLocaleLowerCase()) >= 0)
+      const conditions = this.selectedCondition ? this.selectedCondition : this.defaultCondition
+      if (this.header.datatype) {
+        if (this.header.datatype === 'date' || this.header.datatype === 'number') {
+          if (conditions && conditions.id === 'lessThen' && this.filterText && this.filterText !== '') {
+            return this.values.filter(v => v < this.filterText)
+          } else if (conditions && conditions.id === 'moreThan' && this.filterText && this.filterText !== '') {
+            return this.values.filter(v => v > this.filterText)
+          } else if (conditions && conditions.id === 'equals' && this.filterText && this.filterText !== '') {
+            return this.values.filter(v => v.toString() === this.filterText)
+          } else if (conditions && conditions.id === 'between' && this.filterText && this.filterText !== '' && this.filterTextMax && this.filterTextMax !== '') {
+            return this.values.filter(v => v >= this.filterText && v <= this.filterTextMax)
+          } else return this.values
+        }
+      }
+      if (this.filterText === '' || !this.filterText || !conditions) return this.values
+      if (conditions.id === 'startsWith') {
+        return this.values.filter(v => v.toString().toLocaleLowerCase().startsWith(this.filterText.toLocaleLowerCase()))
+      } else if (conditions.id === 'endsWith') {
+        return this.values.filter(v => v.toString().toLocaleLowerCase().endsWith(this.filterText.toLocaleLowerCase()))
+      }
+      return this.values.filter(v => v.toString().toLocaleLowerCase().indexOf(this.filterText.toLocaleLowerCase()) >= 0)
+    },
+    filteredValuesSelected () {
+      const vals = []
+      this.filteredValues.map(v => {
+        vals.push({ text: v, selected: false })
+      })
+      return vals
     }
   },
   data: () => ({
     isMenuActive: false,
     dataHeaders: undefined,
-    filterText: ''
+    filterText: '',
+    filterTextMax: '',
+    selectedCondition: undefined
   }),
   methods: {
-    deactivateMenu (e, payload) {
-      if (payload === 'CLOSE') {
-        this.isMenuActive = true
-      } else {
-        e.stopPropagation()
-        this.isMenuActive = false
-        if (payload === 'OK') {
-          this.$emit('headers-changed', this.resultHeaders)
-        }
-      }
+    setCondition (e) {
+      this.selectedCondition = e
     },
     changeSelection () {
 
     },
     valueFilterChange (e) {
       this.filterText = e || ''
+    },
+    valueFilterChangeMax (e) {
+      this.filterTextMax = e || ''
     },
     genActivator (listeners) {
       return this.$createElement(VBtn, {
@@ -96,6 +151,66 @@ export default Vue.extend({
         }
       }, [this.filterIcon])
     },
+    genDualConditionsField () {
+      return this.$createElement(VRow, {
+        staticClass: 'v-dual-conditions-field-row'
+      }, [
+        this.$createElement(VTextField, {
+          props: {
+            type: this.valueDataType,
+            label: 'min value',
+            clearable: true,
+            outlined: true,
+            dark: this.dark,
+            dense: true
+          },
+          on: {
+            input: (e) => this.valueFilterChange(e)
+          }
+        }),
+        this.$createElement(VTextField, {
+          props: {
+            type: this.valueDataType,
+            label: 'max value',
+            clearable: true,
+            outlined: true,
+            dark: this.dark,
+            dense: true
+          },
+          on: {
+            input: (e) => this.valueFilterChangeMax(e)
+          }
+        })
+      ])
+    },
+    genMonoConditionsField () {
+      return this.$createElement(VTextField, {
+        props: {
+          type: this.valueDataType,
+          label: 'Filter by value',
+          clearable: true,
+          outlined: true,
+          dark: this.dark,
+          dense: true,
+          appendIcon: 'check'
+        },
+        style: {
+          'padding-left': '16px',
+          'padding-right': '16px',
+          'padding-top': '16px'
+        },
+        on: {
+          input: (e) => this.valueFilterChange(e),
+          'click:append': () => this.changeSelection()
+        }
+      })
+    },
+    genConditionsField () {
+      if (this.selectedCondition && this.selectedCondition.id === 'between') {
+        return this.genDualConditionsField()
+      }
+      return this.genMonoConditionsField()
+    },
     genMenuContent () {
       if (!this.header || !this.header.value) return
       return this.$createElement(VCard, {
@@ -105,28 +220,16 @@ export default Vue.extend({
         }
       },
       [
-        this.$createElement(VTextField, {
+        this.$createElement(VSelect, {
           props: {
             label: 'Filter by condition',
-            clearable: true,
+            items: this.conditions,
+            itemKey: 'id',
+            itemText: 'text',
+            returnObject: true,
+            value: this.selectedCondition ? this.selectedCondition : this.defaultCondition,
             outlined: true,
-            dense: true,
-            appendIcon: 'place'
-          },
-          style: {
-            'padding-left': '16px',
-            'padding-right': '16px',
-            'padding-top': '16px'
-          }
-        }),
-        this.$createElement(VTextField, {
-          props: {
-            label: 'Filter by value',
-            clearable: true,
-            outlined: true,
-            dark: this.dark,
-            dense: true,
-            appendIcon: 'check'
+            dense: true
           },
           style: {
             'padding-left': '16px',
@@ -134,13 +237,13 @@ export default Vue.extend({
             'padding-top': '16px'
           },
           on: {
-            input: (e) => this.valueFilterChange(e),
-            'click:append': () => this.changeSelection()
+            change: (e) => this.setCondition(e)
           }
         }),
+        this.genConditionsField(),
         this.$createElement(VFilterValueList, {
           props: {
-            values: this.filteredValues
+            values: this.filteredValuesSelected
           }
         }),
         this.$createElement(VDivider, {}),
@@ -163,7 +266,7 @@ export default Vue.extend({
               innerHTML: 'Cancel'
             },
             on: {
-              click: (e) => this.deactivateMenu(e, 'CANCEL')
+              click: () => { this.isMenuActive = false }
             }
           }),
           this.$createElement(VBtn, {
@@ -172,18 +275,16 @@ export default Vue.extend({
               dark: this.dark,
               dense: this.dense
             },
-            on: {
-              click: (e) => this.deactivateMenu(e, 'OK')
-            },
             domProps: {
               innerHTML: 'OK'
+            },
+            on: {
+              click: () => { this.isMenuActive = false }
             }
           })
         ])
-
       ])
     }
-
   },
   render () {
     const self = this
@@ -193,9 +294,6 @@ export default Vue.extend({
         value: this.isMenuActive,
         dark: this.dark,
         dense: this.dense
-      },
-      on: {
-        input: (e) => this.deactivateMenu(e, 'CLOSE')
       },
       slot: 'header.data-table-settings',
       scopedSlots: {

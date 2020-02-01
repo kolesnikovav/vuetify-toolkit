@@ -1,7 +1,6 @@
 import Vue from 'vue'
-import { VDataTable } from '../../vuetify-import'
+import { VDataTable, VIcon } from '../../vuetify-import'
 import VColumnEditor from './VColumnEditor'
-// eslint-disable-next-line no-unused-vars
 import VTableFilter from './VTableFilter'
 
 export default Vue.extend({
@@ -38,6 +37,10 @@ export default Vue.extend({
     downIcon: {
       type: String,
       default: 'expand_less'
+    },
+    sortIcon: {
+      type: String,
+      default: '$sort'
     },
     ...VDataTable.options.props
   },
@@ -107,26 +110,42 @@ export default Vue.extend({
         }
       })
     },
+    genSortIcon () {
+      return this.$createElement(VIcon, {
+        staticClass: 'v-data-table-header__icon',
+        props: {
+          size: 18
+        }
+      }, [this.sortIcon])
+    },
     genDefaultHeader (header) {
       return this.$createElement('div', {
         style: {
-          display: 'flex',
           'justify-content': 'flex-start',
           'align-content': 'center'
         }
       }, [
         this.$createElement('span', {
           style: {
-            display: 'inline-block'
+            display: 'inline-block',
+            'align-items': 'center'
           }
         }, [header.text]),
-        this.genFilter(header)
+        header.filterable ? this.genFilter(header)
+          : undefined,
+        header.sortable ? this.genSortIcon()
+          : undefined
       ])
     },
     genDefaultHeaderWithSlot (header, slot) {
       const res = []
       res.push(slot.call(this))
-      res.push(this.genFilter(header))
+      if (header.filterable) {
+        res.push(this.genFilter(header))
+      }
+      if (header.sortable) {
+        res.push(this.genSortIcon())
+      }
       return res
     },
     genTableScopedSlots () {
@@ -148,6 +167,7 @@ export default Vue.extend({
   render () {
     const currentProps = Object.assign({}, this.$props)
     const visibleHeaders = this.computedHeadersTable.filter(v => v.visible || v.value === 'data-table-settings')
+    visibleHeaders.map(el => { el.sortable = false })
     currentProps.headers = visibleHeaders
     const scopedSlots = this.genTableScopedSlots()
     return this.$createElement(VDataTable, {

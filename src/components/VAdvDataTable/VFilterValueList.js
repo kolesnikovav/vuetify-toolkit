@@ -11,14 +11,14 @@ export default Vue.extend({
   methods: {
     genItem (item) {
       return this.$createElement('tr', {
-        staticClass: 'v-table-filter-item',
-        style: {
-          'padding-left': '12px'
-        }
+        staticClass: 'v-table-filter-item'
       }, [
         this.$createElement('td', {
           attrs: {
-            title: item
+            title: item.text
+          },
+          style: {
+            cursor: 'pointer'
           }
         }, [
           this.$createElement('input', {
@@ -30,17 +30,21 @@ export default Vue.extend({
             style: {
               display: 'inline-block',
               'padding-left': '12px',
-              'padding-right': '12px'
+              'padding-right': '12px',
+              cursor: 'pointer',
+              height: '16px',
+              width: '16px'
             }
           }),
           this.$createElement('label', {
             style: {
               display: 'inline-block',
               'padding-left': '12px',
-              'padding-right': '12px'
+              'padding-right': '12px',
+              cursor: 'pointer'
             },
             domProps: {
-              innerText: item
+              innerText: item.text
             }
           })
         ])
