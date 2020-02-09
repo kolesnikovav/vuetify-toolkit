@@ -33,6 +33,10 @@ export default Vue.extend({
       type: String,
       default: undefined
     },
+    filterActiveIconColor: {
+      type: String,
+      default: undefined
+    },
     dark: {
       type: Boolean,
       default: false
@@ -99,15 +103,34 @@ export default Vue.extend({
       }
       return this.values.filter(v => v.toString().toLocaleLowerCase().indexOf(this.filterText.toLocaleLowerCase()) >= 0)
     },
-    filteredValuesSelected () {
+    filteredValuesSelected: {
+      get: function () {
+        const vals = []
+        this.filteredValues.map(v => {
+          vals.push({ text: v, selected: true })
+        })
+        return vals
+      },
+      set: function (item) {
+        this.filteredValuesSelected.map(v => {
+          if (v.text === item.text) {
+            v.selected = !item.selected
+          }
+        })
+      }
+    },
+    resultValues () {
       const vals = []
-      this.filteredValues.map(v => {
-        vals.push({ text: v, selected: false })
+      this.filteredValuesSelected.map(v => {
+        if (v.selected) {
+          vals.push(v.text)
+        }
       })
       return vals
     }
   },
   data: () => ({
+    isActive: false,
     isMenuActive: false,
     dataHeaders: undefined,
     filterText: '',
@@ -147,7 +170,7 @@ export default Vue.extend({
     genIcon () {
       return this.$createElement(VIcon, {
         props: {
-          color: this.filterIconColor
+          color: this.isActive ? this.filterActiveIconColor : this.filterIconColor
         }
       }, [this.filterIcon])
     },
@@ -229,7 +252,8 @@ export default Vue.extend({
             returnObject: true,
             value: this.selectedCondition ? this.selectedCondition : this.defaultCondition,
             outlined: true,
-            dense: true
+            dense: true,
+            dark: this.dark
           },
           style: {
             'padding-left': '16px',
@@ -244,6 +268,11 @@ export default Vue.extend({
         this.$createElement(VFilterValueList, {
           props: {
             values: this.filteredValuesSelected
+          },
+          on: {
+            'change-value-selection': (e, payload) => {
+              this.filteredValuesSelected = payload
+            }
           }
         }),
         this.$createElement(VDivider, {}),
@@ -279,11 +308,16 @@ export default Vue.extend({
               innerHTML: 'OK'
             },
             on: {
-              click: () => { this.isMenuActive = false }
+              click: () => this.changeFilter()
             }
           })
         ])
       ])
+    },
+    changeFilter () {
+      this.isMenuActive = false
+      this.isActive = true
+      this.$emit('filter-change', this.resultValues)
     }
   },
   render () {

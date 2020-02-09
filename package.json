@@ -69,6 +69,6 @@
   },
   "dependencies": {
     "vue": "^2.6.10",
-    "vuetify": "^2.1.13"
+    "vuetify": "^2.2.0"
   }
 }

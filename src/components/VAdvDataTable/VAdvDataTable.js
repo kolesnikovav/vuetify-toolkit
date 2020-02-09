@@ -46,7 +46,8 @@ export default Vue.extend({
   },
   data: () => ({
     isMenuActive: false,
-    dataHeaders: []
+    dataHeaders: [],
+    valueFilter: new Map()
   }),
   computed: {
     computedHeadersTable () {
@@ -57,8 +58,31 @@ export default Vue.extend({
       if (index < 0) headers.push({ ...defaultHeader, value: 'data-table-settings' })
       return headers
     },
+    visibleHeaders () {
+      return this.computedHeadersTable.filter(v => v.visible || v.value === 'data-table-settings')
+    },
     editedHeaders () {
       return this.dataHeaders.filter(v => v.value !== 'data-table-settings')
+    },
+    filteredItems: {
+      get: function () {
+        return this.items.filter(row => {
+          for (const [key, value] of this.valueFilter) {
+            console.log(key)
+            console.log(value)
+            if (Array.isArray(value) && value.length > 0) {
+              if (row[key] && value.indexOf(row[key]) === -1) return false
+            }
+          }
+          return true
+        })
+      },
+      set: function (payload) {
+        console.log(payload)
+        this.filteredItems.filter(row => {
+          return (row[payload.header] && payload.values.indexOf(row[payload.header]) >= 0)
+        })
+      }
     }
   },
   created () {
@@ -96,6 +120,13 @@ export default Vue.extend({
     getValues (val) {
       return this.items.map(v => v[val])
     },
+    applyFilter (vals, header) {
+      if (header.value) {
+        this.valueFilter.set(header.value, vals)
+        const payload = { header: header.value, values: vals }
+        this.filteredItems = payload
+      }
+    },
     genFilter (header) {
       return this.$createElement(VTableFilter, {
         props: {
@@ -107,6 +138,9 @@ export default Vue.extend({
           filterActiveIconColor: this.filterActiveIconColor,
           dense: this.dense,
           dark: this.dark
+        },
+        on: {
+          'filter-change': (values) => this.applyFilter(values, header)
         }
       })
     },
@@ -166,9 +200,10 @@ export default Vue.extend({
   },
   render () {
     const currentProps = Object.assign({}, this.$props)
-    const visibleHeaders = this.computedHeadersTable.filter(v => v.visible || v.value === 'data-table-settings')
-    visibleHeaders.map(el => { el.sortable = false })
-    currentProps.headers = visibleHeaders
+    this.visibleHeaders.map(el => { el.sortable = false })
+    currentProps.headers = this.visibleHeaders
+    console.log(this.filteredItems)
+    currentProps.items = this.filteredItems
     const scopedSlots = this.genTableScopedSlots()
     return this.$createElement(VDataTable, {
       props: currentProps,

@@ -3,64 +3,72 @@ import './VTableFilter.sass'
 
 export default Vue.extend({
   name: 'v-value-list',
+  functional: true,
   props: {
     values: {
       type: Array
     }
   },
-  methods: {
-    genItem (item) {
-      return this.$createElement('tr', {
-        staticClass: 'v-table-filter-item'
-      }, [
-        this.$createElement('td', {
-          attrs: {
-            title: item.text
-          },
-          style: {
-            cursor: 'pointer'
+  render (h, { props, listeners }) {
+    const items = props.values.map(v => {
+      const input = h('input', {
+        attrs: {
+          type: 'checkbox',
+          autocomplete: 'off'
+        },
+        domProps: {
+          checked: v.selected
+        },
+        style: {
+          display: 'inline-block',
+          'padding-left': '12px',
+          'padding-right': '12px',
+          cursor: 'pointer',
+          height: '16px',
+          width: '16px'
+        }
+      })
+      const label = h('label', {
+        domProps: {
+          innerText: v.text
+        },
+        style: {
+          display: 'inline-block',
+          'padding-left': '12px',
+          'padding-right': '12px',
+          cursor: 'pointer',
+          height: '16px',
+          width: '16px'
+        }
+      })
+      const td = h('td', {
+        attrs: {
+          title: v.text
+        },
+        style: {
+          cursor: 'pointer'
+        }
+      }, [input, label])
+      return h('tr', {
+        staticClass: 'v-table-filter-item',
+        on: {
+          '~!click': (e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            const emitEvent = listeners['change-value-selection']
+            if (emitEvent) {
+              emitEvent('change-value-selection', v)
+            }
           }
-        }, [
-          this.$createElement('input', {
-            functional: true,
-            attrs: {
-              type: 'checkbox',
-              autocomplete: 'off'
-            },
-            style: {
-              display: 'inline-block',
-              'padding-left': '12px',
-              'padding-right': '12px',
-              cursor: 'pointer',
-              height: '16px',
-              width: '16px'
-            }
-          }),
-          this.$createElement('label', {
-            style: {
-              display: 'inline-block',
-              'padding-left': '12px',
-              'padding-right': '12px',
-              cursor: 'pointer'
-            },
-            domProps: {
-              innerText: item.text
-            }
-          })
-        ])
-      ])
-    },
-    genTable () {
-      const items = this.values.map(v => this.genItem(v))
-      return this.$createElement('table', {
-        staticClass: 'v-table-filter-value-list'
-      }, [
-        this.$createElement('thead'),
-        this.$createElement('tbody', {}, items)
-      ])
-    }
-  },
-  render () {
-    return this.genTable()
+        }
+      }, [td])
+    })
+    return h('table', {
+      staticClass: 'v-table-filter-value-list',
+      items
+    }, [
+      h('thead'),
+      h('tbody', {}, items)
+    ])
   }
 })

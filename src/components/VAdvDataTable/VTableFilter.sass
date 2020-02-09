@@ -5,9 +5,14 @@
     padding-left: 16px,
     padding-right: 16px,
     max-height: 400px,
-    overflow-y: scroll
+    overflow-y: scroll,
+    white-space: nowrap,
+    text-overflow: ellipsis
 .v-table-filter-item
     display: flex,
+    max-width: 100%,
+    justify-content: flex-start,
+    word-wrap: normal,
     margin-right: auto
     &selected
         background: #f5f5f5

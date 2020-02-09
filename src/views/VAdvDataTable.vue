@@ -99,6 +99,7 @@
           :item-icon-color = "itemIconColor"
           :filter-icon = "filterIcon"
           :filter-icon-color = "filterIconColor"
+          :filter-active-icon-color = "filterActiveIconColor"
           :items-per-page = 5
         >
           <template v-if="customSlots" v-slot:header.fat>
@@ -174,6 +175,7 @@ export default Vue.extend({
     customSlots: false,
     filterIcon: 'subject',
     filterIconColor: 'red',
+    filterActiveIconColor: 'green',
     folderIcon: 'mdi-folder',
     folderOpenIcon: 'mdi-folder-open',
     itemIcon: 'mdi-file',
