@@ -5,13 +5,25 @@ exports[`VTreeSelect.js renders 1`] = `
   <div class="v-input__control">
     <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-1" class="v-input__slot">
       <div class="v-select__slot">
-        <div class="v-select__selections"><input id="input-1" readonly="readonly" type="text" aria-readonly="true"></div>
+        <div class="v-select__selections"><input id="input-1" readonly="readonly" type="text" aria-readonly="false" autocomplete="off"></div>
         <div class="v-input__append-inner">
           <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
         </div><input type="hidden">
       </div>
       <div class="v-menu">
-        <div class="v-menu__content theme--light v-autocomplete__content" style="max-height: auto; min-width: 0px; max-width: auto; top: 12px; left: 0px; transform-origin: top left; z-index: 0; display: none;"></div>
+        <div class="v-menu__content theme--light v-autocomplete__content" style="max-height: auto; min-width: 0px; max-width: auto; top: 12px; left: 0px; transform-origin: top left; z-index: 0; display: none;">
+          <div class="v-select-list v-card theme--light" id="list-1">
+            <div class="v-treeview theme--light">
+              <div aria-expanded="false" class="v-treeview-node">
+                <div class="v-treeview-node__root"><button type="button" class="v-icon notranslate v-treeview-node__toggle v-icon--link mdi mdi-menu-down theme--light"></button><button type="button" class="v-icon notranslate v-treeview-node__checkbox v-icon--link mdi mdi-checkbox-blank-outline theme--light"></button>
+                  <div class="v-treeview-node__content">
+                    <div class="v-treeview-node__label">Root</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="v-text-field__details">
