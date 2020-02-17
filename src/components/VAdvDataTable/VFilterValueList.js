@@ -14,10 +14,20 @@ export default Vue.extend({
       const input = h('input', {
         attrs: {
           type: 'checkbox',
-          autocomplete: 'off'
+          autocomplete: 'off',
+          checked: v.selected
         },
         domProps: {
+          value: v.selected,
           checked: v.selected
+        },
+        on: {
+          input: () => {
+            const emitEvent = listeners['change-value-selection']
+            if (emitEvent) {
+              emitEvent('change-value-selection', v)
+            }
+          }
         },
         style: {
           display: 'inline-block',
@@ -50,25 +60,18 @@ export default Vue.extend({
         }
       }, [input, label])
       return h('tr', {
-        staticClass: 'v-table-filter-item',
-        on: {
-          '~!click': (e) => {
-            e.stopPropagation()
-            e.preventDefault()
-            const emitEvent = listeners['change-value-selection']
-            if (emitEvent) {
-              emitEvent('change-value-selection', v)
-            }
-          }
-        }
+        staticClass: 'v-table-filter-item'
       }, [td])
     })
     return h('table', {
+      functional: true,
       staticClass: 'v-table-filter-value-list',
       items
     }, [
       h('thead'),
-      h('tbody', {}, items)
+      h('tbody', {
+        functional: true
+      }, items)
     ])
   }
 })

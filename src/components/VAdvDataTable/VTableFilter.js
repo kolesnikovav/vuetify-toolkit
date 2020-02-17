@@ -90,7 +90,8 @@ export default Vue.extend({
             return this.values.filter(v => v > this.filterText)
           } else if (conditions && conditions.id === 'equals' && this.filterText && this.filterText !== '') {
             return this.values.filter(v => v.toString() === this.filterText)
-          } else if (conditions && conditions.id === 'between' && this.filterText && this.filterText !== '' && this.filterTextMax && this.filterTextMax !== '') {
+          } else if (conditions && conditions.id === 'between' && this.filterText && this.filterText !== '' &&
+           this.filterTextMax && this.filterTextMax !== '') {
             return this.values.filter(v => v >= this.filterText && v <= this.filterTextMax)
           } else return this.values
         }
@@ -103,26 +104,17 @@ export default Vue.extend({
       }
       return this.values.filter(v => v.toString().toLocaleLowerCase().indexOf(this.filterText.toLocaleLowerCase()) >= 0)
     },
-    filteredValuesSelected: {
-      get: function () {
-        const vals = []
-        this.filteredValues.map(v => {
-          vals.push({ text: v, selected: true })
-        })
-        return vals
-      },
-      set: function (item) {
-        this.filteredValuesSelected.map(v => {
-          if (v.text === item.text) {
-            v.selected = !item.selected
-          }
-        })
-      }
+    filteredValuesSelected () {
+      const vals = []
+      this.filteredValues.map(v => {
+        vals.push({ text: v, selected: true })
+      })
+      return vals
     },
     resultValues () {
       const vals = []
       this.filteredValuesSelected.map(v => {
-        if (v.selected) {
+        if (this.unSelectedValues.indexOf(v.text) === -1) {
           vals.push(v.text)
         }
       })
@@ -135,14 +127,44 @@ export default Vue.extend({
     dataHeaders: undefined,
     filterText: '',
     filterTextMax: '',
-    selectedCondition: undefined
+    selectedCondition: undefined,
+    unSelectedValues: []
   }),
   methods: {
     setCondition (e) {
       this.selectedCondition = e
     },
-    changeSelection () {
-
+    changeSelection (item) {
+      item.selected = !item.selected
+      if (!item.selected) {
+        this.unSelectedValues.push(item.text)
+      } else {
+        const i = this.unSelectedValues.indexOf(item.text)
+        if (i > -1) {
+          this.unSelectedValues.splice(i, 1)
+        }
+      }
+    },
+    clearFilter () {
+      this.isMenuActive = false
+      this.isActive = false
+      this.unSelectedValues = []
+      this.filterText = ''
+      this.filterTextMax = ''
+      this.selectedCondition = undefined
+      this.$emit('clear-filter', this.header)
+    },
+    invertSelection () {
+      const v = []
+      this.unSelectedValues = []
+      this.filteredValuesSelected.map(item => {
+        v.push({ text: item.text, selected: !item.selected })
+        if (item.selected) {
+          this.unSelectedValues.push(item.text)
+        }
+      })
+      this.filteredValuesSelected = v
+      this.$nextTick()
     },
     valueFilterChange (e) {
       this.filterText = e || ''
@@ -224,7 +246,7 @@ export default Vue.extend({
         },
         on: {
           input: (e) => this.valueFilterChange(e),
-          'click:append': () => this.changeSelection()
+          'click:append': () => this.invertSelection()
         }
       })
     },
@@ -271,7 +293,7 @@ export default Vue.extend({
           },
           on: {
             'change-value-selection': (e, payload) => {
-              this.filteredValuesSelected = payload
+              this.changeSelection(payload)
             }
           }
         }),
@@ -292,10 +314,10 @@ export default Vue.extend({
               dense: this.dense
             },
             domProps: {
-              innerHTML: 'Cancel'
+              innerHTML: 'Clear'
             },
             on: {
-              click: () => { this.isMenuActive = false }
+              click: () => this.clearFilter()
             }
           }),
           this.$createElement(VBtn, {

@@ -30,6 +30,26 @@
             <td>downIcon</td> <td>string</td> <td>'expand_less'</td>
             <td>The button icon to move header down</td>
            </tr>
+           <tr>
+            <td>filterIcon</td> <td>string</td> <td>undefined</td>
+            <td>Filter icon</td>
+           </tr>
+           <tr>
+            <td>filterActiveIcon</td> <td>string</td> <td>undefined</td>
+            <td>Filter icon when filter is active</td>
+           </tr>
+           <tr>
+            <td>filterIconColor</td> <td>String</td> <td>'undefined'</td>
+            <td>Default filter icon color</td>
+           </tr>
+           <tr>
+            <td>filterActiveIconColor</td> <td>string</td> <td>'undefined'</td>
+            <td>Filter icon color when it active</td>
+           </tr>
+           <tr>
+            <td>filterActiveIconColor</td> <td>string</td> <td>'undefined'</td>
+            <td>Filter icon color when it active</td>
+           </tr>
         </tbody>
     </table>
     <span />
