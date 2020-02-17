@@ -30,6 +30,26 @@
             <td>downIcon</td> <td>string</td> <td>'expand_less'</td>
             <td>The button icon to move header down</td>
            </tr>
+           <tr>
+            <td>filterIcon</td> <td>string</td> <td>undefined</td>
+            <td>Filter icon</td>
+           </tr>
+           <tr>
+            <td>filterActiveIcon</td> <td>string</td> <td>undefined</td>
+            <td>Filter icon when filter is active</td>
+           </tr>
+           <tr>
+            <td>filterIconColor</td> <td>String</td> <td>'undefined'</td>
+            <td>Default filter icon color</td>
+           </tr>
+           <tr>
+            <td>filterActiveIconColor</td> <td>string</td> <td>'undefined'</td>
+            <td>Filter icon color when it active</td>
+           </tr>
+           <tr>
+            <td>filterActiveIconColor</td> <td>string</td> <td>'undefined'</td>
+            <td>Filter icon color when it active</td>
+           </tr>
         </tbody>
     </table>
     <span />
@@ -97,6 +117,9 @@
           :item-icon = "itemIcon"
           :folder-icon-color = "folderIconColor"
           :item-icon-color = "itemIconColor"
+          :filter-icon = "filterIcon"
+          :filter-icon-color = "filterIconColor"
+          :filter-active-icon-color = "filterActiveIconColor"
           :items-per-page = 5
         >
           <template v-if="customSlots" v-slot:header.fat>
@@ -170,6 +193,9 @@ export default Vue.extend({
     dense: false,
     dark: false,
     customSlots: false,
+    filterIcon: 'subject',
+    filterIconColor: 'red',
+    filterActiveIconColor: 'green',
     folderIcon: 'mdi-folder',
     folderOpenIcon: 'mdi-folder-open',
     itemIcon: 'mdi-file',

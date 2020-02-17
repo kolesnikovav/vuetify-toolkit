@@ -76,11 +76,13 @@ export const dataGridHeaders = [
   {
     text: 'Dessert (100g serving)',
     align: 'left',
-    value: 'name'
+    value: 'name',
+    filterable: true,
+    sortrable: true
   },
-  { text: 'Calories', value: 'calories' },
-  { text: 'Fat (g)', value: 'fat' },
-  { text: 'Carbs (g)', value: 'carbs' },
+  { text: 'Calories', value: 'calories', filterable: true, sortrable: true, datatype: 'number' },
+  { text: 'Fat (g)', value: 'fat', filterable: true },
+  { text: 'Carbs (g)', value: 'carbs', sortrable: true },
   { text: 'Protein (g)', value: 'protein' },
   { text: 'Iron (%)', value: 'iron' }
 ]
