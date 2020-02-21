@@ -3,55 +3,116 @@
     <h1>VAdvDataTable</h1>
     <span></span>
     <p>
-      VAdvDataTable means "Advanced Data Table". This component wraps <a href = "https://vuetifyjs.com/en/components/data-tables">VDataTable</a> and add new possibilities in this component.
+      VAdvDataTable means "Advanced Data Table". This component wraps <a
+        href="https://vuetifyjs.com/en/components/data-tables">VDataTable</a> and add new possibilities in this
+      component.
       User can select table columns order and visibility.
     </p>
     <p>Added properties are below</p>
-    <table class="v-card__text v-data-table elevation-1 theme--light">
-        <thead>
-           <tr>
-            <th>Name</th> <th>Type</th> <th>Default</th><th>Describtion</th>
-           </tr>
-        </thead>
-        <tbody>
-           <tr>
-            <td>headerIcon</td> <td>string</td> <td>undefined</td>
-            <td>Determines header settings icon</td>
-           </tr>
-           <tr>
-            <td>headerIconColor</td> <td>string</td> <td>undefined</td>
-            <td>Settings icon color</td>
-           </tr>
-           <tr>
-            <td>upIcon</td> <td>String</td> <td>'expand_more'</td>
-            <td>The button icon to move header up</td>
-           </tr>
-           <tr>
-            <td>downIcon</td> <td>string</td> <td>'expand_less'</td>
-            <td>The button icon to move header down</td>
-           </tr>
-           <tr>
-            <td>filterIcon</td> <td>string</td> <td>undefined</td>
-            <td>Filter icon</td>
-           </tr>
-           <tr>
-            <td>filterActiveIcon</td> <td>string</td> <td>undefined</td>
-            <td>Filter icon when filter is active</td>
-           </tr>
-           <tr>
-            <td>filterIconColor</td> <td>String</td> <td>'undefined'</td>
-            <td>Default filter icon color</td>
-           </tr>
-           <tr>
-            <td>filterActiveIconColor</td> <td>string</td> <td>'undefined'</td>
-            <td>Filter icon color when it active</td>
-           </tr>
-           <tr>
-            <td>filterActiveIconColor</td> <td>string</td> <td>'undefined'</td>
-            <td>Filter icon color when it active</td>
-           </tr>
-        </tbody>
-    </table>
+    <v-expansion-panels>
+      <v-expansion-panel>
+        <v-expansion-panel-header>Icon and style properties </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <table class="v-card__text v-data-table elevation-1 theme--light">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Describtion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>headerIcon</td>
+                <td>string</td>
+                <td>undefined</td>
+                <td>Determines header settings icon</td>
+              </tr>
+              <tr>
+                <td>headerIconColor</td>
+                <td>string</td>
+                <td>undefined</td>
+                <td>Settings icon color</td>
+              </tr>
+              <tr>
+                <td>upIcon</td>
+                <td>String</td>
+                <td>'expand_more'</td>
+                <td>The button icon to move header up</td>
+              </tr>
+              <tr>
+                <td>downIcon</td>
+                <td>string</td>
+                <td>'expand_less'</td>
+                <td>The button icon to move header down</td>
+              </tr>
+              <tr>
+                <td>filterIcon</td>
+                <td>string</td>
+                <td>undefined</td>
+                <td>Filter icon</td>
+              </tr>
+              <tr>
+                <td>filterActiveIcon</td>
+                <td>string</td>
+                <td>undefined</td>
+                <td>Filter icon when filter is active</td>
+              </tr>
+              <tr>
+                <td>filterIconColor</td>
+                <td>String</td>
+                <td>'undefined'</td>
+                <td>Default filter icon color</td>
+              </tr>
+              <tr>
+                <td>filterActiveIconColor</td>
+                <td>string</td>
+                <td>'undefined'</td>
+                <td>Filter icon color when it active</td>
+              </tr>
+              <tr>
+                <td>filterActiveIconColor</td>
+                <td>string</td>
+                <td>'undefined'</td>
+                <td>Filter icon color when it active</td>
+              </tr>
+            </tbody>
+          </table>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-header>Datatable header modifications </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <p>Original vuetifyjs datatable header object is changed</p>
+          <table class="v-card__text v-data-table elevation-1 theme--light">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Describtion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>filterable</td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Allow to use value filter</td>
+              </tr>
+              <tr>
+                <td>datatype</td>
+                <td>['number', 'date, 'string']</td>
+                <td>'string'</td>
+                <td>Determines column datatype. If type is 'date' or 'number', then compare for equal than, more than, less than and between to becomes available</td>
+              </tr>
+            </tbody>
+          </table>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+
     <span />
     <h2>Sandbox</h2>
     <v-card :dark="dark">
@@ -103,27 +164,13 @@
           <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
           <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
         </v-row>
-        <v-adv-data-table
-          :items="items"
-          :dark="dark"
-          :headers="headers"
-          headerIcon = "mdi-settings"
-          headerIconColor = "error"
-          :showSelect = "showSelect"
-          :singleSelect = "singleSelect"
-          :dense = "dense"
-          :folder-icon = "folderIcon"
-          :folder-open-icon = "folderOpenIcon"
-          :item-icon = "itemIcon"
-          :folder-icon-color = "folderIconColor"
-          :item-icon-color = "itemIconColor"
-          :filter-icon = "filterIcon"
-          :filter-icon-color = "filterIconColor"
-          :filter-active-icon-color = "filterActiveIconColor"
-          :items-per-page = 5
-        >
+        <v-adv-data-table :items="items" :dark="dark" :headers="headers" headerIcon="mdi-settings"
+          headerIconColor="error" :showSelect="showSelect" :singleSelect="singleSelect" :dense="dense"
+          :folder-icon="folderIcon" :folder-open-icon="folderOpenIcon" :item-icon="itemIcon"
+          :folder-icon-color="folderIconColor" :item-icon-color="itemIconColor" :filter-icon="filterIcon"
+          :filter-icon-color="filterIconColor" :filter-active-icon-color="filterActiveIconColor" :items-per-page=5>
           <template v-if="customSlots" v-slot:header.fat>
-            <v-icon color ="red">mdi-cake</v-icon>
+            <v-icon color="red">mdi-cake</v-icon>
           </template>
           <template v-if="customSlots" v-slot:item.calories="{ item }">
             <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip>
