@@ -115,7 +115,6 @@ export default Vue.extend({
       }
       if (this.filterText === '' || !this.filterText || !conditions) return this.values
       const vals = this.values as string[]
-      console.log(vals)
       if (conditions.id === 'startsWith') {
         return vals.filter(v => v.toLocaleLowerCase().startsWith(this.filterText.toLocaleLowerCase()))
       } else if (conditions.id === 'endsWith') {
