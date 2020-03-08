@@ -1,16 +1,15 @@
-import Vue from 'vue'
+import Vue, { PropType, VNode } from 'vue'
+import { SelectableValue } from '../VAdvDataTable/utils/AdvTableUtils'
 import './VTableFilter.sass'
 
 export default Vue.extend({
   name: 'v-value-list',
   functional: true,
   props: {
-    values: {
-      type: Array
-    }
+    values: Array as PropType<SelectableValue[]>
   },
-  render (h, { props, listeners }) {
-    const items = props.values.map(v => {
+  render (h, { props, listeners }): VNode {
+    const items = props.values.map((v:SelectableValue) => {
       const input = h('input', {
         attrs: {
           type: 'checkbox',
@@ -25,7 +24,7 @@ export default Vue.extend({
           input: () => {
             const emitEvent = listeners['change-value-selection']
             if (emitEvent) {
-              emitEvent('change-value-selection', v)
+              (emitEvent as any)('change-value-selection', v)
             }
           }
         },
@@ -64,14 +63,10 @@ export default Vue.extend({
       }, [td])
     })
     return h('table', {
-      functional: true,
-      staticClass: 'v-table-filter-value-list',
-      items
+      staticClass: 'v-table-filter-value-list'
     }, [
       h('thead'),
-      h('tbody', {
-        functional: true
-      }, items)
+      h('tbody', {}, items)
     ])
   }
 })

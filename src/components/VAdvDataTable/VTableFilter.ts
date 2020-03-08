@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue, { PropType, VNode } from 'vue'
 import {
   VBtn,
   VIcon,
@@ -11,15 +11,15 @@ import {
   VRow
 } from '../../vuetify-import'
 import VFilterValueList from './VFilterValueList'
+import { SelectableValue, TableHeader, FilterCondition, GetItem } from '../VAdvDataTable/utils/AdvTableUtils'
 
 export default Vue.extend({
   name: 'v-table-filter',
   props: {
-    header: {
-      type: Object
-    },
+    header: Object as PropType<TableHeader>,
     getItemValues: {
-      type: Function
+      type: Function,
+      default: Function as PropType<GetItem>
     },
     filterIcon: {
       type: String,
@@ -47,11 +47,15 @@ export default Vue.extend({
     }
   },
   computed: {
-    values () {
-      return [...new Set(this.getItemValues(this.header.value))]
+    values (): string[]| number[] {
+      if (this.valueDataType === 'text') {
+        return [...new Set((this.getItemValues as GetItem)(this.header.value) as string[])]
+      } else {
+        return [...new Set((this.getItemValues as GetItem)(this.header.value) as number[])]
+      }
     },
-    conditions () {
-      const result = []
+    conditions (): FilterCondition[] {
+      const result: FilterCondition[] = []
       if (!this.header.datatype || this.header.datatype === 'string') {
         result.push({ id: 'contains', text: 'contains' })
         result.push({ id: 'startsWith', text: 'starts with' })
@@ -64,13 +68,13 @@ export default Vue.extend({
       }
       return result
     },
-    defaultCondition () {
+    defaultCondition (): FilterCondition {
       if (this.header.datatype === 'date' || this.header.datatype === 'number') {
         return { id: 'equals', text: 'equals' }
       }
       return { id: 'contains', text: 'contains' }
     },
-    valueDataType () {
+    valueDataType (): string {
       if (!this.header.datatype || this.header.datatype === 'string') {
         return 'text'
       } else if (this.header.datatype === 'date') {
@@ -80,40 +84,61 @@ export default Vue.extend({
       }
       return 'text'
     },
-    filteredValues () {
+    filteredValues (): string[]|number[] {
       const conditions = this.selectedCondition ? this.selectedCondition : this.defaultCondition
       if (this.header.datatype) {
-        if (this.header.datatype === 'date' || this.header.datatype === 'number') {
+        if (this.header.datatype === 'number') {
+          const vals = this.values as number[]
           if (conditions && conditions.id === 'lessThen' && this.filterText && this.filterText !== '') {
-            return this.values.filter(v => v < this.filterText)
+            return vals.filter((v: number) => v < Number(this.filterText))
           } else if (conditions && conditions.id === 'moreThan' && this.filterText && this.filterText !== '') {
-            return this.values.filter(v => v > this.filterText)
+            return vals.filter((v: number) => v > Number(this.filterText))
           } else if (conditions && conditions.id === 'equals' && this.filterText && this.filterText !== '') {
-            return this.values.filter(v => v.toString() === this.filterText)
+            return vals.filter((v: number) => v === Number(this.filterText))
           } else if (conditions && conditions.id === 'between' && this.filterText && this.filterText !== '' &&
            this.filterTextMax && this.filterTextMax !== '') {
-            return this.values.filter(v => v >= this.filterText && v <= this.filterTextMax)
+            return vals.filter((v: number) => v >= Number(this.filterText) && v <= Number(this.filterTextMax))
+          } else return this.values
+        } else if (this.header.datatype === 'date') {
+          const vals = this.values as string[]
+          if (conditions && conditions.id === 'lessThen' && this.filterText && this.filterText !== '') {
+            return vals.filter((v: string) => v < this.filterText)
+          } else if (conditions && conditions.id === 'moreThan' && this.filterText && this.filterText !== '') {
+            return vals.filter((v: string) => v > this.filterText)
+          } else if (conditions && conditions.id === 'equals' && this.filterText && this.filterText !== '') {
+            return vals.filter((v: string) => v === this.filterText)
+          } else if (conditions && conditions.id === 'between' && this.filterText && this.filterText !== '' &&
+           this.filterTextMax && this.filterTextMax !== '') {
+            return vals.filter((v: string) => v >= this.filterText && v <= this.filterTextMax)
           } else return this.values
         }
       }
       if (this.filterText === '' || !this.filterText || !conditions) return this.values
+      const vals = this.values as string[]
+      console.log(vals)
       if (conditions.id === 'startsWith') {
-        return this.values.filter(v => v.toString().toLocaleLowerCase().startsWith(this.filterText.toLocaleLowerCase()))
+        return vals.filter(v => v.toLocaleLowerCase().startsWith(this.filterText.toLocaleLowerCase()))
       } else if (conditions.id === 'endsWith') {
-        return this.values.filter(v => v.toString().toLocaleLowerCase().endsWith(this.filterText.toLocaleLowerCase()))
+        return vals.filter(v => v.toLocaleLowerCase().endsWith(this.filterText.toLocaleLowerCase()))
       }
-      return this.values.filter(v => v.toString().toLocaleLowerCase().indexOf(this.filterText.toLocaleLowerCase()) >= 0)
+      return vals.filter(v => v.toLocaleLowerCase().indexOf(this.filterText.toLocaleLowerCase()) >= 0)
     },
-    filteredValuesSelected () {
-      const vals = []
-      this.filteredValues.map(v => {
-        vals.push({ text: v, selected: true })
-      })
+    filteredValuesSelected (): SelectableValue[] {
+      const vals: SelectableValue[] = []
+      if (this.valueDataType === 'number') {
+        const filteredVals = this.filteredValues as number[]
+        filteredVals.map(v => vals.push({ text: v.toString(), selected: true }))
+      } else {
+        const filteredVals = this.filteredValues as string[]
+        filteredVals.map(v => {
+          vals.push({ text: v, selected: true })
+        })
+      }
       return vals
     },
-    resultValues () {
-      const vals = []
-      this.filteredValuesSelected.map(v => {
+    resultValues (): string[] {
+      const vals: string[] = []
+      this.filteredValuesSelected.map((v:SelectableValue) => {
         if (this.unSelectedValues.indexOf(v.text) === -1) {
           vals.push(v.text)
         }
@@ -127,14 +152,14 @@ export default Vue.extend({
     dataHeaders: undefined,
     filterText: '',
     filterTextMax: '',
-    selectedCondition: undefined,
-    unSelectedValues: []
+    selectedCondition: undefined as FilterCondition|undefined,
+    unSelectedValues: [] as string[]
   }),
   methods: {
-    setCondition (e) {
+    setCondition (e: FilterCondition) {
       this.selectedCondition = e
     },
-    changeSelection (item) {
+    changeSelection (item: SelectableValue) {
       item.selected = !item.selected
       if (!item.selected) {
         this.unSelectedValues.push(item.text)
@@ -155,7 +180,7 @@ export default Vue.extend({
       this.$emit('clear-filter', this.header)
     },
     invertSelection () {
-      const v = []
+      const v:SelectableValue[] = []
       this.unSelectedValues = []
       this.filteredValuesSelected.map(item => {
         v.push({ text: item.text, selected: !item.selected })
@@ -166,20 +191,20 @@ export default Vue.extend({
       this.filteredValuesSelected = v
       this.$nextTick()
     },
-    valueFilterChange (e) {
+    valueFilterChange (e?: string) {
       this.filterText = e || ''
     },
-    valueFilterChangeMax (e) {
+    valueFilterChangeMax (e?: string) {
       this.filterTextMax = e || ''
     },
-    genActivator (listeners) {
+    genActivator (listeners: any): VNode {
       return this.$createElement(VBtn, {
         props: {
           icon: true
         },
         slot: 'activator',
         on: {
-          click: (e) => {
+          click: (e: any) => {
             e.stopPropagation()
             this.isMenuActive = !this.isMenuActive
           },
@@ -189,14 +214,14 @@ export default Vue.extend({
         this.genIcon()
       ])
     },
-    genIcon () {
+    genIcon (): VNode {
       return this.$createElement(VIcon, {
         props: {
           color: this.isActive ? this.filterActiveIconColor : this.filterIconColor
         }
       }, [this.filterIcon])
     },
-    genDualConditionsField () {
+    genDualConditionsField (): VNode {
       return this.$createElement(VRow, {
         staticClass: 'v-dual-conditions-field-row'
       }, [
@@ -210,7 +235,7 @@ export default Vue.extend({
             dense: true
           },
           on: {
-            input: (e) => this.valueFilterChange(e)
+            input: (e: string|undefined) => this.valueFilterChange(e)
           }
         }),
         this.$createElement(VTextField, {
@@ -223,12 +248,12 @@ export default Vue.extend({
             dense: true
           },
           on: {
-            input: (e) => this.valueFilterChangeMax(e)
+            input: (e: string|undefined) => this.valueFilterChangeMax(e)
           }
         })
       ])
     },
-    genMonoConditionsField () {
+    genMonoConditionsField (): VNode {
       return this.$createElement(VTextField, {
         props: {
           type: this.valueDataType,
@@ -245,18 +270,18 @@ export default Vue.extend({
           'padding-top': '16px'
         },
         on: {
-          input: (e) => this.valueFilterChange(e),
+          input: (e: string|undefined) => this.valueFilterChange(e),
           'click:append': () => this.invertSelection()
         }
       })
     },
-    genConditionsField () {
+    genConditionsField (): VNode {
       if (this.selectedCondition && this.selectedCondition.id === 'between') {
         return this.genDualConditionsField()
       }
       return this.genMonoConditionsField()
     },
-    genMenuContent () {
+    genMenuContent (): VNode|undefined {
       if (!this.header || !this.header.value) return
       return this.$createElement(VCard, {
         props: {
@@ -283,7 +308,7 @@ export default Vue.extend({
             'padding-top': '16px'
           },
           on: {
-            change: (e) => this.setCondition(e)
+            change: (e: FilterCondition) => this.setCondition(e)
           }
         }),
         this.genConditionsField(),
@@ -292,7 +317,7 @@ export default Vue.extend({
             values: this.filteredValuesSelected
           },
           on: {
-            'change-value-selection': (e, payload) => {
+            'change-value-selection': (e: any, payload: SelectableValue) => {
               this.changeSelection(payload)
             }
           }
@@ -342,7 +367,7 @@ export default Vue.extend({
       this.$emit('filter-change', this.resultValues)
     }
   },
-  render () {
+  render (): VNode {
     const self = this
     return this.$createElement(VMenu, {
       props: {
