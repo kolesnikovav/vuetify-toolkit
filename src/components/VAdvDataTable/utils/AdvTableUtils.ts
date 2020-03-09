@@ -14,7 +14,9 @@ export type TableHeader = {
     width?: string | number
     filter?: (value: any, search: string, item: any) => boolean
     sort?: (a: any, b: any) => number,
-    datatype?: 'string' | 'number'| 'date'
+    datatype?: 'string' | 'number'| 'date',
+    visible?: boolean,
+    order?: number
   }
 
 export type FilterCondition = {

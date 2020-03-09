@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue, { PropType, VNode } from 'vue'
 import {
   VBtn,
   VIcon,
@@ -14,6 +14,7 @@ import {
   VCard,
   VCardActions
 } from '../../vuetify-import'
+import { TableHeader } from '../VAdvDataTable/utils/AdvTableUtils'
 
 export default Vue.extend({
   name: 'v-column-editor',
@@ -34,10 +35,7 @@ export default Vue.extend({
       type: String,
       default: 'expand_less'
     },
-    headers: {
-      type: Array,
-      default: () => []
-    },
+    headers: Array as PropType<TableHeader[]>,
     dark: {
       type: Boolean,
       default: false
@@ -48,22 +46,22 @@ export default Vue.extend({
     }
   },
   computed: {
-    sortedHeaders () {
-      if (!this.dataHeaders) {
-        return this.headers.slice().sort((a, b) => a.order - b.order)
-      }
+    sortedHeaders (): TableHeader[] {
+      // if (!this.dataHeaders) {
+      //   return this.headers.slice().sort((a, b) => a.order - b.order)
+      // }
       return this.dataHeaders
     },
-    resultHeaders () {
-      return this.sortedHeaders.filter(v => v.visible)
+    resultHeaders (): TableHeader[] {
+      return this.sortedHeaders.filter((v: TableHeader) => v.visible)
     }
   },
   data: () => ({
     isMenuActive: false,
-    dataHeaders: undefined
+    dataHeaders: [] as TableHeader[]
   }),
   methods: {
-    deactivateMenu (e, payload) {
+    deactivateMenu (e: Event, payload: string) {
       if (payload === 'CLOSE') {
         this.isMenuActive = true
       } else {
@@ -74,14 +72,14 @@ export default Vue.extend({
         }
       }
     },
-    genActivator (listeners) {
+    genActivator (listeners: EventListener): VNode {
       return this.$createElement(VBtn, {
         props: {
           icon: true
         },
         slot: 'activator',
         on: {
-          click: (e) => {
+          click: (e: Event) => {
             e.stopPropagation()
             this.isMenuActive = !this.isMenuActive
             this.$nextTick()
@@ -92,14 +90,14 @@ export default Vue.extend({
         this.genIcon()
       ])
     },
-    genIcon () {
+    genIcon (): VNode {
       return this.$createElement(VIcon, {
         props: {
           color: this.headerIconColor
         }
       }, [this.headerIcon])
     },
-    genVisibleCheckbox (header) {
+    genVisibleCheckbox (header: TableHeader): VNode {
       return this.$createElement(VCheckbox, {
         props: {
           value: header.visible,
@@ -108,7 +106,7 @@ export default Vue.extend({
           falseValue: false
         },
         on: {
-          click: (e) => {
+          click: (e: Event) => {
             e.stopPropagation()
             e.preventDefault()
             header.visible = !header.visible
@@ -116,7 +114,7 @@ export default Vue.extend({
         }
       })
     },
-    genMenuItem (header) {
+    genMenuItem (header: TableHeader): VNode {
       return this.$createElement(VListItem, {
         props: {
           dense: this.dense
@@ -131,7 +129,7 @@ export default Vue.extend({
               icon: true
             },
             on: {
-              click: (e) => this.downHeader(header)
+              click: () => this.downHeader(header)
             }
           }, [
             this.$createElement(VIcon, this.downIcon)
@@ -143,7 +141,7 @@ export default Vue.extend({
               icon: true
             },
             on: {
-              click: (e) => this.upHeader(header)
+              click: () => this.upHeader(header)
             }
           }, [
             this.$createElement(VIcon, this.upIcon)
@@ -162,7 +160,7 @@ export default Vue.extend({
           }),
           this.$createElement(VListItemSubtitle, {
             domProps: {
-              innerHTML: header.name
+              innerHTML: header.text
             }
           })
         ])
@@ -173,7 +171,7 @@ export default Vue.extend({
         this.dataHeaders = this.sortedHeaders
       }
     },
-    upHeader (header) {
+    upHeader (header: TableHeader) {
       this.setDataHeaders()
       const i = this.dataHeaders.indexOf(header)
       if (i === 0) {
@@ -191,7 +189,7 @@ export default Vue.extend({
       }
       this.$nextTick()
     },
-    downHeader (header) {
+    downHeader (header: TableHeader) {
       this.setDataHeaders()
       const i = this.dataHeaders.indexOf(header)
       if (i === this.dataHeaders.length) {
@@ -209,7 +207,7 @@ export default Vue.extend({
       }
       this.$nextTick()
     },
-    genMenuContent () {
+    genMenuContent (): VNode {
       const items = this.sortedHeaders.map(header => this.genMenuItem(header))
       return this.$createElement(VCard, {
         props: {
@@ -233,7 +231,7 @@ export default Vue.extend({
               innerHTML: 'Cancel'
             },
             on: {
-              click: (e) => this.deactivateMenu(e, 'CANCEL')
+              click: (e: Event) => this.deactivateMenu(e, 'CANCEL')
             }
           }),
           this.$createElement(VBtn, {
@@ -241,7 +239,7 @@ export default Vue.extend({
               text: true
             },
             on: {
-              click: (e) => this.deactivateMenu(e, 'OK')
+              click: (e: Event) => this.deactivateMenu(e, 'OK')
             },
             domProps: {
               innerHTML: 'OK'
@@ -253,7 +251,7 @@ export default Vue.extend({
     }
 
   },
-  render () {
+  render (): VNode {
     const self = this
     return this.$createElement(VMenu, {
       props: {
@@ -261,7 +259,7 @@ export default Vue.extend({
         value: this.isMenuActive
       },
       on: {
-        input: (e) => this.deactivateMenu(e, 'CLOSE')
+        input: (e: Event) => this.deactivateMenu(e, 'CLOSE')
       },
       slot: 'header.data-table-settings',
       scopedSlots: {

@@ -1,7 +1,12 @@
-import Vue from 'vue'
+import Vue, { VNode, PropType } from 'vue'
 import { VDataTable, VIcon } from '../../vuetify-import'
 import VColumnEditor from './VColumnEditor'
 import VTableFilter from './VTableFilter'
+import { TableHeader, FilterCondition, GetItem } from '../VAdvDataTable/utils/AdvTableUtils'
+import { ScopedSlot } from 'vue/types/vnode'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const VDataTableProps = ((VDataTable as any).options as any).props
 
 export default Vue.extend({
   name: 'v-adv-data-table',
@@ -42,16 +47,17 @@ export default Vue.extend({
       type: String,
       default: '$sort'
     },
-    ...VDataTable.options.props
+    ...VDataTableProps,
+    headers: Array as PropType<TableHeader[]>
   },
   data: () => ({
     isMenuActive: false,
-    dataHeaders: [],
+    dataHeaders: [] as TableHeader[],
     valueFilter: new Map(),
     valueFilterUpdateTracker: 1
   }),
   computed: {
-    computedHeadersTable () {
+    computedHeadersTable (): TableHeader[] {
       if (!this.dataHeaders) return []
       const headers = this.dataHeaders
       const defaultHeader = { text: '', sortable: false, width: '18px' }
@@ -59,15 +65,15 @@ export default Vue.extend({
       if (index < 0) headers.push({ ...defaultHeader, value: 'data-table-settings' })
       return headers
     },
-    visibleHeaders () {
-      return this.computedHeadersTable.filter(v => v.visible || v.value === 'data-table-settings')
+    visibleHeaders (): TableHeader[] {
+      return this.computedHeadersTable.filter((v: TableHeader) => v.visible || v.value === 'data-table-settings')
     },
-    editedHeaders () {
+    editedHeaders (): TableHeader[] {
       return this.dataHeaders.filter(v => v.value !== 'data-table-settings')
     },
-    filteredItems () {
+    filteredItems (): any[] {
       if (this.valueFilterUpdateTracker || !this.valueFilterUpdateTracker) {
-        return this.items.filter(row => {
+        return this.$props.items.filter((row: any) => {
           for (const [key, value] of this.valueFilter) {
             if (Array.isArray(value) && value.length > 0) {
               if (row[key] && value.indexOf(row[key]) === -1) return false
@@ -76,7 +82,7 @@ export default Vue.extend({
           return true
         })
       } else {
-        return this.items.filter(row => {
+        return this.$props.items.filter((row: any) => {
           for (const [key, value] of this.valueFilter) {
             if (Array.isArray(value) && value.length > 0) {
               if (row[key] && value.indexOf(row[key]) === -1) return false
@@ -93,74 +99,74 @@ export default Vue.extend({
   methods: {
     refreshHeaders () {
       this.dataHeaders = []
-      if (this.headers && this.headers.length > 0) {
-        for (let i = 0; i < this.headers.length; i++) {
-          const hdr = Object.assign({}, this.headers[i])
+      if (this.$props.headers && this.$props.headers.length > 0) {
+        for (let i = 0; i < this.$props.headers.length; i++) {
+          const hdr = Object.assign({}, this.$props.headers[i])
           hdr.visible = true
           hdr.order = i
           this.dataHeaders.push(hdr)
         }
       }
     },
-    genHeaderSettings () {
+    genHeaderSettings (): VNode {
       return this.$createElement(VColumnEditor, {
         props: {
           headers: this.editedHeaders,
-          headerIcon: this.headerIcon,
-          headerIconColor: this.headerIconColor,
-          dark: this.dark,
-          dense: this.dense
+          headerIcon: this.$props.headerIcon,
+          headerIconColor: this.$props.headerIconColor,
+          dark: this.$props.dark,
+          dense: this.$props.dense
         },
         on: {
-          'headers-changed': (newHeaders) => {
+          'headers-changed': (newHeaders: TableHeader[]) => {
             this.dataHeaders = newHeaders
             this.$nextTick()
           }
         }
       })
     },
-    getValues (val) {
-      return this.items.map(v => v[val])
+    getValues (val: string) {
+      return this.$props.items.map((v: any) => v[val])
     },
-    applyFilter (vals, header) {
+    applyFilter (vals: any[], header: TableHeader) {
       if (header.value) {
         this.valueFilter.set(header.value, vals)
         this.valueFilterUpdateTracker += 1
       }
     },
-    clearFilter (header) {
+    clearFilter (header: TableHeader) {
       if (header.value && this.valueFilter.has(header.value)) {
         this.valueFilter.delete(header.value)
         this.valueFilterUpdateTracker += 1
       }
     },
-    genFilter (header) {
+    genFilter (header: TableHeader): VNode {
       return this.$createElement(VTableFilter, {
         props: {
           header: header,
           getItemValues: this.getValues,
-          filterIcon: this.filterIcon,
-          filterActiveIcon: this.filterActiveIcon,
-          filterIconColor: this.filterIconColor,
-          filterActiveIconColor: this.filterActiveIconColor,
-          dense: this.dense,
-          dark: this.dark
+          filterIcon: this.$props.filterIcon,
+          filterActiveIcon: this.$props.filterActiveIcon,
+          filterIconColor: this.$props.filterIconColor,
+          filterActiveIconColor: this.$props.filterActiveIconColor,
+          dense: this.$props.dense,
+          dark: this.$props.dark
         },
         on: {
-          'filter-change': (values) => this.applyFilter(values, header),
-          'clear-filter': (header) => this.clearFilter(header)
+          'filter-change': (values: any[]) => this.applyFilter(values, header),
+          'clear-filter': (header: TableHeader) => this.clearFilter(header)
         }
       })
     },
-    genSortIcon () {
+    genSortIcon (): VNode {
       return this.$createElement(VIcon, {
         staticClass: 'v-data-table-header__icon',
         props: {
           size: 18
         }
-      }, [this.sortIcon])
+      }, [this.$props.sortIcon])
     },
-    genDefaultHeader (header) {
+    genDefaultHeader (header: TableHeader): VNode {
       return this.$createElement('div', {
         style: {
           'justify-content': 'flex-start',
@@ -179,7 +185,7 @@ export default Vue.extend({
           : undefined
       ])
     },
-    genDefaultHeaderWithSlot (header, slot) {
+    genDefaultHeaderWithSlot (header: TableHeader, slot: any): VNode[] {
       const res = []
       res.push(slot.call(this))
       if (header.filterable) {
@@ -190,23 +196,21 @@ export default Vue.extend({
       }
       return res
     },
-    genTableScopedSlots () {
+    genTableScopedSlots (): {[key: string]: ScopedSlot| undefined}| undefined {
       let slots = {}
-      this.headers.forEach(element => {
+      this.$props.headers.forEach((element: TableHeader) => {
         const slotName = 'header.' + element.value
         let currentSlot
         if (this.$scopedSlots[slotName]) {
           currentSlot = this.genDefaultHeaderWithSlot.bind(this, element, this.$scopedSlots[slotName])
         }
-        const slotnew = {}
-        slotnew[slotName] = currentSlot || this.genDefaultHeader.bind(this, element)
-        slots = Object.assign(slots, slotnew)
+        slots = Object.assign(slots, currentSlot || this.genDefaultHeader.bind(this, element))
       })
       slots = Object.assign(slots, { 'header.data-table-settings': this.genHeaderSettings })
       return slots
     }
   },
-  render () {
+  render (): VNode {
     const currentProps = Object.assign({}, this.$props)
     this.visibleHeaders.map(el => { el.sortable = false })
     currentProps.headers = this.visibleHeaders
@@ -215,6 +219,6 @@ export default Vue.extend({
     return this.$createElement(VDataTable, {
       props: currentProps,
       scopedSlots: scopedSlots
-    }, this.$slots)
+    })
   }
 })
