@@ -1,4 +1,4 @@
-import VDateTimeSelect from './VDateTimeSelect'
+import VDateTimeSelect from './VDataTimeSelect'
 
 export { VDateTimeSelect }
 export default VDateTimeSelect

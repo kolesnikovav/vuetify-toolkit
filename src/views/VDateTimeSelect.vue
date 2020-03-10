@@ -56,14 +56,15 @@
     </v-tabs>
       <v-card-text>
         <v-row justify="space-around">
-          <v-switch v-model="autocomplete" class="ma-2" label="autocomplete"></v-switch>
-          <v-switch v-model="dense" class="ma-2" label="dense"></v-switch>
-          <v-switch v-model="clearable" class="ma-2" label="clearable"></v-switch>
-          <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
+          <v-switch v-model= "autocomplete" class="ma-2" label="autocomplete"></v-switch>
+          <v-switch v-model= "dense" class="ma-2" label="dense"></v-switch>
+          <v-switch v-model= "clearable" class="ma-2" label="clearable"></v-switch>
+          <v-switch v-model = "dark" class="ma-2" label="dark"></v-switch>
         </v-row>
         <v-row justify="space-between">
-          <v-select label = "select your locale" :items="locales" v-model="currentLocale"></v-select>
-          <v-select label = "selection type" :items="selectionTypes" v-model="selectionType"></v-select>
+          <v-select label = "select your locale" :items="locales" v-model = "currentLocale"></v-select>
+          <v-select label = "selection type" :items = "selectionTypes" v-model = "selectionType"></v-select>
+          <v-select label = "text align" :items = "textAlignVarians" v-model = "textAlign"></v-select>
         </v-row>
         <v-date-time-select
           :autocomplete="autocomplete"
@@ -73,6 +74,7 @@
           :dark="dark"
           :locale ="currentLocale"
           :selectionType ="selectionType"
+          :text-align = "textAlign"
         >
         </v-date-time-select>
       </v-card-text>
@@ -121,9 +123,10 @@ export default Vue.extend({
     customSlots: false,
     currentLocale: 'en',
     selectionType: 'datetime',
-
+    textAlign: 'left',
     locales: ['en', 'ru', 'it', 'pt', 'pl', 'zh'],
     selectionTypes: ['date', 'time', 'datetime'],
+    textAlignVarians: ['left', 'right', 'center'],
     codeSandbox: false,
     sandboxTemplate: sandboxTemplateHTML,
     sandboxCode: sandboxCode

@@ -28,7 +28,8 @@ import {
   VTooltip,
   VRow,
   VCol,
-  VSpacer
+  VSpacer,
+  VSheet
 } from 'vuetify/lib'
 
 import { VTreeviewNodeProps } from 'vuetify/lib/components/VTreeview/VTreeviewNode'
@@ -73,6 +74,7 @@ export {
   VRow,
   VCol,
   VSpacer,
+  VSheet,
   consoleError,
   getPropertyFromItem,
   getObjectValueByPath,
