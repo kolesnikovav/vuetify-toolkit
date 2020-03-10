@@ -2,7 +2,7 @@ import Vue, { VNode, PropType } from 'vue'
 import { VDataTable, VIcon } from '../../vuetify-import'
 import VColumnEditor from './VColumnEditor'
 import VTableFilter from './VTableFilter'
-import { TableHeader, FilterCondition, GetItem } from '../VAdvDataTable/utils/AdvTableUtils'
+import { TableHeader, FilterCondition, GetItem, ColumnEditorResult } from '../VAdvDataTable/utils/AdvTableUtils'
 import { ScopedSlot } from 'vue/types/vnode'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -54,22 +54,29 @@ export default Vue.extend({
     isMenuActive: false,
     dataHeaders: [] as TableHeader[],
     valueFilter: new Map(),
-    valueFilterUpdateTracker: 1
+    valueFilterUpdateTracker: 1,
+    invisibleHeaders: new Set<string>(),
+    order: new Map<string, number>()
   }),
   computed: {
     computedHeadersTable (): TableHeader[] {
-      if (!this.dataHeaders) return []
-      const headers = this.dataHeaders
+      const headers = this.$props.headers.slice()
       const defaultHeader = { text: '', sortable: false, width: '18px' }
-      const index = headers.findIndex(h => h.value === 'data-table-settings')
+      const index = headers.findIndex((h: TableHeader) => h.value === 'data-table-settings')
       if (index < 0) headers.push({ ...defaultHeader, value: 'data-table-settings' })
       return headers
     },
     visibleHeaders (): TableHeader[] {
-      return this.computedHeadersTable.filter((v: TableHeader) => v.visible || v.value === 'data-table-settings')
+      const headers = this.computedHeadersTable.slice()
+      return headers.filter((v: TableHeader) => !this.invisibleHeaders.has(v.value) || v.value === 'data-table-settings')
     },
     editedHeaders (): TableHeader[] {
-      return this.dataHeaders.filter(v => v.value !== 'data-table-settings')
+      const headers = this.$props.headers.slice()
+      headers.map((v: TableHeader) => {
+        if (!this.invisibleHeaders.has(v.value)) v.visible = true
+        else v.visible = false
+      })
+      return headers
     },
     filteredItems (): any[] {
       if (this.valueFilterUpdateTracker || !this.valueFilterUpdateTracker) {
@@ -111,16 +118,18 @@ export default Vue.extend({
     genHeaderSettings (): VNode {
       return this.$createElement(VColumnEditor, {
         props: {
-          headers: this.editedHeaders,
+          editedHeaders: this.editedHeaders,
           headerIcon: this.$props.headerIcon,
           headerIconColor: this.$props.headerIconColor,
           dark: this.$props.dark,
           dense: this.$props.dense
         },
         on: {
-          'headers-changed': (newHeaders: TableHeader[]) => {
-            this.dataHeaders = newHeaders
-            this.$nextTick()
+          'headers-changed': (newSettings: ColumnEditorResult) => {
+            this.$nextTick(() => {
+              this.invisibleHeaders = newSettings.invisible
+              this.order = newSettings.order
+            })
           }
         }
       })

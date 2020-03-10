@@ -24,4 +24,9 @@ export type FilterCondition = {
     text: string
   }
 
+export type ColumnEditorResult = {
+    invisible: Set<string>,
+    order: Map<string, number>
+  }
+
 export type GetItem = (a: string) => string[]|number[]
