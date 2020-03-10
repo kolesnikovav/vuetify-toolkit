@@ -301,18 +301,21 @@ export default Vue.extend({
         // needs combined scoped slot
         slots = Object.assign({}, { prepend: this.genCombinedTreeViewSlot })
         if (this.$scopedSlots.appendTree) {
-          slots = Object.assign({}, { append: (props: any) => this.$scopedSlots.appendTree(props) })
+          const slotAppend = this.$scopedSlots.appendTree
+          slots = Object.assign({}, { append: (props: any) => slotAppend(props) })
         }
         if (this.$scopedSlots.labelTree) {
-          slots = Object.assign({}, { label: (props: any) => this.$scopedSlots.labelTree(props) })
+          const slotLabel = this.$scopedSlots.labelTree
+          slots = Object.assign({}, { label: (props: any) => slotLabel(props) })
         }
       } else {
         slots = treeviewScopedSlots(this.$scopedSlots)
       }
       if (this.$props.folderIcon || this.$props.folderOpenIcon) {
-        if (!slots.prepend) {
-          slots = Object.assign(slots, { prepend: this.genItemIcon })
-        }
+        // if (!slots.prependTree) {
+        //   const slotPrepend = this.$scopedSlots.labelTree
+        //   slots = Object.assign(slots, { prepend: this.genItemIcon })
+        // }
       }
       return slots as ScopedSlotType
     },
