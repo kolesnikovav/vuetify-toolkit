@@ -112,7 +112,18 @@ export default Vue.extend({
           return true
         })
       }
+    },
+    filteredItemsCount (): number {
+      return this.filteredItems.length
     }
+  },
+  watch: {
+    filteredItemsCount: {
+      handler (val: number) {
+        this.$emit('items-count-change', val)
+      }
+    }
+
   },
   created () {
     this.refreshHeaders()

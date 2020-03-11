@@ -3,7 +3,7 @@ import { VCard, VDivider, VTreeview, VTreeviewNodeProps, VPagination, VRow, VIco
 import VAdvDataTable from '../VAdvDataTable'
 import treeviewScopedSlots from '../../utils/TreeviewScopedSlots'
 import tableScopedSlots from '../../utils/TableScopedSlots'
-import { ScopedSlot, NormalizedScopedSlot, VNodeData } from 'vue/types/vnode'
+import { ScopedSlot } from 'vue/types/vnode'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const VDataTableProps = ((VAdvDataTable as any).options as any).props
@@ -53,7 +53,8 @@ export default Vue.extend({
     currentPage: 1,
     x: 0,
     clientwidth: 0,
-    treeWidth: 300
+    treeWidth: 300,
+    filteredTableItemsCount: 0
   }),
   computed: {
     treeItems (): any[] {
@@ -86,9 +87,9 @@ export default Vue.extend({
     },
     pageCount (): number {
       if (this.$props.itemsPerPage && Array.isArray(this.tableItems)) {
-        if (this.$props.itemsPerPage < this.tableItems.length) {
-          let res = Math.floor(this.tableItems.length / this.$props.itemsPerPage)
-          res += (this.tableItems.length % this.$props.itemsPerPage) > 0 ? 1 : 0
+        if (this.$props.itemsPerPage < this.filteredTableItemsCount) {
+          let res = Math.floor(this.filteredTableItemsCount / this.$props.itemsPerPage)
+          res += (this.filteredTableItemsCount % this.$props.itemsPerPage) > 0 ? 1 : 0
           return res
         }
       }
@@ -173,7 +174,8 @@ export default Vue.extend({
     /* resising parts of component */
     genPagination (): VNode| VNode[]| undefined {
       if (this.$props.itemsPerPage && Array.isArray(this.tableItems)) {
-        if (this.$props.itemsPerPage < this.tableItems.length) {
+        // if (this.$props.itemsPerPage < this.tableItems.length) {
+        if (this.$props.itemsPerPage < this.filteredTableItemsCount) {
           return [
             this.$createElement(VDivider, {
               props: {
@@ -273,7 +275,8 @@ export default Vue.extend({
         },
         scopedSlots: TableScopedSlots,
         on: {
-          'click:row': (e: any) => this.synchronyzeActiveNode(e)
+          'click:row': (e: any) => this.synchronyzeActiveNode(e),
+          'items-count-change': (e: number) => { this.filteredTableItemsCount = e }
         }
       }, slots)
     },
