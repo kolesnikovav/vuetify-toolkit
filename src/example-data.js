@@ -202,5 +202,5 @@ export const mdvHeaders = [
     align: 'left',
     value: 'id'
   },
-  { text: 'name', value: 'name' }
+  { text: 'name', value: 'name', divider: true, filterable: true }
 ]

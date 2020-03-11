@@ -126,6 +126,11 @@
           :folder-icon-color = "folderIconColor"
           :item-icon-color = "itemIconColor"
           :items-per-page = 5
+          header-icon = "mdi-settings"
+          upIcon = "mdi-arrow-expand-up"
+          downIcon = "mdi-arrow-expand-down"
+          filterIcon = "mdi-text-subject"
+          filterActiveIconColor = "red"
         >
           <template v-if="customSlots" v-slot:prependTree="{ item, open }">
             <v-icon >{{ open ? 'mdi-play' : 'mdi-pause' }}</v-icon>
@@ -157,6 +162,11 @@ const sandboxTemplateHTML = '<v-md-view\n' +
 '          :dense="dense"\n' +
 '          :hierarchy = "hierarchy"\n' +
 '          :items-per-page = 5\n' +
+'          header-icon = "mdi-settings"' +
+'          upIcon = "mdi-arrow-expand-up"' +
+'          downIcon = "mdi-arrow-expand-down"' +
+'          filterIcon = "mdi-text-subject"' +
+'          filterActiveIconColor = "red"' +
 '        >\n' +
 '          <template v-if="customSlots" v-slot:prependTree="{ item, open }">\n' +
 '            <v-icon >{{ open ? "mdi-folder-open" : "mdi-folder" }}</v-icon>\n' +

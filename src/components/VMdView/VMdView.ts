@@ -1,11 +1,12 @@
 import Vue, { VNode } from 'vue'
-import { VCard, VDivider, VDataTable, VTreeview, VTreeviewNodeProps, VPagination, VRow, VIcon, getObjectValueByPath } from '../../vuetify-import'
+import { VCard, VDivider, VTreeview, VTreeviewNodeProps, VPagination, VRow, VIcon, getObjectValueByPath } from '../../vuetify-import'
+import VAdvDataTable from '../VAdvDataTable'
 import treeviewScopedSlots from '../../utils/TreeviewScopedSlots'
 import tableScopedSlots from '../../utils/TableScopedSlots'
 import { ScopedSlot, NormalizedScopedSlot, VNodeData } from 'vue/types/vnode'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const VDataTableProps = ((VDataTable as any).options as any).props
+const VDataTableProps = ((VAdvDataTable as any).options as any).props
 
 type ScopedSlotType = { [key: string]: ScopedSlot | undefined }
 
@@ -245,7 +246,7 @@ export default Vue.extend({
         }, this.$slots[slotName]))
       const TableScopedSlots = this.genTableScopedSlots()
 
-      return this.$createElement(VDataTable, {
+      return this.$createElement(VAdvDataTable, {
         ref: 'data-table',
         props: {
           selected: this.$props.selectable,
@@ -256,7 +257,15 @@ export default Vue.extend({
           page: this.currentPage,
           hideDefaultFooter: true,
           showSelect: this.$props.selectable,
-          singleSelect: !this.$props.multiple
+          singleSelect: !this.$props.multiple,
+          headerIcon: this.$props.headerIcon,
+          headerIconColor: this.$props.headerIconColor,
+          upIcon: this.$props.upIcon,
+          downIcon: this.$props.downIcon,
+          filterIcon: this.$props.filterIcon,
+          filterActiveIcon: this.$props.filterActiveIcon,
+          filterActiveIconColor: this.$props.filterActiveIconColor,
+          sortIcon: this.$props.sortIcon
         },
         style: {
           width: this.tableWidth + 'px'
