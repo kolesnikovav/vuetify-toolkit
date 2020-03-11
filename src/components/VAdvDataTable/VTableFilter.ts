@@ -196,7 +196,6 @@ export default Vue.extend({
           return item
         })
         this.filteredValuesSelected = result.slice()
-        console.log(this.filteredValuesSelected)
       })
     },
     valueFilterChange (e?: string) {
