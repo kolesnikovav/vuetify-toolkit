@@ -264,6 +264,7 @@ export default Vue.extend({
           downIcon: this.$props.downIcon,
           filterIcon: this.$props.filterIcon,
           filterActiveIcon: this.$props.filterActiveIcon,
+          filterSelectionIcon: this.$props.filterSelectionIcon,
           filterActiveIconColor: this.$props.filterActiveIconColor,
           sortIcon: this.$props.sortIcon
         },

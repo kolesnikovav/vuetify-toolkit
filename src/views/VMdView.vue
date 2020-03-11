@@ -130,6 +130,7 @@
           upIcon = "mdi-arrow-expand-up"
           downIcon = "mdi-arrow-expand-down"
           filterIcon = "mdi-text-subject"
+          filterSelectionIcon = "mdi-select-all"
           filterActiveIconColor = "red"
         >
           <template v-if="customSlots" v-slot:prependTree="{ item, open }">

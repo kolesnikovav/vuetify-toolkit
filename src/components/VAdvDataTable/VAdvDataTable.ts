@@ -35,6 +35,10 @@ export default Vue.extend({
       type: Boolean,
       default: false
     },
+    filterSelectionIcon: {
+      type: String,
+      default: '$unfold'
+    },
     upIcon: {
       type: String,
       default: 'expand_more'
@@ -169,6 +173,7 @@ export default Vue.extend({
           filterActiveIcon: this.$props.filterActiveIcon,
           filterIconColor: this.$props.filterIconColor,
           filterActiveIconColor: this.$props.filterActiveIconColor,
+          filterSelectionIcon: this.$props.filterSelectionIcon,
           dense: this.$props.dense,
           dark: this.$props.dark
         },
@@ -243,6 +248,6 @@ export default Vue.extend({
     return this.$createElement(VDataTable, {
       props: currentProps,
       scopedSlots: scopedSlots
-    })
+    }, this.$slots as any)
   }
 })

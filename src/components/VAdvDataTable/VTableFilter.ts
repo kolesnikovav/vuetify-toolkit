@@ -37,6 +37,10 @@ export default Vue.extend({
       type: String,
       default: undefined
     },
+    filterSelectionIcon: {
+      type: String,
+      default: '$unfold'
+    },
     dark: {
       type: Boolean,
       default: false
@@ -261,7 +265,7 @@ export default Vue.extend({
           outlined: true,
           dark: this.dark,
           dense: true,
-          appendIcon: 'check'
+          appendIcon: this.$props.filterSelectionIcon
         },
         style: {
           'padding-left': '16px',
