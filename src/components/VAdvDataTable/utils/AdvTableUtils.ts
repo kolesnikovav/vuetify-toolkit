@@ -19,6 +19,12 @@ export type TableHeader = {
     order?: number
   }
 
+export type TableHeaderEdition = {
+    text: string
+    value: string
+    visible: boolean
+}
+
 export type FilterCondition = {
     id: string
     text: string
@@ -26,7 +32,7 @@ export type FilterCondition = {
 
 export type ColumnEditorResult = {
     invisible: Set<string>,
-    order: Map<string, number>
+    order: TableHeaderEdition[]
   }
 
 export type GetItem = (a: string) => string[]|number[]

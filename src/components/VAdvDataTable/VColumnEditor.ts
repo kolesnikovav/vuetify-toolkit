@@ -14,7 +14,7 @@ import {
   VCard,
   VCardActions
 } from '../../vuetify-import'
-import { TableHeader } from '../VAdvDataTable/utils/AdvTableUtils'
+import { TableHeader, TableHeaderEdition } from '../VAdvDataTable/utils/AdvTableUtils'
 
 export default Vue.extend({
   name: 'v-column-editor',
@@ -46,18 +46,28 @@ export default Vue.extend({
     }
   },
   computed: {
-    sortedHeaders (): TableHeader[] {
-      return this.editedHeaders.slice().sort((a: TableHeader, b: TableHeader) => (a.order || -1) - (b.order || -1))
+    sortedHeaders (): TableHeaderEdition[] {
+      // const hd: TableHeader[] = []
+      // this.orderedHeaders.forEach(v => {
+      //   const currentHeder = this.editedHeaders.find(name => name.value === v)
+      //   if (currentHeder) hd.push(currentHeder)
+      // })
+      // console.log(hd)
+      // return hd
+      return this.orderedHeaders
     }
   },
   watch: {
     isMenuActive: {
       handler (val: boolean) {
         if (val) {
-          let i = 0
+          this.orderedHeaders = []
           return this.editedHeaders.map(v => {
-            this.order.set(v.value, i)
-            i++
+            this.orderedHeaders.push({
+              value: v.value,
+              text: v.text,
+              visible: v.visible || false
+            })
           })
         }
       }
@@ -66,7 +76,7 @@ export default Vue.extend({
   data: () => ({
     isMenuActive: false,
     invisibleHeaders: new Set<string>(),
-    order: new Map<string, number>()
+    orderedHeaders: [] as TableHeaderEdition[]
   }),
   methods: {
     deactivateMenu (e: Event, payload: string) {
@@ -76,7 +86,7 @@ export default Vue.extend({
         e.stopPropagation()
         this.isMenuActive = false
         if (payload === 'OK') {
-          this.$emit('headers-changed', { invisible: this.invisibleHeaders, order: this.order })
+          this.$emit('headers-changed', { invisible: this.invisibleHeaders, order: this.orderedHeaders })
         }
         this.invisibleHeaders = new Set<string>()
       }
@@ -106,11 +116,11 @@ export default Vue.extend({
         }
       }, [this.headerIcon])
     },
-    changeVisibility (header: TableHeader, val: boolean) {
+    changeVisibility (header: TableHeaderEdition, val: boolean) {
       if (!val && !this.invisibleHeaders.has(header.value)) this.invisibleHeaders.add(header.value)
       else if (val && this.invisibleHeaders.has(header.value)) this.invisibleHeaders.delete(header.value)
     },
-    genVisibleCheckbox (header: TableHeader): VNode {
+    genVisibleCheckbox (header: TableHeaderEdition): VNode {
       return this.$createElement(VCheckbox, {
         props: {
           value: header.visible,
@@ -123,7 +133,7 @@ export default Vue.extend({
         }
       })
     },
-    genMenuItem (header: TableHeader): VNode {
+    genMenuItem (header: TableHeaderEdition): VNode {
       return this.$createElement(VListItem, {
         props: {
           dense: this.dense
@@ -175,47 +185,30 @@ export default Vue.extend({
         ])
       ])
     },
-    upHeader (header: TableHeader) {
-      // if (header.order && header.order === 0) {
-      //   const last = this.sortedHeaders.length
-      // }
-      // this.setDataHeaders()
-      // const i = this.dataHeaders.indexOf(header)
-      // if (i === 0) {
-      //   const a = this.dataHeaders.slice(1)
-      //   a.push(header)
-      //   a.map(v => { v.order = a.indexOf(v) })
-      //   this.dataHeaders = a
-      // } else {
-      //   const a = this.dataHeaders.slice(0, i - 1)
-      //   a.push(header)
-      //   a.push(this.dataHeaders[i - 1])
-      //   a.push(...this.dataHeaders.slice(i + 1))
-      //   a.map(v => { v.order = a.indexOf(v) })
-      //   this.dataHeaders = a
-      // }
-      // this.$nextTick()
+    upHeader (header: TableHeaderEdition) {
+      this.$nextTick(() => {
+        const idx = this.orderedHeaders.findIndex(v => v.value === header.value)
+        const idxToChange = (idx === 0) ? this.orderedHeaders.length - 1 : idx - 1
+        const vChange = this.orderedHeaders[idxToChange]
+        this.orderedHeaders[idxToChange] = header
+        this.orderedHeaders[idx] = vChange
+        const o = this.orderedHeaders.slice()
+        this.orderedHeaders = o
+      })
     },
-    downHeader (header: TableHeader) {
-      // this.setDataHeaders()
-      // const i = this.dataHeaders.indexOf(header)
-      // if (i === this.dataHeaders.length) {
-      //   const a = this.dataHeaders.slice(0, i - 1)
-      //   a.push(header)
-      //   a.map(v => { v.order = a.indexOf(v) })
-      //   this.dataHeaders = a
-      // } else {
-      //   const a = this.dataHeaders.slice(0, i - 1)
-      //   a.push(header)
-      //   a.push(this.dataHeaders[i - 1])
-      //   a.push(...this.dataHeaders.slice(i + 1))
-      //   a.map(v => { v.order = a.indexOf(v) })
-      //   this.dataHeaders = a
-      // }
-      // this.$nextTick()
+    downHeader (header: TableHeaderEdition) {
+      this.$nextTick(() => {
+        const idx = this.orderedHeaders.findIndex(v => v.value === header.value)
+        const idxToChange = (idx === this.orderedHeaders.length - 1) ? 0 : idx + 1
+        const vChange = this.orderedHeaders[idxToChange]
+        this.orderedHeaders[idxToChange] = header
+        this.orderedHeaders[idx] = vChange
+        const o = this.orderedHeaders.slice()
+        this.orderedHeaders = o
+      })
     },
     genMenuContent (): VNode {
-      const items = this.sortedHeaders.map(header => this.genMenuItem(header))
+      const items = this.orderedHeaders.map(header => this.genMenuItem(header))
       return this.$createElement(VCard, {
         props: {
           dark: this.dark,

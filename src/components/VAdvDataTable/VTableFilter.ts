@@ -120,7 +120,7 @@ export default Vue.extend({
       } else if (conditions.id === 'endsWith') {
         return vals.filter(v => v.toLocaleLowerCase().endsWith(this.filterText.toLocaleLowerCase()))
       }
-      return vals.filter(v => v.toLocaleLowerCase().indexOf(this.filterText.toLocaleLowerCase()) >= 0)
+      return vals.filter((v: string) => v.toString().toLocaleLowerCase().indexOf(this.filterText.toString().toLocaleLowerCase()) >= 0)
     },
     filteredValuesSelected (): SelectableValue[] {
       const vals: SelectableValue[] = []
@@ -138,8 +138,8 @@ export default Vue.extend({
     resultValues (): string[] {
       const vals: string[] = []
       this.filteredValuesSelected.map((v:SelectableValue) => {
-        if (this.unSelectedValues.indexOf(v.text) === -1) {
-          vals.push(v.text)
+        if (this.unSelectedValues.indexOf(v.text.toString()) === -1) {
+          vals.push(v.text.toString())
         }
       })
       return vals

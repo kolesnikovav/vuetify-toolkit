@@ -165,6 +165,8 @@
           <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
         </v-row>
         <v-adv-data-table :items="items" :dark="dark" :headers="headers" headerIcon="mdi-settings"
+        upIcon = "mdi-arrow-expand-up"
+        downIcon = "mdi-arrow-expand-down"
           headerIconColor="error" :showSelect="showSelect" :singleSelect="singleSelect" :dense="dense"
           :folder-icon="folderIcon" :folder-open-icon="folderOpenIcon" :item-icon="itemIcon"
           :folder-icon-color="folderIconColor" :item-icon-color="itemIconColor" :filter-icon="filterIcon"
@@ -240,12 +242,12 @@ export default Vue.extend({
     dense: false,
     dark: false,
     customSlots: false,
-    filterIcon: 'subject',
+    filterIcon: 'mdi-text-subject',
     filterIconColor: 'red',
     filterActiveIconColor: 'green',
-    folderIcon: 'mdi-folder',
-    folderOpenIcon: 'mdi-folder-open',
-    itemIcon: 'mdi-file',
+    folderIcon: 'folder',
+    folderOpenIcon: 'folder-open',
+    itemIcon: 'file',
     itemIconColor: 'cyan',
     folderIconColor: 'amber',
 
