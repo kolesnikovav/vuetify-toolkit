@@ -126,18 +126,22 @@ export default Vue.extend({
       }
       return vals.filter((v: string) => v.toString().toLocaleLowerCase().indexOf(this.filterText.toString().toLocaleLowerCase()) >= 0)
     },
-    filteredValuesSelected (): SelectableValue[] {
-      const vals: SelectableValue[] = []
-      if (this.valueDataType === 'number') {
-        const filteredVals = this.filteredValues as number[]
-        filteredVals.map(v => vals.push({ text: v.toString(), selected: true }))
-      } else {
-        const filteredVals = this.filteredValues as string[]
-        filteredVals.map(v => {
-          vals.push({ text: v, selected: true })
-        })
+    filteredValuesSelected: {
+      get: function ():SelectableValue[] {
+        const vals: SelectableValue[] = []
+        if (this.valueDataType === 'number') {
+          const filteredVals = this.filteredValues as number[]
+          filteredVals.map(v => vals.push({ text: v.toString(), selected: true }))
+        } else {
+          const filteredVals = this.filteredValues as string[]
+          filteredVals.map(v => {
+            vals.push({ text: v, selected: true })
+          })
+        }
+        return vals
+      },
+      set: function () {
       }
-      return vals
     },
     resultValues (): string[] {
       const vals: string[] = []
@@ -183,16 +187,17 @@ export default Vue.extend({
       this.$emit('clear-filter', this.header)
     },
     invertSelection () {
-      const v:SelectableValue[] = []
-      this.unSelectedValues = []
-      this.filteredValuesSelected.map(item => {
-        v.push({ text: item.text, selected: !item.selected })
-        if (item.selected) {
-          this.unSelectedValues.push(item.text)
-        }
+      this.$nextTick(() => {
+        const result = this.filteredValuesSelected.map<SelectableValue>((item: SelectableValue) => {
+          item.selected = !item.selected
+          if (!item.selected) {
+            this.unSelectedValues.push(item.text)
+          }
+          return item
+        })
+        this.filteredValuesSelected = result.slice()
+        console.log(this.filteredValuesSelected)
       })
-      this.filteredValuesSelected = v
-      this.$nextTick()
     },
     valueFilterChange (e?: string) {
       this.filterText = e || ''

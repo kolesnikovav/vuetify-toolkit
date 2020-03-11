@@ -123,7 +123,6 @@ export default Vue.extend({
         this.$emit('items-count-change', val)
       }
     }
-
   },
   created () {
     this.refreshHeaders()
@@ -258,7 +257,8 @@ export default Vue.extend({
     const scopedSlots = this.genTableScopedSlots()
     return this.$createElement(VDataTable, {
       props: currentProps,
-      scopedSlots: scopedSlots
+      scopedSlots: scopedSlots,
+      on: this.$listeners
     }, this.$slots as any)
   }
 })
