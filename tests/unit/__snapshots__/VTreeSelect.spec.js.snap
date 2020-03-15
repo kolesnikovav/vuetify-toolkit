@@ -11,23 +11,13 @@ exports[`VTreeSelect.js renders 1`] = `
         </div><input type="hidden">
       </div>
       <div class="v-menu">
-        <div class="v-menu__content theme--light v-autocomplete__content" style="max-height: auto; min-width: 0px; max-width: auto; top: 12px; left: 0px; transform-origin: top left; z-index: 0; display: none;">
-          <div class="v-select-list v-card theme--light" id="list-1">
-            <div class="v-treeview theme--light">
-              <div aria-expanded="false" class="v-treeview-node">
-                <div class="v-treeview-node__root"><button type="button" class="v-icon notranslate v-treeview-node__toggle v-icon--link mdi mdi-menu-down theme--light"></button><button type="button" class="v-icon notranslate v-treeview-node__checkbox v-icon--link mdi mdi-checkbox-blank-outline theme--light"></button>
-                  <div class="v-treeview-node__content">
-                    <div class="v-treeview-node__label">Root</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!---->
       </div>
     </div>
     <div class="v-text-field__details">
-      <div class="v-messages theme--light"><span name="message-transition" tag="div" class="v-messages__wrapper"></span></div>
+      <div class="v-messages theme--light">
+        <div class="v-messages__wrapper"></div>
+      </div>
     </div>
   </div>
 </div>

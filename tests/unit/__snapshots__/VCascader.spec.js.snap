@@ -11,19 +11,13 @@ exports[`VCascader.js renders 1`] = `
         </div><input type="hidden">
       </div>
       <div class="v-menu">
-        <div class="v-menu__content theme--light v-autocomplete__content" style="max-height: auto; min-width: 0px; max-width: auto; top: 12px; left: 0px; transform-origin: top left; z-index: 0; display: none;">
-          <div role="listbox" tabindex="-1" class="v-list v-select-list v-sheet v-sheet--tile theme--light theme--light">
-            <div tabindex="0" aria-selected="false" id="list-item-6-0" role="option" class="v-list-item v-list-item--link theme--light">
-              <div class="v-list-item__content">
-                <div class="v-list-item__title">[object Object]</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!---->
       </div>
     </div>
     <div class="v-text-field__details">
-      <div class="v-messages theme--light"><span name="message-transition" tag="div" class="v-messages__wrapper"></span></div>
+      <div class="v-messages theme--light">
+        <div class="v-messages__wrapper"></div>
+      </div>
     </div>
   </div>
 </div>

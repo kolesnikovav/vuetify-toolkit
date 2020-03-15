@@ -6,12 +6,55 @@
     "name": "Aleksandr Kolesnikov",
     "email": "alex.v.kolesnikov72@gmail.com"
   },
-  "license": "MIT",
-  "homepage": "https://github.com/kolesnikovav/vuetify-toolkit",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kolesnikovav/vuetify-toolkit.git"
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint",
+    "lib": "vue-cli-service build --target lib 'src/components/index.js'",
+    "publish": "npm run lib && node postbuild.js"
   },
+  "dependencies": {
+    "core-js": "^3.6.4",
+    "vue": "^2.6.10",
+    "vuetify": "^2.2.0"
+  },
+  "devDependencies": {
+    "@mdi/font": "^5.0.45",
+    "@types/jest": "^25.1.4",
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
+    "@vue/cli-plugin-babel": "~4.2.3",
+    "@vue/cli-plugin-eslint": "~4.2.3",
+    "@vue/cli-plugin-typescript": "~4.2.3",
+    "@vue/cli-plugin-unit-jest": "~4.2.3",
+    "@vue/cli-service": "~4.2.3",
+    "@vue/eslint-config-standard": "^5.1.2",
+    "@vue/eslint-config-typescript": "^5.0.2",
+    "@vue/test-utils": "1.0.0-beta.32",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^4.9.0",
+    "sass": "^1.17.4",
+    "sass-loader": "^7.1.0",
+    "ts-jest": "^25.2.1",
+    "typescript": "~3.7.5",
+    "vue-cli-plugin-vuetify": "~2.0.5",
+    "vue-template-compiler": "^2.6.10",
+    "vuetify-loader": "^1.4.3"
+  },
+  "peerDependencies": {
+    "core-js": "^3.6.4",
+    "vue": "^2.6.10",
+    "vuetify": "^2.2.0"
+  },
+  "homepage": "https://github.com/kolesnikovav/vuetify-toolkit",
   "keywords": [
     "vuetify",
     "vue",
@@ -22,54 +65,12 @@
     "cascader",
     "master-detail"
   ],
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint",
-    "lib": "vue-cli-service build --target lib 'src/components/index.js'",
-    "publish": "npm run lib && node postbuild.js"
-  },
-  "peerDependencies": {
-    "core-js": "^3.4.8",
-    "vue": "^2.6.10",
-    "vuetify": "^2.1.13"
-  },
+  "license": "MIT",
   "optionalDependencies": {
-    "vue-router": "^3.0.3"
+    "vue-router": "^3.1.6"
   },
-  "devDependencies": {
-    "@mdi/font": "^5.0.45",
-    "@types/jest": "^23.1.4",
-    "@typescript-eslint/eslint-plugin": "^2.11.0",
-    "@typescript-eslint/parser": "^2.11.0",
-    "@vue/cli-plugin-babel": "^4.1.1",
-    "@vue/cli-plugin-eslint": "^4.1.1",
-    "@vue/cli-plugin-typescript": "^4.1.1",
-    "@vue/cli-plugin-unit-jest": "^4.1.1",
-    "@vue/cli-service": "^4.1.1",
-    "@vue/eslint-config-standard": "^5.0.1",
-    "@vue/eslint-config-typescript": "^5.0.1",
-    "@vue/test-utils": "1.0.0-beta.29",
-    "babel-core": "7.0.0-bridge.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^6.7.2",
-    "eslint-plugin-import": "^2.19.1",
-    "eslint-plugin-node": "^10.0.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "eslint-plugin-vue": "^6.0.1",
-    "node-sass": "^4.9.0",
-    "sass": "^1.17.4",
-    "sass-loader": "^7.1.0",
-    "ts-jest": "^23.0.0",
-    "typescript": "^3.4.3",
-    "vue-cli-plugin-vuetify": "^1.1.0",
-    "vue-template-compiler": "^2.6.10",
-    "vuetify-loader": "^1.4.3"
-  },
-  "dependencies": {
-    "vue": "^2.6.10",
-    "vuetify": "^2.2.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kolesnikovav/vuetify-toolkit.git"
   }
 }
