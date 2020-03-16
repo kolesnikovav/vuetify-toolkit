@@ -1,6 +1,10 @@
-// import { mixins, VDataTable, VListTile, VListTileContent, VListTileTitle, Themeable, Colorable } from '../../vuetify-import'
+import { VNode } from 'vue'
 import { mixins, VDataTable, VListItem, VListItemContent, VListItemTitle, Themeable, Colorable } from '../../vuetify-import'
 import tableScopedSlots from '../../utils/TableScopedSlots'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const VDataTableProps = ((VDataTable as any).options as any).props
+
 export default mixins(
   Themeable, Colorable
   /* @vue/component */
@@ -32,31 +36,31 @@ export default mixins(
       type: Array,
       default: () => []
     },
-    ...VDataTable.options.props
+    ...VDataTableProps
   },
   computed: {
-    staticNoDataTile () {
+    staticNoDataTile (): VNode {
       const tile = {
         on: {
-          mousedown: e => e.preventDefault() // Prevent onBlur from being called
+          mousedown: (e: MouseEvent) => e.preventDefault() // Prevent onBlur from being called
         }
       }
-      return this.$createElement(VListItem, tile, [
-        this.genTileNoDataContent()
+      return (this as any).$createElement(VListItem, tile, [
+        (this as any).genTileNoDataContent()
       ])
     }
   },
   methods: {
-    genTileNoDataContent () {
-      const innerHTML = this.noDataText
-      return this.$createElement(VListItemContent,
-        [this.$createElement(VListItemTitle, {
+    genTileNoDataContent (): VNode {
+      const innerHTML = (this as any).noDataText
+      return (this as any).$createElement(VListItemContent,
+        [(this as any).$createElement(VListItemTitle, {
           domProps: { innerHTML }
         })]
       )
     }
   },
-  render () {
+  render (): VNode {
     const children = []
     if (!this.items || !Array.isArray(this.items) || this.items.length < 1) {
       children.push(this.$slots['no-data'] || this.staticNoDataTile)
@@ -91,7 +95,7 @@ export default mixins(
         },
         scopedSlots: tableScopedSlots(this.$scopedSlots),
         on: {
-          input: e => {
+          input: (e: any[]) => {
             this.$emit('input', e)
           }
         }
