@@ -1,6 +1,9 @@
+import Vue, { VueConstructor } from 'vue'
 import { VTreeview } from '../../vuetify-import'
 
-export default VTreeview.extend({
+const VTreeviewComponent = VTreeview as VueConstructor<Vue>
+
+export default VTreeviewComponent.extend({
   name: 'v-tree-view-selector',
   props: {
     selectedItems: {
@@ -21,16 +24,16 @@ export default VTreeview.extend({
   methods: {
     clearSelection () {
       this.selectedCache.clear()
-      Object.keys(this.nodes).forEach(key => {
-        this.nodes[key].isSelected = false
-        this.nodes[key].isIndeterminate = false
+      Object.keys(this.$data.nodes).forEach(key => {
+        this.$data.nodes[key].isSelected = false
+        this.$data.nodes[key].isIndeterminate = false
       })
     },
     selectAll () {
       this.selectedCache.clear()
-      Object.keys(this.nodes).forEach(key => {
-        this.nodes[key].isSelected = true
-        this.nodes[key].isIndeterminate = false
+      Object.keys(this.$data.nodes).forEach(key => {
+        this.$data.nodes[key].isSelected = true
+        this.$data.nodes[key].isIndeterminate = false
       })
     }
   }
