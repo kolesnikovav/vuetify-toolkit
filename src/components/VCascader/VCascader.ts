@@ -1,6 +1,7 @@
-import Vue, { VueConstructor, VNodeData, VNode } from 'vue'
+import Vue, { VueConstructor, VNodeData, VNode, VNodeChildren } from 'vue'
 import { VAutocomplete, VSelect, getPropertyFromItem } from '../../vuetify-import'
 import DefaultMenuProps from '../../utils/MenuProps'
+import VCascaderSelectList from './VCascaderSelectList'
 
 const VAutocompleteComponent = VAutocomplete as VueConstructor<Vue>
 
@@ -64,15 +65,23 @@ export default VAutocompleteComponent.extend({
           itemAvatar: this.itemAvatar,
           itemDisabled: this.itemDisabled,
           itemValue: this.itemValue,
-          itemText: this.getItemText
+          itemText: this.getText
         },
         on: {
-          select: () => this.selectItem
+          select: (item: object) => (this as any).selectItem(item)
         },
         scopedSlots: {
           item: (this.$scopedSlots as any).item
         }
       }
+    },
+    staticList (): VNode {
+      // if (this.$slots['no-data'] || this.$slots['prepend-item'] || this.$slots['append-item']) {
+      //   consoleError('assert: staticList should not be called if slots are used')
+      // }
+      const slots: VNodeChildren = []
+      slots.push((this.$scopedSlots as any).items)
+      return (this as any).$createElement(VCascaderSelectList, (this as any).listData, slots)
     }
   },
   watch: {
@@ -102,19 +111,20 @@ export default VAutocompleteComponent.extend({
       this.$data.parentItems = []
       this.$nextTick(() => (this.$refs.input as HTMLInputElement).focus())
     },
-    getText (item): string {
-      return getPropertyFromItem(item, (this as any).getItemText(), item)
-    },
-    getItemText (): string {
-      if (this.$props.itemText instanceof Array) {
-        const iText = this.$props.itemText[this.$data.currentStep]
-        return iText
-      } else if (this.$props.itemText instanceof Function) {
-        return this.$props.itemText()
-      } else {
-        return this.$props.itemText
-      }
-    },
+    // // getText (item): string {
+    // //   return getPropertyFromItem(item, (this as any).getItemText(), item)
+    // // },
+    // getItemText (item: ): string {
+
+    //   // if (this.$props.itemText instanceof Array) {
+    //   //   const iText = this.$props.itemText[this.$data.currentStep]
+    //   //   return iText
+    //   // } else if (this.$props.itemText instanceof Function) {
+    //   //   return this.$props.itemText()
+    //   // } else {
+    //   //   return this.$props.itemText
+    //   // }
+    // },
     genInput (): VNode {
       return this.$props.autocomplete ? (VAutocomplete as any).options.methods.genInput.call(this)
         : (VSelect as any).options.methods.genInput.call(this)
@@ -145,9 +155,10 @@ export default VAutocompleteComponent.extend({
       }, children)
     },
 
-    selectItem (item) {
+    selectItem (item: object) {
       /* change parent item if item has children */
       const chld = (this as any).getChildren(item)
+      console.log(chld)
       if (Array.isArray(chld) && chld.length > 0) {
         this.$data.parentItems.push(this.$data.parentItem)
         this.$data.parentItem = item
@@ -170,7 +181,7 @@ export default VAutocompleteComponent.extend({
         return this.$props.items
       }
       if (this.$props.itemChildren && typeof this.$props.itemChildren === 'string') {
-        const res = item ? item[this.$props.itemChildren] : this.$props.parentItem[this.$props.itemChildren]
+        const res = item[this.$props.itemChildren] ? item[this.$props.itemChildren] : this.$props.parentItem[this.$props.itemChildren]
         return res || []
       } else if (this.$props.itemChildren && typeof this.$props.itemChildren === 'function') {
         const res = item ? this.$props.itemChildren.call(item) : this.$props.itemChildren.call(this.$props.parentItem)
