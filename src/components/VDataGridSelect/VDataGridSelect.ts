@@ -2,7 +2,7 @@ import Vue, { VNode, VueConstructor } from 'vue'
 import { VAutocomplete, VSelect, VDataTable, consoleError } from '../../vuetify-import'
 import VDataGridSelectList from './VDataGridSelectList'
 import DefaultMenuProps from '../../utils/MenuProps'
-import { NormalizedScopedSlot, VNodeChildren } from 'vue/types/vnode'
+import { VNodeChildren } from 'vue/types/vnode'
 
 const VAutocompleteComponent = VAutocomplete as VueConstructor<Vue>
 
