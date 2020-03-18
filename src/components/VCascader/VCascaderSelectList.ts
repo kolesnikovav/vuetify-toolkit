@@ -45,16 +45,19 @@ export default mixins(
       }
     },
     genHeader (item: object): VNode {
-      const a = this.$createElement(VExpansionPanelHeader, (item as any).name)
-      console.log(a)
-      return a
+      return this.$createElement(VExpansionPanelHeader, (item as any).name)
     },
     genItem (item: object): VNode {
-      return this.$createElement(VExpansionPanel, {},
-        [
-          this.genHeader(item),
-          this.genItemContent(item)
-        ])
+      const children = this.getChildren(item)
+      if (children) {
+        return this.$createElement(VExpansionPanel, {},
+          [
+            this.genHeader(item),
+            this.genItemContent(item)
+          ])
+      } else {
+        return this.genHeader(item)
+      }
     }
   },
   render (): VNode {
