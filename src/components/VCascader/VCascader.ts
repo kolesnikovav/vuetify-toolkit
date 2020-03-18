@@ -81,7 +81,10 @@ export default VAutocompleteComponent.extend({
       // }
       const slots: VNodeChildren = []
       slots.push((this.$scopedSlots as any).items)
-      return (this as any).$createElement(VCascaderSelectList, (this as any).listData, slots)
+      // return (this as any).$createElement(VCascaderSelectList, (this as any).listData, slots)
+      return (this as any).$createElement(VCascaderSelectList, {
+        props: this.$props
+      }, slots)
     }
   },
   watch: {

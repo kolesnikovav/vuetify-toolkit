@@ -24,42 +24,30 @@ export default mixins(
       default: () => ([])
     },
     ...(VSelect as any).options.props
-    // noDataText: String,
-    // dense: Boolean,
-    // multiple: Boolean,
-    // openAll: Boolean,
-    // returnObject: {
-    //   type: Boolean,
-    //   default: false // TODO: Should be true in next major
-    // },
-    // value: {
-    //   type: Array,
-    //   default: () => ([])
-    // },
-    // search: String,
-    // filter: {
-    //   type: Function,
-    //   default: undefined
-    // }
   },
-  //   computed: {
-  //     staticNoDataTile (): VNode {
-  //       const tile = {
-  //         on: {
-  //           mousedown: (e: MouseEvent) => e.preventDefault() // Prevent onBlur from being called
-  //         }
-  //       }
-  //       return (this as any).$createElement(VListItem, tile, [
-  //         (this as any).genTileNoDataContent()
-  //       ])
-  //     }
-  //   },
   methods: {
+    getChildren (item: object) {
+      return (item as any)[this.$props.itemChildren]
+    },
     genItemContent (item: object): VNode {
-      return this.$createElement(VExpansionPanelContent, {})
+      const chld = this.getChildren(item)
+
+      if (chld) {
+        const content: VNode[] = []
+        const a = chld.map((v: object) => {
+          const el = this.genItem(v)
+          content.push(el)
+        })
+        const wrapper = this.$createElement(VExpansionPanels, content)
+        return wrapper
+      } else {
+        return this.$createElement(VExpansionPanelContent, {})
+      }
     },
     genHeader (item: object): VNode {
-      return this.$createElement(VExpansionPanelHeader, {})
+      const a = this.$createElement(VExpansionPanelHeader, (item as any).name)
+      console.log(a)
+      return a
     },
     genItem (item: object): VNode {
       return this.$createElement(VExpansionPanel, {},
@@ -68,55 +56,50 @@ export default mixins(
           this.genItemContent(item)
         ])
     }
-    // genTileNoDataContent (): VNode {
-    //   const innerHTML = (this as any).noDataText
-    //   return (this as any).$createElement(VListItemContent,
-    //     [(this as any).$createElement(VListItemTitle, {
-    //       domProps: { innerHTML }
-    //     })]
-    //   )
-    // }
   },
   render (): VNode {
     const children = []
-    if (!this.items || !Array.isArray(this.items) || this.items.length < 1) {
-      children.push(this.$slots['no-data'] || this.staticNoDataTile)
+    if (!this.$props.items || !Array.isArray(this.$props.items) || this.$props.items.length < 1) {
+      children.push(this.$slots['no-data'] || (this as any).staticNoDataTile)
     }
     this.$slots['prepend-item'] && children.unshift(this.$slots['prepend-item'])
     const childrenAppend = []
     this.$slots['append-item'] && childrenAppend.push(this.$slots['append-item'])
-
+    const content:VNode[] = []
+    this.$props.items.map((item: object) => {
+      content.push(this.genItem(item))
+    })
     return this.$createElement('div', {
       staticClass: 'v-select-list v-card',
-      class: this.themeClasses
+      class: (this as any).themeClasses
     }, [
       children,
       // this.genHeader(),
       this.$createElement(VExpansionPanels, {
-        props: {
-          selected: true,
-          dense: this.dense,
-          items: this.items,
-          itemKey: this.itemKey,
-          returnObject: false,
-          itemText: this.itemText,
-          headers: this.headers,
-          headersLength: this.headersLength,
-          headerText: this.headerText,
-          headerKey: this.headerKey,
-          hideHeaders: this.hideHeaders,
-          rowsPerPageText: this.rowsPerPageText,
-          customFilter: this.customFilter,
-          showSelect: true,
-          singleSelect: !this.multiple
-        },
-        scopedSlots: this.$scopedSlots,
-        on: {
-          input: (e: any[]) => {
-            this.$emit('input', e)
-          }
-        }
-      }), childrenAppend
+        // props: {
+        //   selected: true,
+        //   dense: this.dense,
+        //   items: this.items,
+        //   itemKey: this.itemKey,
+        //   returnObject: false,
+        //   itemText: this.itemText,
+        //   headers: this.headers,
+        //   headersLength: this.headersLength,
+        //   headerText: this.headerText,
+        //   headerKey: this.headerKey,
+        //   hideHeaders: this.hideHeaders,
+        //   rowsPerPageText: this.rowsPerPageText,
+        //   customFilter: this.customFilter,
+        //   showSelect: true,
+        //   singleSelect: !this.multiple
+        // },
+        // scopedSlots: this.$scopedSlots,
+        // on: {
+        //   input: (e: any[]) => {
+        //     this.$emit('input', e)
+        //   }
+        // }
+      }, content), childrenAppend
     ])
   }
 })
