@@ -161,7 +161,6 @@ export default VAutocompleteComponent.extend({
     selectItem (item: object) {
       /* change parent item if item has children */
       const chld = (this as any).getChildren(item)
-      console.log(chld)
       if (Array.isArray(chld) && chld.length > 0) {
         this.$data.parentItems.push(this.$data.parentItem)
         this.$data.parentItem = item

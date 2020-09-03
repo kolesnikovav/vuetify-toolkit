@@ -1,4 +1,4 @@
-import Vue, { VNode, VueConstructor, VNodeData } from 'vue'
+import Vue, { VNode, VueConstructor, VNodeData, PropType } from 'vue'
 import { VAutocomplete, VSelect, VTreeviewNodeProps, consoleError } from '../../vuetify-import'
 import VTreeSelectList from './VTreeSelectList'
 import DefaultMenuProps from '../../utils/MenuProps'
@@ -20,7 +20,12 @@ export default VAutocompleteComponent.extend({
       type: [String, Array, Object],
       default: () => DefaultMenuProps
     },
-    openAll: Boolean
+    openAll: Boolean,
+    selectionType: {
+      type: String as PropType<'leaf' | 'independent'>,
+      default: 'leaf',
+      validator: (v: string) => ['leaf', 'independent'].includes(v)
+    }
   },
   data: () => ({
     selectedItems: [] as any[]
@@ -72,6 +77,7 @@ export default VAutocompleteComponent.extend({
         itemDisabled: this.$props.itemDisabled,
         transition: this.$props.transition,
         selectedItems: this.selectedItems,
+        selectionType: this.$props.selectionType,
         shaped: this.$props.shaped,
         rounded: this.$props.rounded,
         openAll: this.$props.openAll,

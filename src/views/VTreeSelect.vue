@@ -79,6 +79,7 @@
           <v-switch v-model="clearable" class="ma-2" label="clearable"></v-switch>
           <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
           <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
+          <v-switch v-model="independent" class="ma-2" :label="getSelectionType()"></v-switch>
         </v-row>
         <v-tree-select
           :autocomplete="autocomplete"
@@ -88,6 +89,7 @@
           :items="items"
           :clearable="clearable"
           :dark="dark"
+          :selectionType = "getSelectionType()"
         >
           <template v-if="customSlots" v-slot:prependTree="{ item, open }">
             <v-icon v-if = "item.children">{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
@@ -166,11 +168,15 @@ export default Vue.extend({
     dark: false,
     autocomplete: false,
     customSlots: false,
+    independent: true,
     //
     codeSandbox: false,
     sandboxTemplate: sandboxTemplateHTML,
     sandboxCode: sandboxCode,
     dataSource: staticitems
-  })
+  }),
+  methods: {
+    getSelectionType () { return (this.independent) ? 'independent' : 'leaf' }
+  }
 })
 </script>

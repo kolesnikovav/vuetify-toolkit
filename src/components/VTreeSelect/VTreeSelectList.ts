@@ -1,4 +1,4 @@
-import { VNode } from 'vue'
+import { VNode, PropType } from 'vue'
 import { mixins, VTreeviewNodeProps, VListItem, VListItemContent, VListItemTitle, Themeable, Colorable } from '../../vuetify-import'
 
 import VTreeViewSelector from './VTreeViewSelector'
@@ -45,7 +45,12 @@ export default mixinsComponent(
       type: Array,
       default: () => []
     },
-    ...VTreeviewNodeProps
+    ...VTreeviewNodeProps,
+    selectionType: {
+      type: String as PropType<'leaf' | 'independent'>,
+      default: 'leaf',
+      validator: (v: string) => ['leaf', 'independent'].includes(v)
+    }
   },
   computed: {
     staticNoDataTile (): VNode {
@@ -98,7 +103,8 @@ export default mixinsComponent(
           selectedItems: this.selectedItems,
           openAll: this.openAll,
           shaped: this.shaped,
-          rounded: this.rounded
+          rounded: this.rounded,
+          selectionType: this.selectionType
         },
         scopedSlots: this.$scopedSlots,
         on: {
