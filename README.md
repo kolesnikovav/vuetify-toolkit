@@ -110,6 +110,10 @@ Then, you can use this components as
 
 [Here](https://github.com/kolesnikovav/testapp) is the sample project with vuetify-toolkit, built with [vue cli](https://cli.vuejs.org/)
 
+### Codesandbox example
+
+[See](https://codesandbox.io/s/ritcx)
+
 ### Contributing
 
 Any help for this project are welcome.
