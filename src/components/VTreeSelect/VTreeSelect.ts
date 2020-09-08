@@ -124,7 +124,7 @@ export default VAutocompleteComponent.extend({
       let genSelection
       if (this.$scopedSlots.selection) {
         genSelection = (this as any).genSlotSelection
-      } else if (this.$props.hasChips) {
+      } else if ((this as any).hasChips) {
         genSelection = (this as any).genChipSelection
       } else {
         genSelection = (this as any).genCommaSelection

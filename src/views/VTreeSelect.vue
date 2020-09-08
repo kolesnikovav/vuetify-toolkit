@@ -29,6 +29,10 @@
             <td>autocomplete</td> <td>boolean</td> <td>true</td>
             <td>Switch between autocomplete/select behavior</td>
            </tr>
+           <tr>
+            <td>selection-type</td> <td>boolean</td> <td>'leaf'</td>
+            <td>Controls how the treeview selects nodes. There are two modes available: 'leaf' and 'independent'</td>
+           </tr>
         </tbody>
     </table>
     <span />
