@@ -1,12 +1,12 @@
 import { VNode } from 'vue'
+import { Themeable, Colorable } from '../../vuetify-import'
 import {
-  VSelect,
-  VExpansionPanels,
-  VExpansionPanel,
-  VExpansionPanelHeader,
-  VExpansionPanelContent,
-  Themeable, Colorable
-} from '../../vuetify-import'
+  VSelectA,
+  VExpansionPanelsA,
+  VExpansionPanelA,
+  VExpansionPanelHeaderA,
+  VExpansionPanelContentA
+} from '../../shims-vuetify'
 import mixins from '../../utils/mixins'
 
 export default mixins(
@@ -23,7 +23,7 @@ export default mixins(
       type: Array,
       default: () => ([])
     },
-    ...(VSelect as any).options.props
+    ...(VSelectA as any).options.props
   },
   methods: {
     getChildren (item: object) {
@@ -38,19 +38,19 @@ export default mixins(
           const el = this.genItem(v)
           content.push(el)
         })
-        const wrapper = this.$createElement(VExpansionPanels, content)
+        const wrapper = this.$createElement(VExpansionPanelsA, content)
         return wrapper
       } else {
-        return this.$createElement(VExpansionPanelContent, {})
+        return this.$createElement(VExpansionPanelContentA, {})
       }
     },
     genHeader (item: object): VNode {
-      return this.$createElement(VExpansionPanelHeader, (item as any).name)
+      return this.$createElement(VExpansionPanelHeaderA, (item as any).name)
     },
     genItem (item: object): VNode {
       const children = this.getChildren(item)
       if (children) {
-        return this.$createElement(VExpansionPanel, {},
+        return this.$createElement(VExpansionPanelA, {},
           [
             this.genHeader(item),
             this.genItemContent(item)
@@ -78,7 +78,7 @@ export default mixins(
     }, [
       children,
       // this.genHeader(),
-      this.$createElement(VExpansionPanels, {
+      this.$createElement(VExpansionPanelsA, {
         // props: {
         //   selected: true,
         //   dense: this.dense,

@@ -1,5 +1,6 @@
 import Vue, { VNode } from 'vue'
-import { VCard, VDivider, VTreeview, VTreeviewNodeProps, VPagination, VRow, VIcon, getObjectValueByPath } from '../../vuetify-import'
+import { VTreeviewNodeProps, getObjectValueByPath } from '../../vuetify-import'
+import { VCardA, VDividerA, VTreeviewA, VPaginationA, VRowA, VIconA } from '../../shims-vuetify'
 import VAdvDataTable from '../VAdvDataTable'
 import treeviewScopedSlots from '../../utils/TreeviewScopedSlots'
 import tableScopedSlots from '../../utils/TableScopedSlots'
@@ -134,7 +135,7 @@ export default Vue.extend({
       }
     },
     genDivider (): VNode {
-      return this.$createElement(VDivider, {
+      return this.$createElement(VDividerA, {
         props: {
           vertical: true
         },
@@ -177,12 +178,12 @@ export default Vue.extend({
         // if (this.$props.itemsPerPage < this.tableItems.length) {
         if (this.$props.itemsPerPage < this.filteredTableItemsCount) {
           return [
-            this.$createElement(VDivider, {
+            this.$createElement(VDividerA, {
               props: {
                 vertical: false
               }
             }),
-            this.$createElement(VPagination, {
+            this.$createElement(VPaginationA, {
               ref: 'data-table-pagination',
               props: {
                 length: this.pageCount,
@@ -216,7 +217,7 @@ export default Vue.extend({
         fn = this.$props.itemIcon
         color = this.$props.itemIconColor
       }
-      return this.$createElement(VIcon, {
+      return this.$createElement(VIconA, {
         props: {
           color: color
         }
@@ -333,7 +334,7 @@ export default Vue.extend({
       return slots as ScopedSlotType
     },
     genTreeView (): VNode {
-      return this.$createElement(VTreeview, {
+      return this.$createElement(VTreeviewA, {
         ref: 'treeview',
         props: {
           dense: this.$props.dense,
@@ -384,9 +385,9 @@ export default Vue.extend({
     window.removeEventListener('load', this.updateDimensions)
   },
   render (): VNode {
-    return this.$createElement(VCard, {},
+    return this.$createElement(VCardA, {},
       [
-        this.$createElement(VRow, {
+        this.$createElement(VRowA, {
           props: {
             align: 'stretch'
           }

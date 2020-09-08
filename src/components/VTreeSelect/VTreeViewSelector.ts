@@ -1,9 +1,6 @@
-import Vue, { VueConstructor } from 'vue'
-import { VTreeview } from '../../vuetify-import'
+import { VTreeviewA } from '../../shims-vuetify'
 
-const VTreeviewComponent = VTreeview as VueConstructor<Vue>
-
-export default VTreeviewComponent.extend({
+export default VTreeviewA.extend({
   name: 'v-tree-view-selector',
   props: {
     selectedItems: {

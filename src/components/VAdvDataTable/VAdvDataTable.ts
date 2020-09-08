@@ -1,12 +1,12 @@
 import Vue, { VNode, PropType } from 'vue'
-import { VDataTable, VIcon } from '../../vuetify-import'
+import { VDataTableA, VIconA } from '../../shims-vuetify'
 import VColumnEditor from './VColumnEditor'
 import VTableFilter from './VTableFilter'
 import { TableHeader, TableHeaderEdition, ColumnEditorResult } from '../VAdvDataTable/utils/AdvTableUtils'
 import { ScopedSlot } from 'vue/types/vnode'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const VDataTableProps = ((VDataTable as any).options as any).props
+const VDataTableProps = ((VDataTableA as any).options as any).props
 
 export default Vue.extend({
   name: 'v-adv-data-table',
@@ -194,7 +194,7 @@ export default Vue.extend({
       })
     },
     genSortIcon (): VNode {
-      return this.$createElement(VIcon, {
+      return this.$createElement(VIconA, {
         staticClass: 'v-data-table-header__icon',
         props: {
           size: 18
@@ -255,7 +255,7 @@ export default Vue.extend({
     currentProps.headers = this.visibleHeaders
     currentProps.items = this.filteredItems
     const scopedSlots = this.genTableScopedSlots()
-    return this.$createElement(VDataTable, {
+    return this.$createElement(VDataTableA, {
       props: currentProps,
       scopedSlots: scopedSlots,
       on: this.$listeners

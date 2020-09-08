@@ -1,11 +1,11 @@
 import Vue, { VNode } from 'vue'
-import { VDatePicker, VTimePicker, VRow, VCol, VBtn, VSheet } from '../../vuetify-import'
+import { VDatePickerA, VTimePickerA, VRowA, VColA, VBtnA, VSheetA } from '../../shims-vuetify'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const VDatePickerProps = ((VDatePicker as any).options as any).props
+const VDatePickerProps = ((VDatePickerA as any).options as any).props
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const VTimePickerProps = ((VTimePicker as any).options as any).props
+const VTimePickerProps = ((VTimePickerA as any).options as any).props
 
 export default Vue.extend({
   name: 'v-date-time-select-list',
@@ -50,7 +50,7 @@ export default Vue.extend({
         }
       },
       [this.selectedDate + ':' + this.selectedTime])
-      const btnOK = this.$createElement(VBtn, {
+      const btnOK = this.$createElement(VBtnA, {
         props: {
           text: true
         },
@@ -58,7 +58,7 @@ export default Vue.extend({
           click: (e: string) => { this.$emit('input-value', this.selectedDate + ':' + this.selectedTime) }
         }
       }, 'OK')
-      const btnCancel = this.$createElement(VBtn, {
+      const btnCancel = this.$createElement(VBtnA, {
         props: {
           text: true
         },
@@ -92,9 +92,9 @@ export default Vue.extend({
       ])
     },
     genDatePicker (): VNode {
-      return this.$createElement(VCol, {},
+      return this.$createElement(VColA, {},
         [
-          this.$createElement(VDatePicker, {
+          this.$createElement(VDatePickerA, {
             props: {
               locale: this.$props.locale,
               dark: this.$props.dark,
@@ -140,13 +140,13 @@ export default Vue.extend({
         ])
     },
     genTimePicker (): VNode {
-      return this.$createElement(VCol, {
+      return this.$createElement(VColA, {
         style: {
           'padding-left': this.$props.selectionType === 'datetime' ? 0 : 15
         }
       },
       [
-        this.$createElement(VTimePicker, {
+        this.$createElement(VTimePickerA, {
           ref: 'timepicker',
           props: {
             locale: this.$props.locale,
@@ -183,14 +183,14 @@ export default Vue.extend({
     const childrenAppend = []
     this.$slots['append-item'] && childrenAppend.push(this.$slots['append-item'])
 
-    return this.$createElement(VSheet, {
+    return this.$createElement(VSheetA, {
       // staticClass: 'v-select-list v-card'
       // class: this.themeClasses
     },
     [
       this.genHeader(),
       children,
-      this.$createElement(VRow, {
+      this.$createElement(VRowA, {
         props: {
           align: 'stretch'
         }
