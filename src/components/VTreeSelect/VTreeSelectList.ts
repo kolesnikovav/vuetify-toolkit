@@ -1,5 +1,6 @@
 import { VNode, PropType } from 'vue'
-import { mixins, VTreeviewNodeProps, VListItem, VListItemContent, VListItemTitle, Themeable, Colorable } from '../../vuetify-import'
+import { mixins, VTreeviewNodeProps, Themeable, Colorable } from '../../vuetify-import'
+import { VListItemA, VListItemContentA, VListItemTitleA } from '../../shims-vuetify'
 
 import VTreeViewSelector from './VTreeViewSelector'
 
@@ -59,7 +60,7 @@ export default mixinsComponent(
           mousedown: (e: any) => e.preventDefault() // Prevent onBlur from being called
         }
       }
-      return (this as any).$createElement(VListItem, tile, [
+      return (this as any).$createElement(VListItemA, tile, [
         (this as any).genTileNoDataContent()
       ])
     }
@@ -67,8 +68,8 @@ export default mixinsComponent(
   methods: {
     genTileNoDataContent (): VNode {
       const innerHTML = (this as any).noDataText
-      return (this as any).$createElement(VListItemContent,
-        [(this as any).$createElement(VListItemTitle, {
+      return (this as any).$createElement(VListItemContentA,
+        [(this as any).$createElement(VListItemTitleA, {
           domProps: { innerHTML }
         })]
       )

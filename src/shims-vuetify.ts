@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import Vue, { VueConstructor } from 'vue'
 
 import {
