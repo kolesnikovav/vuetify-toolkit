@@ -1,9 +1,10 @@
 import { VNode } from 'vue'
-import { mixins, VDataTable, VListItem, VListItemContent, VListItemTitle, Themeable, Colorable } from '../../vuetify-import'
+import { mixins, Themeable, Colorable } from '../../vuetify-import'
+import { VDataTableA, VListItemA, VListItemContentA, VListItemTitleA } from '../../shims-vuetify'
 import tableScopedSlots from '../../utils/TableScopedSlots'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const VDataTableProps = ((VDataTable as any).options as any).props
+const VDataTableProps = ((VDataTableA as any).options as any).props
 
 export default mixins(
   Themeable, Colorable
@@ -45,7 +46,7 @@ export default mixins(
           mousedown: (e: MouseEvent) => e.preventDefault() // Prevent onBlur from being called
         }
       }
-      return (this as any).$createElement(VListItem, tile, [
+      return (this as any).$createElement(VListItemA, tile, [
         (this as any).genTileNoDataContent()
       ])
     }
@@ -53,8 +54,8 @@ export default mixins(
   methods: {
     genTileNoDataContent (): VNode {
       const innerHTML = (this as any).noDataText
-      return (this as any).$createElement(VListItemContent,
-        [(this as any).$createElement(VListItemTitle, {
+      return (this as any).$createElement(VListItemContentA,
+        [(this as any).$createElement(VListItemTitleA, {
           domProps: { innerHTML }
         })]
       )
@@ -75,7 +76,7 @@ export default mixins(
     }, [
       children,
       // this.genHeader(),
-      this.$createElement(VDataTable, {
+      this.$createElement(VDataTableA, {
         props: {
           selected: true,
           dense: this.dense,

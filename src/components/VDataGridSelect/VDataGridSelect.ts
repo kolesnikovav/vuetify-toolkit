@@ -1,17 +1,16 @@
 import Vue, { VNode, VueConstructor } from 'vue'
-import { VAutocomplete, VSelect, VDataTable, consoleError } from '../../vuetify-import'
+import { consoleError } from '../../vuetify-import'
+import { VAutocompleteA, VSelectA, VDataTableA } from '../../shims-vuetify'
 import VDataGridSelectList from './VDataGridSelectList'
 import DefaultMenuProps from '../../utils/MenuProps'
 import { VNodeChildren } from 'vue/types/vnode'
 
-const VAutocompleteComponent = VAutocomplete as VueConstructor<Vue>
-
-export default VAutocompleteComponent.extend({
+export default VAutocompleteA.extend({
   name: 'v-data-grid-select',
   props: {
-    ...(VSelect as any).options.props,
-    ...(VAutocomplete as any).options.props,
-    ...(VDataTable as any).options.props,
+    ...(VSelectA as any).options.props,
+    ...(VAutocompleteA as any).options.props,
+    ...(VDataTableA as any).options.props,
     autocomplete: {
       type: Boolean,
       default: false
@@ -32,28 +31,28 @@ export default VAutocompleteComponent.extend({
   computed: {
     classes (): Object {
       if (this.$props.autocomplete) {
-        return Object.assign({}, (VSelect as any).options.computed.classes.call(this), {
+        return Object.assign({}, (VSelectA as any).options.computed.classes.call(this), {
           'v-autocomplete': true,
           'v-autocomplete--is-selecting-index': (this as any).selectedIndex > -1
         })
       } else {
-        return Object.assign({}, (VSelect as any).options.computed.classes.call(this), {})
+        return Object.assign({}, (VSelectA as any).options.computed.classes.call(this), {})
       }
     },
     internalSearch: {
       get () {
-        const result = (this as any).autocomplete ? (VAutocomplete as any).options.computed.internalSearch.get.call(this)
+        const result = (this as any).autocomplete ? (VAutocompleteA as any).options.computed.internalSearch.get.call(this)
           : ''
         return result
       },
       set (val) {
         if ((this as any).autocomplete) {
-          (VAutocomplete as any).options.computed.internalSearch.set.call(this, val)
+          (VAutocompleteA as any).options.computed.internalSearch.set.call(this, val)
         }
       }
     },
     listData (): Object {
-      const data = (VSelect as any).options.computed.listData.call(this)
+      const data = (VSelectA as any).options.computed.listData.call(this)
       Object.assign(data.props, {
         activatable: this.$props.activatable,
         activeClass: this.$props.activeClass,
@@ -104,8 +103,8 @@ export default VAutocompleteComponent.extend({
   methods: {
     register () {},
     genInput (): VNode {
-      return this.$props.autocomplete ? (VAutocomplete as any).options.methods.genInput.call(this)
-        : (VSelect as any).options.methods.genInput.call(this)
+      return this.$props.autocomplete ? (VAutocompleteA as any).options.methods.genInput.call(this)
+        : (VSelectA as any).options.methods.genInput.call(this)
     },
     genList () {
       // If there's no slots, we can use a cached VNode to improve performance
@@ -126,7 +125,7 @@ export default VAutocompleteComponent.extend({
       }, slots)
     },
     genSelections (): VNode {
-      return (VSelect as any).options.methods.genSelections.call(this)
+      return (VSelectA as any).options.methods.genSelections.call(this)
     },
     selectItems (items: any[]) {
       (this as any).selectedItems = items

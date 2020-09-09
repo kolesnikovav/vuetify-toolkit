@@ -1,6 +1,6 @@
 {
   "name": "vuetify-toolkit",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Vuetify.js Additional components set",
   "author": {
     "name": "Aleksandr Kolesnikov",
@@ -73,7 +73,7 @@
     "type": "git",
     "url": "git+https://github.com/kolesnikovav/vuetify-toolkit.git"
   },
-  "main": "dist/vuetify-toolkit.umd.js",
-  "jsdelivr": "dist/vuetify-toolkit.umd.js",
-  "unpkg": "dist/vuetify-toolkit.umd.js"
+  "main": "vuetify-toolkit.umd.js",
+  "jsdelivr": "vuetify-toolkit.umd.js",
+  "unpkg": "vuetify-toolkit.umd.js"
 }

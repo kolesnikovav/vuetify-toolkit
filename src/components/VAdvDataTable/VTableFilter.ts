@@ -1,15 +1,15 @@
 import Vue, { PropType, VNode } from 'vue'
 import {
-  VBtn,
-  VIcon,
-  VSelect,
-  VTextField,
-  VMenu,
-  VDivider,
-  VCard,
-  VCardActions,
-  VRow
-} from '../../vuetify-import'
+  VBtnA,
+  VIconA,
+  VSelectA,
+  VTextFieldA,
+  VMenuA,
+  VDividerA,
+  VCardA,
+  VCardActionsA,
+  VRowA
+} from '../../shims-vuetify'
 import VFilterValueList from './VFilterValueList'
 import { SelectableValue, TableHeader, FilterCondition, GetItem } from '../VAdvDataTable/utils/AdvTableUtils'
 
@@ -205,7 +205,7 @@ export default Vue.extend({
       this.filterTextMax = e || ''
     },
     genActivator (listeners: any): VNode {
-      return this.$createElement(VBtn, {
+      return this.$createElement(VBtnA, {
         props: {
           icon: true
         },
@@ -222,17 +222,17 @@ export default Vue.extend({
       ])
     },
     genIcon (): VNode {
-      return this.$createElement(VIcon, {
+      return this.$createElement(VIconA, {
         props: {
           color: this.isActive ? this.filterActiveIconColor : this.filterIconColor
         }
       }, [this.filterIcon])
     },
     genDualConditionsField (): VNode {
-      return this.$createElement(VRow, {
+      return this.$createElement(VRowA, {
         staticClass: 'v-dual-conditions-field-row'
       }, [
-        this.$createElement(VTextField, {
+        this.$createElement(VTextFieldA, {
           props: {
             type: this.valueDataType,
             label: 'min value',
@@ -245,7 +245,7 @@ export default Vue.extend({
             input: (e: string|undefined) => this.valueFilterChange(e)
           }
         }),
-        this.$createElement(VTextField, {
+        this.$createElement(VTextFieldA, {
           props: {
             type: this.valueDataType,
             label: 'max value',
@@ -261,7 +261,7 @@ export default Vue.extend({
       ])
     },
     genMonoConditionsField (): VNode {
-      return this.$createElement(VTextField, {
+      return this.$createElement(VTextFieldA, {
         props: {
           type: this.valueDataType,
           label: 'Filter by value',
@@ -290,14 +290,14 @@ export default Vue.extend({
     },
     genMenuContent (): VNode|undefined {
       if (!this.header || !this.header.value) return
-      return this.$createElement(VCard, {
+      return this.$createElement(VCardA, {
         props: {
           dark: this.dark,
           dense: this.dense
         }
       },
       [
-        this.$createElement(VSelect, {
+        this.$createElement(VSelectA, {
           props: {
             label: 'Filter by condition',
             items: this.conditions,
@@ -329,8 +329,8 @@ export default Vue.extend({
             }
           }
         }),
-        this.$createElement(VDivider, {}),
-        this.$createElement(VCardActions, {
+        this.$createElement(VDividerA, {}),
+        this.$createElement(VCardActionsA, {
           style: {
             'justify-content': 'flex-end'
           },
@@ -339,7 +339,7 @@ export default Vue.extend({
             dense: this.dense
           }
         }, [
-          this.$createElement(VBtn, {
+          this.$createElement(VBtnA, {
             props: {
               text: true,
               dark: this.dark,
@@ -352,7 +352,7 @@ export default Vue.extend({
               click: () => this.clearFilter()
             }
           }),
-          this.$createElement(VBtn, {
+          this.$createElement(VBtnA, {
             props: {
               text: true,
               dark: this.dark,
@@ -376,7 +376,7 @@ export default Vue.extend({
   },
   render (): VNode {
     const self = this
-    return this.$createElement(VMenu, {
+    return this.$createElement(VMenuA, {
       props: {
         closeOnContentClick: false,
         value: this.isMenuActive,

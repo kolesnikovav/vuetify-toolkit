@@ -1,19 +1,19 @@
 import Vue, { PropType, VNode } from 'vue'
 import {
-  VBtn,
-  VIcon,
-  VMenu,
-  VList,
-  VListItem,
-  VListItemContent,
-  VListItemTitle,
-  VListItemSubtitle,
-  VListItemAction,
-  VCheckbox,
-  VDivider,
-  VCard,
-  VCardActions
-} from '../../vuetify-import'
+  VBtnA,
+  VIconA,
+  VMenuA,
+  VListA,
+  VListItemA,
+  VListItemContentA,
+  VListItemTitleA,
+  VListItemSubtitleA,
+  VListItemActionA,
+  VCheckboxA,
+  VDividerA,
+  VCardA,
+  VCardActionsA
+} from '../../shims-vuetify'
 import { TableHeader, TableHeaderEdition } from '../VAdvDataTable/utils/AdvTableUtils'
 
 export default Vue.extend({
@@ -92,7 +92,7 @@ export default Vue.extend({
       }
     },
     genActivator (listeners: EventListener): VNode {
-      return this.$createElement(VBtn, {
+      return this.$createElement(VBtnA, {
         props: {
           icon: true
         },
@@ -110,7 +110,7 @@ export default Vue.extend({
       ])
     },
     genIcon (): VNode {
-      return this.$createElement(VIcon, {
+      return this.$createElement(VIconA, {
         props: {
           color: this.headerIconColor
         }
@@ -121,7 +121,7 @@ export default Vue.extend({
       else if (val && this.invisibleHeaders.has(header.value)) this.invisibleHeaders.delete(header.value)
     },
     genVisibleCheckbox (header: TableHeaderEdition): VNode {
-      return this.$createElement(VCheckbox, {
+      return this.$createElement(VCheckboxA, {
         props: {
           value: header.visible,
           inputValue: header.visible,
@@ -134,16 +134,16 @@ export default Vue.extend({
       })
     },
     genMenuItem (header: TableHeaderEdition): VNode {
-      return this.$createElement(VListItem, {
+      return this.$createElement(VListItemA, {
         props: {
           dense: this.dense
         }
       }, [
-        this.$createElement(VListItemAction, {}, [
+        this.$createElement(VListItemActionA, {}, [
           this.genVisibleCheckbox(header)
         ]),
-        this.$createElement(VListItemAction, {}, [
-          this.$createElement(VBtn, {
+        this.$createElement(VListItemActionA, {}, [
+          this.$createElement(VBtnA, {
             props: {
               icon: true
             },
@@ -151,11 +151,11 @@ export default Vue.extend({
               click: () => this.downHeader(header)
             }
           }, [
-            this.$createElement(VIcon, this.downIcon)
+            this.$createElement(VIconA, this.downIcon)
           ])
         ]),
-        this.$createElement(VListItemAction, {}, [
-          this.$createElement(VBtn, {
+        this.$createElement(VListItemActionA, {}, [
+          this.$createElement(VBtnA, {
             props: {
               icon: true
             },
@@ -163,21 +163,21 @@ export default Vue.extend({
               click: () => this.upHeader(header)
             }
           }, [
-            this.$createElement(VIcon, this.upIcon)
+            this.$createElement(VIconA, this.upIcon)
           ])
         ]),
-        this.$createElement(VListItemContent, {
+        this.$createElement(VListItemContentA, {
           style: {
             'padding-left': '18px',
             'padding-right': '18px'
           }
         }, [
-          this.$createElement(VListItemTitle, {
+          this.$createElement(VListItemTitleA, {
             domProps: {
               innerHTML: header.value
             }
           }),
-          this.$createElement(VListItemSubtitle, {
+          this.$createElement(VListItemSubtitleA, {
             domProps: {
               innerHTML: header.text
             }
@@ -209,7 +209,7 @@ export default Vue.extend({
     },
     genMenuContent (): VNode {
       const items = this.orderedHeaders.map(header => this.genMenuItem(header))
-      return this.$createElement(VCard, {
+      return this.$createElement(VCardA, {
         props: {
           dark: this.dark,
           dense: this.dense,
@@ -217,14 +217,14 @@ export default Vue.extend({
         }
       },
       [
-        this.$createElement(VList, {}, items),
-        this.$createElement(VDivider, {}),
-        this.$createElement(VCardActions, {
+        this.$createElement(VListA, {}, items),
+        this.$createElement(VDividerA, {}),
+        this.$createElement(VCardActionsA, {
           style: {
             'justify-content': 'flex-end'
           }
         }, [
-          this.$createElement(VBtn, {
+          this.$createElement(VBtnA, {
             props: {
               text: true
             },
@@ -235,7 +235,7 @@ export default Vue.extend({
               click: (e: Event) => this.deactivateMenu(e, 'CANCEL')
             }
           }),
-          this.$createElement(VBtn, {
+          this.$createElement(VBtnA, {
             props: {
               text: true
             },
@@ -253,7 +253,7 @@ export default Vue.extend({
   },
   render (): VNode {
     const self = this
-    return this.$createElement(VMenu, {
+    return this.$createElement(VMenuA, {
       props: {
         closeOnContentClick: false,
         value: this.isMenuActive

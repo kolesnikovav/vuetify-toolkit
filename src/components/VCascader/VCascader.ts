@@ -1,12 +1,11 @@
 import Vue, { VueConstructor, VNodeData, VNode, VNodeChildren } from 'vue'
-import { VAutocomplete, VSelect, getPropertyFromItem } from '../../vuetify-import'
+import { getPropertyFromItem } from '../../vuetify-import'
+import { VAutocompleteA, VSelectA } from '../../shims-vuetify'
 import DefaultMenuProps from '../../utils/MenuProps'
 import VCascaderSelectList from './VCascaderSelectList'
 
-const VAutocompleteComponent = VAutocomplete as VueConstructor<Vue>
-
 /* @vue/component */
-export default VAutocompleteComponent.extend({
+export default VAutocompleteA.extend({
   name: 'v-cascader',
   props: {
     itemChildren: {
@@ -17,8 +16,8 @@ export default VAutocompleteComponent.extend({
       type: Boolean,
       default: false
     },
-    ...(VSelect as any).options.props,
-    ...(VAutocomplete as any).options.props,
+    ...(VSelectA as any).options.props,
+    ...(VAutocompleteA as any).options.props,
     menuProps: {
       type: [String, Array, Object],
       default: () => DefaultMenuProps
@@ -37,13 +36,13 @@ export default VAutocompleteComponent.extend({
     },
     internalSearch: {
       get () {
-        const result = (this as any).autocomplete ? (VAutocomplete as any).options.computed.internalSearch.get.call(this)
+        const result = (this as any).autocomplete ? (VAutocompleteA as any).options.computed.internalSearch.get.call(this)
           : ''
         return result
       },
       set (val) {
         if ((this as any).autocomplete) {
-          (VAutocomplete as any).options.computed.internalSearch.set.call(this, val)
+          (VAutocompleteA as any).options.computed.internalSearch.set.call(this, val)
         }
       }
     },
@@ -129,8 +128,8 @@ export default VAutocompleteComponent.extend({
     //   // }
     // },
     genInput (): VNode {
-      return this.$props.autocomplete ? (VAutocomplete as any).options.methods.genInput.call(this)
-        : (VSelect as any).options.methods.genInput.call(this)
+      return this.$props.autocomplete ? (VAutocompleteA as any).options.methods.genInput.call(this)
+        : (VSelectA as any).options.methods.genInput.call(this)
     },
     genSelections () {
       let length = (this as any).selectedItems.length

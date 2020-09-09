@@ -1,16 +1,15 @@
-import Vue, { VNode, VueConstructor, VNodeData, PropType } from 'vue'
-import { VAutocomplete, VSelect, VTreeviewNodeProps, consoleError } from '../../vuetify-import'
+import { VNode, VNodeData, PropType } from 'vue'
+import { VTreeviewNodeProps, consoleError } from '../../vuetify-import'
+import { VAutocompleteA, VSelectA } from '../../shims-vuetify'
 import VTreeSelectList from './VTreeSelectList'
 import DefaultMenuProps from '../../utils/MenuProps'
 import treeviewScopedSlots from '../../utils/TreeviewScopedSlots'
 
-const VAutocompleteComponent = VAutocomplete as VueConstructor<Vue>
-
-export default VAutocompleteComponent.extend({
+export default VAutocompleteA.extend({
   name: 'v-tree-select',
   props: {
-    ...(VSelect as any).options.props,
-    ...(VAutocomplete as any).options.props,
+    ...(VSelectA as any).options.props,
+    ...(VAutocompleteA as any).options.props,
     ...VTreeviewNodeProps,
     autocomplete: {
       type: Boolean,
@@ -33,28 +32,28 @@ export default VAutocompleteComponent.extend({
   computed: {
     classes (): Object {
       if (this.$props.autocomplete) {
-        return Object.assign({}, (VSelect as any).options.computed.classes.call(this), {
+        return Object.assign({}, (VSelectA as any).options.computed.classes.call(this), {
           'v-autocomplete': true,
           'v-autocomplete--is-selecting-index': this.$data.selectedIndex > -1
         })
       } else {
-        return Object.assign({}, (VSelect as any).options.computed.classes.call(this), {})
+        return Object.assign({}, (VSelectA as any).options.computed.classes.call(this), {})
       }
     },
     internalSearch: {
       get (): string {
-        const result = this.$props.autocomplete ? (VAutocomplete as any).options.computed.internalSearch.get.call(this)
+        const result = this.$props.autocomplete ? (VAutocompleteA as any).options.computed.internalSearch.get.call(this)
           : ''
         return result
       },
       set (val: string) {
         if (this.$props.autocomplete) {
-          (VAutocomplete as any).options.computed.internalSearch.set.call(this, val)
+          (VAutocompleteA as any).options.computed.internalSearch.set.call(this, val)
         }
       }
     },
     listData (): Object {
-      const data = (VSelect as any).options.computed.listData.call(this)
+      const data = (VSelectA as any).options.computed.listData.call(this)
       Object.assign(data.props, { ...VTreeviewNodeProps })
       /* to remove console warns and type conflicts */
       Object.assign(data.props, {
@@ -103,8 +102,8 @@ export default VAutocompleteComponent.extend({
   methods: {
     register () {},
     genInput (): VNode {
-      return this.$props.autocomplete ? (VAutocomplete as any).options.methods.genInput.call(this)
-        : (VSelect as any).options.methods.genInput.call(this)
+      return this.$props.autocomplete ? (VAutocompleteA as any).options.methods.genInput.call(this)
+        : (VSelectA as any).options.methods.genInput.call(this)
     },
     genListWithSlot (): VNode {
       const slots = ['prepend-item', 'no-data', 'append-item']
@@ -124,7 +123,7 @@ export default VAutocompleteComponent.extend({
       let genSelection
       if (this.$scopedSlots.selection) {
         genSelection = (this as any).genSlotSelection
-      } else if (this.$props.hasChips) {
+      } else if ((this as any).hasChips) {
         genSelection = (this as any).genChipSelection
       } else {
         genSelection = (this as any).genCommaSelection

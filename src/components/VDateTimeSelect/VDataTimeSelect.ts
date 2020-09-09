@@ -1,16 +1,17 @@
 import Vue, { VNode } from 'vue'
-import { VMenu, VTextField, VDatePicker, VTimePicker, consoleError } from '../../vuetify-import'
+import { consoleError } from '../../vuetify-import'
+import { VMenuA, VTextFieldA, VDatePickerA, VTimePickerA } from '../../shims-vuetify'
 import VDateTimeSelectList from './VDataTimeSelectList'
 // import DefaultMenuProps from '../../utils/MenuProps'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const VDatePickerProps = ((VDatePicker as any).options as any).props
+const VDatePickerProps = ((VDatePickerA as any).options as any).props
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const VTimePickerProps = ((VTimePicker as any).options as any).props
+const VTimePickerProps = ((VTimePickerA as any).options as any).props
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const VTextFieldProps = ((VTextField as any).options as any).props
+const VTextFieldProps = ((VTextFieldA as any).options as any).props
 
 export default Vue.extend({
   name: 'v-date-time-select',
@@ -118,7 +119,7 @@ export default Vue.extend({
       const props = Object.assign({}, this.$props)
       props.value = this.internalValue
       props.type = 'text'
-      return this.$createElement(VTextField, {
+      return this.$createElement(VTextFieldA, {
         ref: 'inputField',
         props,
         slot: 'activator',
@@ -147,7 +148,7 @@ export default Vue.extend({
   },
   render (): VNode {
     const inputFeild = this.genInput()
-    return this.$createElement(VMenu, {
+    return this.$createElement(VMenuA, {
       props: {
         // absolute: true,
         // positionX: this.x,
