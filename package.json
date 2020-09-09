@@ -73,7 +73,7 @@
     "type": "git",
     "url": "git+https://github.com/kolesnikovav/vuetify-toolkit.git"
   },
-  "main": "dist/vuetify-toolkit.umd.js",
-  "jsdelivr": "dist/vuetify-toolkit.umd.js",
-  "unpkg": "dist/vuetify-toolkit.umd.js"
+  "main": "vuetify-toolkit.umd.js",
+  "jsdelivr": "vuetify-toolkit.umd.js",
+  "unpkg": "vuetify-toolkit.umd.js"
 }
