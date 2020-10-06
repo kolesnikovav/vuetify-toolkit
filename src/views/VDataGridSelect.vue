@@ -84,7 +84,7 @@
           <v-switch v-model="dark" class="ma-2"    label="dark"></v-switch>
           <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
           </v-row>
-          <v-data-grid-select :autocomplete = "autocomplete" :chips = "chips" :dense = "dense" :multiple = "multiple" :items="items" :clearable = "clearable"
+          <v-data-grid-select v-model = "selectedItems" :autocomplete = "autocomplete" :chips = "chips" :dense = "dense" :multiple = "multiple" :items="items" :clearable = "clearable"
             :headers="dataGridHeaders" item-key = "name" item-text = "name" :dark = "dark"
             :smallChips = "smallChips" :deletableChips = "deletableChips"
           >
@@ -178,6 +178,7 @@ export default Vue.extend({
     customSlots: false,
     deletableChips: false,
     smallChips: false,
+    selectedItems: [],
     //
     codeSandbox: false,
     sandboxTemplate: sandboxTemplate,

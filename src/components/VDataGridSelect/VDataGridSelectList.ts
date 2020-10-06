@@ -70,6 +70,8 @@ export default mixins(
     const childrenAppend = []
     this.$slots['append-item'] && childrenAppend.push(this.$slots['append-item'])
 
+    const inputHandler = { input: (e: any[]) => { this.$emit('input', e) } }
+
     return this.$createElement('div', {
       staticClass: 'v-select-list v-card',
       class: this.themeClasses
@@ -92,14 +94,10 @@ export default mixins(
           customFilter: this.customFilter,
           showSelect: true,
           singleSelect: !this.multiple,
-          value: this.selectedItems
+          value: this.value
         },
         scopedSlots: tableScopedSlots(this.$scopedSlots),
-        on: {
-          input: (e: any[]) => {
-            this.$emit('input', e)
-          }
-        }
+        on: inputHandler
       }), childrenAppend
     ])
   }

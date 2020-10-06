@@ -79,6 +79,8 @@
           <v-switch v-model="autocomplete" class="ma-2" label="autocomplete"></v-switch>
           <v-switch v-model="multiple" class="ma-2" label="multiple"></v-switch>
           <v-switch v-model="chips" class="ma-2" label="chips"></v-switch>
+          <v-switch v-model="deletableChips" class="ma-2"    label="Deletable chips"></v-switch>
+          <v-switch v-model="smallChips" class="ma-2"    label="Small chips"></v-switch>
           <v-switch v-model="dense" class="ma-2" label="dense"></v-switch>
           <v-switch v-model="clearable" class="ma-2" label="clearable"></v-switch>
           <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
@@ -86,6 +88,7 @@
           <v-switch v-model="independent" class="ma-2" :label="getSelectionType()"></v-switch>
         </v-row>
         <v-tree-select
+          v-model = "selectedItems"
           :autocomplete="autocomplete"
           :chips="chips"
           :dense="dense"
@@ -94,6 +97,8 @@
           :clearable="clearable"
           :dark="dark"
           :selectionType = "getSelectionType()"
+          :smallChips = "smallChips"
+          :deletableChips = "deletableChips"
         >
           <template v-if="customSlots" v-slot:prependTree="{ item, open }">
             <v-icon v-if = "item.children">{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
@@ -173,6 +178,9 @@ export default Vue.extend({
     autocomplete: false,
     customSlots: false,
     independent: true,
+    deletableChips: false,
+    smallChips: false,
+    selectedItems: [],
     //
     codeSandbox: false,
     sandboxTemplate: sandboxTemplateHTML,
