@@ -75,7 +75,6 @@ export default mixins(
       class: this.themeClasses
     }, [
       children,
-      // this.genHeader(),
       this.$createElement(VDataTableA, {
         props: {
           selected: true,
@@ -92,7 +91,8 @@ export default mixins(
           rowsPerPageText: this.rowsPerPageText,
           customFilter: this.customFilter,
           showSelect: true,
-          singleSelect: !this.multiple
+          singleSelect: !this.multiple,
+          value: this.selectedItems
         },
         scopedSlots: tableScopedSlots(this.$scopedSlots),
         on: {

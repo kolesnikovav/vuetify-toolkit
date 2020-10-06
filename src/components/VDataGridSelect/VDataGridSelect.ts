@@ -68,7 +68,7 @@ export default VAutocompleteA.extend({
         itemText: this.$props.itemText,
         multiple: this.$props.multiple,
         transition: this.$props.transition,
-        selectedItems: this.$props.selectedItems,
+        selectedItems: this.selectedItems,
         openAll: this.$props.openAll,
         openOnClick: this.$props.openOnClick,
         headers: this.$props.headers,
@@ -132,13 +132,10 @@ export default VAutocompleteA.extend({
       if (!this.$props.multiple) {
         this.$data.isMenuActive = false
       }
+      this.$emit('change', items)
     },
     clearableCallback () {
-      // this.internalValue = null
-      // this.$refs.input.internalValue = ''
-      // this.$refs.input.value = ''
-      // this.selectedItems = []
-      // this.$nextTick(() => this.$refs.input.focus())
+      this.selectedItems = []
     }
   }
 })
