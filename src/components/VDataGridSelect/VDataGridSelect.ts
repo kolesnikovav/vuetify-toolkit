@@ -81,9 +81,6 @@ export default VAutocompleteA.extend({
         useDefaultCommands: this.$props.useDefaultCommands
       })
       Object.assign(data.on, {
-        select: (e:any[]) => {
-          (this as any).selectItems(e)
-        },
         input: (e: any[]) => {
           (this as any).selectItems(e)
         }
@@ -98,6 +95,17 @@ export default VAutocompleteA.extend({
       const slots: VNodeChildren = []
       slots.push((this.$scopedSlots.items as any))
       return this.$createElement(VDataGridSelectList, (this as any).listData, slots)
+    },
+    hasChips (): boolean {
+      return this.$props.chips || this.$props.smallChips || this.$props.deletableChips
+    }
+  },
+  watch: {
+    value: {
+      immediate: true,
+      handler (val) {
+        this.selectedItems = val
+      }
     }
   },
   methods: {
@@ -132,13 +140,13 @@ export default VAutocompleteA.extend({
       if (!this.$props.multiple) {
         this.$data.isMenuActive = false
       }
+      this.$emit('change', items)
+      this.$emit('input', items)
     },
     clearableCallback () {
-      // this.internalValue = null
-      // this.$refs.input.internalValue = ''
-      // this.$refs.input.value = ''
-      // this.selectedItems = []
-      // this.$nextTick(() => this.$refs.input.focus())
+      this.selectedItems = []
+      this.$emit('change', [])
+      this.$emit('input', [])
     }
   }
 })

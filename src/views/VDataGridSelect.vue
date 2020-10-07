@@ -77,13 +77,16 @@
           <v-switch v-model="autocomplete" class="ma-2" label="autocomplete"></v-switch>
           <v-switch v-model="multiple" class="ma-2" label="multiple"></v-switch>
           <v-switch v-model="chips" class="ma-2"    label="chips"></v-switch>
+          <v-switch v-model="deletableChips" class="ma-2"    label="Deletable chips"></v-switch>
+          <v-switch v-model="smallChips" class="ma-2"    label="Small chips"></v-switch>
           <v-switch v-model="dense" class="ma-2"    label="dense"></v-switch>
           <v-switch v-model="clearable" class="ma-2"    label="clearable"></v-switch>
           <v-switch v-model="dark" class="ma-2"    label="dark"></v-switch>
           <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
           </v-row>
-          <v-data-grid-select :autocomplete = "autocomplete" :chips = "chips" :dense = "dense" :multiple = "multiple" :items="items" :clearable = "clearable"
+          <v-data-grid-select v-model = "selectedItems" :autocomplete = "autocomplete" :chips = "chips" :dense = "dense" :multiple = "multiple" :items="items" :clearable = "clearable"
             :headers="dataGridHeaders" item-key = "name" item-text = "name" :dark = "dark"
+            :smallChips = "smallChips" :deletableChips = "deletableChips"
           >
           <template v-if="customSlots" v-slot:headerTable.fat>
             <v-icon color ="red">mdi-cake</v-icon>
@@ -173,6 +176,9 @@ export default Vue.extend({
     dark: false,
     autocomplete: false,
     customSlots: false,
+    deletableChips: false,
+    smallChips: false,
+    selectedItems: [],
     //
     codeSandbox: false,
     sandboxTemplate: sandboxTemplate,

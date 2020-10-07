@@ -85,7 +85,7 @@ export default VAutocompleteA.extend({
         toolbarCommands: this.$props.toolbarCommands
       })
       Object.assign(data.on, {
-        select: (e: any[]) => {
+        input: (e: any[]) => {
           this.selectItems(e)
         }
       })
@@ -97,6 +97,25 @@ export default VAutocompleteA.extend({
         consoleError('assert: staticList should not be called if slots are used')
       }
       return this.$createElement(VTreeSelectList, this.listData)
+    },
+    hasChips (): boolean {
+      return this.$props.chips || this.$props.smallChips || this.$props.deletableChips
+    }
+  },
+  watch: {
+    value: {
+      immediate: true,
+      handler (val) {
+        if (val) {
+          if (Array.isArray(val)) {
+            this.selectedItems = val.flat()
+          } else {
+            this.selectedItems = []
+          }
+        } else {
+          this.selectedItems = []
+        }
+      }
     }
   },
   methods: {
@@ -119,7 +138,6 @@ export default VAutocompleteA.extend({
     genSelections (): VNode {
       let length = this.selectedItems.length
       const children = new Array(length)
-
       let genSelection
       if (this.$scopedSlots.selection) {
         genSelection = (this as any).genSlotSelection
@@ -128,7 +146,6 @@ export default VAutocompleteA.extend({
       } else {
         genSelection = (this as any).genCommaSelection
       }
-
       while (length--) {
         children[length] = genSelection(
           this.selectedItems[length],
@@ -136,7 +153,6 @@ export default VAutocompleteA.extend({
           length === children.length - 1
         )
       }
-
       return this.$createElement('div', {
         staticClass: 'v-select__selections'
       }, children)
@@ -148,11 +164,9 @@ export default VAutocompleteA.extend({
       }
     },
     clearableCallback () {
-      this.$data.internalValue = null;
-      // this.$refs.input.internalValue = '';
-      (this.$refs.input as HTMLInputElement).value = ''
       this.selectedItems = []
-      this.$nextTick(() => (this.$refs.input as HTMLInputElement).focus())
+      this.$emit('change', [])
+      this.$emit('input', [])
     }
   }
 })
