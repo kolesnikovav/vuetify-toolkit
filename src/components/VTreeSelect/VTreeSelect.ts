@@ -85,7 +85,7 @@ export default VAutocompleteA.extend({
         toolbarCommands: this.$props.toolbarCommands
       })
       Object.assign(data.on, {
-        input: (e: any[]) => {
+        select: (e: any[]) => {
           this.selectItems(e)
         }
       })
@@ -112,8 +112,6 @@ export default VAutocompleteA.extend({
           } else {
             this.selectedItems = []
           }
-        } else {
-          this.selectedItems = []
         }
       }
     }
@@ -162,6 +160,7 @@ export default VAutocompleteA.extend({
       if (!this.$props.multiple) {
         this.$data.isMenuActive = false
       }
+      this.$emit('input', items)
     },
     clearableCallback () {
       this.selectedItems = []

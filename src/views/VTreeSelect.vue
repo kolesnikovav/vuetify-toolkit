@@ -110,7 +110,7 @@
     <span />
     <h2>Examples</h2>
     <h3>v-tree-select-select example (chips selections)</h3>
-    <v-tree-select chips :items="items" clearable></v-tree-select>
+    <v-tree-select v-model = "selectedItems" chips :items="items" clearable></v-tree-select>
     <h3>v-tree-select-select example (no data)</h3>
     <v-tree-select chips clearable></v-tree-select>
     <h3>v-tree-select-select example (multiple selection)</h3>
