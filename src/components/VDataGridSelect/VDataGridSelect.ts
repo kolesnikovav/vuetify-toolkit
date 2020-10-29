@@ -1,58 +1,18 @@
-import Vue, { VNode, VueConstructor } from 'vue'
+import { VNode } from 'vue'
 import { consoleError } from '../../vuetify-import'
-import { VAutocompleteA, VSelectA, VDataTableA } from '../../shims-vuetify'
+import { VDataTableA } from '../../shims-vuetify'
+import commonSelect from '../mixin/commonSelect'
 import VDataGridSelectList from './VDataGridSelectList'
-import DefaultMenuProps from '../../utils/MenuProps'
 import { VNodeChildren } from 'vue/types/vnode'
 
-export default VAutocompleteA.extend({
+export default commonSelect.extend({
   name: 'v-data-grid-select',
   props: {
-    ...(VSelectA as any).options.props,
-    ...(VAutocompleteA as any).options.props,
-    ...(VDataTableA as any).options.props,
-    autocomplete: {
-      type: Boolean,
-      default: false
-    },
-    openAll: Boolean,
-    menuProps: {
-      type: [String, Array, Object],
-      default: () => DefaultMenuProps
-    },
-    itemText: {
-      type: [String, Array, Function],
-      default: 'text'
-    }
+    ...(VDataTableA as any).options.props
   },
-  data: () => ({
-    selectedItems: []
-  }),
   computed: {
-    classes (): Object {
-      if (this.$props.autocomplete) {
-        return Object.assign({}, (VSelectA as any).options.computed.classes.call(this), {
-          'v-autocomplete': true,
-          'v-autocomplete--is-selecting-index': (this as any).selectedIndex > -1
-        })
-      } else {
-        return Object.assign({}, (VSelectA as any).options.computed.classes.call(this), {})
-      }
-    },
-    internalSearch: {
-      get () {
-        const result = (this as any).autocomplete ? (VAutocompleteA as any).options.computed.internalSearch.get.call(this)
-          : ''
-        return result
-      },
-      set (val) {
-        if ((this as any).autocomplete) {
-          (VAutocompleteA as any).options.computed.internalSearch.set.call(this, val)
-        }
-      }
-    },
     listData (): Object {
-      const data = (VSelectA as any).options.computed.listData.call(this)
+      const data = (commonSelect as any).options.computed.listData.call(this)
       Object.assign(data.props, {
         activatable: this.$props.activatable,
         activeClass: this.$props.activeClass,
@@ -64,21 +24,21 @@ export default VAutocompleteA.extend({
         offIcon: this.$props.offIcon,
         expandIcon: this.$props.expandIcon,
         loadingIcon: this.$props.loadingIcon,
-        itemKey: this.$props.itemKey,
-        itemText: this.$props.itemText,
+        //   itemKey: this.$props.itemKey,
+        //   itemText: this.$props.itemText,
         multiple: this.$props.multiple,
         transition: this.$props.transition,
         selectedItems: this.$props.selectedItems,
-        openAll: this.$props.openAll,
-        openOnClick: this.$props.openOnClick,
+        //   openAll: this.$props.openAll,
+        //   openOnClick: this.$props.openOnClick,
         headers: this.$props.headers,
         headersLength: this.$props.headersLength,
         headerText: this.$props.headerText,
         headerKey: this.$props.headerKey,
         hideHeaders: this.$props.hideHeaders,
         rowsPerPageText: this.$props.rowsPerPageText,
-        customFilter: this.$props.customFilter,
-        useDefaultCommands: this.$props.useDefaultCommands
+        customFilter: this.$props.customFilter
+      //   useDefaultCommands: this.$props.useDefaultCommands
       })
       Object.assign(data.on, {
         input: (e: any[]) => {
@@ -95,58 +55,13 @@ export default VAutocompleteA.extend({
       const slots: VNodeChildren = []
       slots.push((this.$scopedSlots.items as any))
       return this.$createElement(VDataGridSelectList, (this as any).listData, slots)
-    },
-    hasChips (): boolean {
-      return this.$props.chips || this.$props.smallChips || this.$props.deletableChips
-    }
-  },
-  watch: {
-    value: {
-      immediate: true,
-      handler (val) {
-        this.selectedItems = val
-      }
     }
   },
   methods: {
-    register () {},
-    genInput (): VNode {
-      return this.$props.autocomplete ? (VAutocompleteA as any).options.methods.genInput.call(this)
-        : (VSelectA as any).options.methods.genInput.call(this)
-    },
-    genList () {
-      // If there's no slots, we can use a cached VNode to improve performance
-      if (this.$slots['no-data'] || this.$slots['prepend-item'] || this.$slots['append-item']) {
-        return (this as any).genListWithSlot()
-      } else {
-        return (this as any).staticList
-      }
-    },
     genListWithSlot (): VNode {
-      const slots = ['prepend-item', 'no-data', 'append-item']
-        .filter(slotName => this.$slots[slotName])
-        .map(slotName => this.$createElement('template', {
-          slot: slotName
-        }, this.$slots[slotName]))
       return this.$createElement(VDataGridSelectList, {
         ...(this as any).listData
-      }, slots)
-    },
-    genSelections (): VNode {
-      return (VSelectA as any).options.methods.genSelections.call(this)
-    },
-    selectItems (items: any[]) {
-      (this as any).selectedItems = items
-      if (!this.$props.multiple) {
-        this.$data.isMenuActive = false
-      }
-      this.$emit('change', items)
-      this.$emit('input', items)
-    },
-    clearableCallback () {
-      this.selectedItems = []
-      this.$emit('change', [])
-      this.$emit('input', [])
+      }, this.genSlots())
     }
   }
 })

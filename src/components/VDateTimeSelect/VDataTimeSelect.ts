@@ -1,8 +1,7 @@
-import Vue, { VNode } from 'vue'
-import { consoleError } from '../../vuetify-import'
+import { VNode } from 'vue'
 import { VMenuA, VTextFieldA, VDatePickerA, VTimePickerA } from '../../shims-vuetify'
 import VDateTimeSelectList from './VDataTimeSelectList'
-// import DefaultMenuProps from '../../utils/MenuProps'
+import commonSelect from '../mixin/commonSelect'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const VDatePickerProps = ((VDatePickerA as any).options as any).props
@@ -10,19 +9,11 @@ const VDatePickerProps = ((VDatePickerA as any).options as any).props
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const VTimePickerProps = ((VTimePickerA as any).options as any).props
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const VTextFieldProps = ((VTextFieldA as any).options as any).props
-
-export default Vue.extend({
+export default commonSelect.extend({
   name: 'v-date-time-select',
   props: {
-    ...VTextFieldProps,
     ...VDatePickerProps,
     ...VTimePickerProps,
-    autocomplete: {
-      type: Boolean,
-      default: false
-    },
     selectionType: {
       type: String,
       default: 'datetime',
@@ -166,9 +157,6 @@ export default Vue.extend({
           return inputFeild
         }
       }
-    //   on: {
-    //     'update:return-value': (val: string|number|undefined) => this.closeSelector(val)
-    //   }
     }, [
       this.genPicker()
     ])

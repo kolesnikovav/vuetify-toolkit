@@ -1,24 +1,13 @@
 import { VNode, VNodeData, PropType } from 'vue'
 import { VTreeviewNodeProps, consoleError } from '../../vuetify-import'
-import { VAutocompleteA, VSelectA } from '../../shims-vuetify'
 import VTreeSelectList from './VTreeSelectList'
-import DefaultMenuProps from '../../utils/MenuProps'
 import treeviewScopedSlots from '../../utils/TreeviewScopedSlots'
+import commonSelect from '../mixin/commonSelect'
 
-export default VAutocompleteA.extend({
+export default commonSelect.extend({
   name: 'v-tree-select',
   props: {
-    ...(VSelectA as any).options.props,
-    ...(VAutocompleteA as any).options.props,
     ...VTreeviewNodeProps,
-    autocomplete: {
-      type: Boolean,
-      default: false
-    },
-    menuProps: {
-      type: [String, Array, Object],
-      default: () => DefaultMenuProps
-    },
     openAll: Boolean,
     selectionType: {
       type: String as PropType<'leaf' | 'independent'>,
@@ -26,34 +15,9 @@ export default VAutocompleteA.extend({
       validator: (v: string) => ['leaf', 'independent'].includes(v)
     }
   },
-  data: () => ({
-    selectedItems: [] as any[]
-  }),
   computed: {
-    classes (): Object {
-      if (this.$props.autocomplete) {
-        return Object.assign({}, (VSelectA as any).options.computed.classes.call(this), {
-          'v-autocomplete': true,
-          'v-autocomplete--is-selecting-index': this.$data.selectedIndex > -1
-        })
-      } else {
-        return Object.assign({}, (VSelectA as any).options.computed.classes.call(this), {})
-      }
-    },
-    internalSearch: {
-      get (): string {
-        const result = this.$props.autocomplete ? (VAutocompleteA as any).options.computed.internalSearch.get.call(this)
-          : ''
-        return result
-      },
-      set (val: string) {
-        if (this.$props.autocomplete) {
-          (VAutocompleteA as any).options.computed.internalSearch.set.call(this, val)
-        }
-      }
-    },
     listData (): Object {
-      const data = (VSelectA as any).options.computed.listData.call(this)
+      const data = (commonSelect as any).options.computed.listData.call(this)
       Object.assign(data.props, { ...VTreeviewNodeProps })
       /* to remove console warns and type conflicts */
       Object.assign(data.props, {
@@ -97,31 +61,9 @@ export default VAutocompleteA.extend({
         consoleError('assert: staticList should not be called if slots are used')
       }
       return this.$createElement(VTreeSelectList, this.listData)
-    },
-    hasChips (): boolean {
-      return this.$props.chips || this.$props.smallChips || this.$props.deletableChips
-    }
-  },
-  watch: {
-    value: {
-      immediate: true,
-      handler (val) {
-        if (val) {
-          if (Array.isArray(val)) {
-            this.selectedItems = val.flat()
-          } else {
-            this.selectedItems = []
-          }
-        }
-      }
     }
   },
   methods: {
-    register () {},
-    genInput (): VNode {
-      return this.$props.autocomplete ? (VAutocompleteA as any).options.methods.genInput.call(this)
-        : (VSelectA as any).options.methods.genInput.call(this)
-    },
     genListWithSlot (): VNode {
       const slots = ['prepend-item', 'no-data', 'append-item']
         .filter(slotName => this.$slots[slotName])
@@ -132,40 +74,6 @@ export default VAutocompleteA.extend({
       // modifying the `on` property when passed
       // as a referenced object
       return this.$createElement(VTreeSelectList, ({ ...this.listData }) as VNodeData, slots)
-    },
-    genSelections (): VNode {
-      let length = this.selectedItems.length
-      const children = new Array(length)
-      let genSelection
-      if (this.$scopedSlots.selection) {
-        genSelection = (this as any).genSlotSelection
-      } else if ((this as any).hasChips) {
-        genSelection = (this as any).genChipSelection
-      } else {
-        genSelection = (this as any).genCommaSelection
-      }
-      while (length--) {
-        children[length] = genSelection(
-          this.selectedItems[length],
-          length,
-          length === children.length - 1
-        )
-      }
-      return this.$createElement('div', {
-        staticClass: 'v-select__selections'
-      }, children)
-    },
-    selectItems (items: any[]) {
-      this.selectedItems = items
-      if (!this.$props.multiple) {
-        this.$data.isMenuActive = false
-      }
-      this.$emit('input', items)
-    },
-    clearableCallback () {
-      this.selectedItems = []
-      this.$emit('change', [])
-      this.$emit('input', [])
     }
   }
 })

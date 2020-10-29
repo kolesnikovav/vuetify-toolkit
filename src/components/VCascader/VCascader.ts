@@ -1,26 +1,15 @@
 import Vue, { VueConstructor, VNodeData, VNode, VNodeChildren } from 'vue'
 import { getPropertyFromItem } from '../../vuetify-import'
-import { VAutocompleteA, VSelectA } from '../../shims-vuetify'
-import DefaultMenuProps from '../../utils/MenuProps'
 import VCascaderSelectList from './VCascaderSelectList'
+import commonSelect from '../mixin/commonSelect'
 
 /* @vue/component */
-export default VAutocompleteA.extend({
+export default commonSelect.extend({
   name: 'v-cascader',
   props: {
     itemChildren: {
       type: [String, Function],
       default: 'children'
-    },
-    autocomplete: {
-      type: Boolean,
-      default: false
-    },
-    ...(VSelectA as any).options.props,
-    ...(VAutocompleteA as any).options.props,
-    menuProps: {
-      type: [String, Array, Object],
-      default: () => DefaultMenuProps
     }
   },
   data: (vm: any) => ({
@@ -31,21 +20,6 @@ export default VAutocompleteA.extend({
     selectedItems: []
   }),
   computed: {
-    allItems (): any[] {
-      return (this as any).filterDuplicates((this as any).cachedItems.concat(this.items))
-    },
-    internalSearch: {
-      get () {
-        const result = (this as any).autocomplete ? (VAutocompleteA as any).options.computed.internalSearch.get.call(this)
-          : ''
-        return result
-      },
-      set (val) {
-        if ((this as any).autocomplete) {
-          (VAutocompleteA as any).options.computed.internalSearch.set.call(this, val)
-        }
-      }
-    },
     listData (): VNodeData {
       const scopeId = this.$vnode && (this.$vnode as any).context.$options._scopeId
       return {
@@ -127,35 +101,6 @@ export default VAutocompleteA.extend({
     //   //   return this.$props.itemText
     //   // }
     // },
-    genInput (): VNode {
-      return this.$props.autocomplete ? (VAutocompleteA as any).options.methods.genInput.call(this)
-        : (VSelectA as any).options.methods.genInput.call(this)
-    },
-    genSelections () {
-      let length = (this as any).selectedItems.length
-      const children = new Array(length)
-
-      let genSelection
-      if (this.$scopedSlots.selection) {
-        genSelection = (this as any).genSlotSelection
-      } else if (this.$props.hasChips) {
-        genSelection = (this as any).genChipSelection
-      } else {
-        genSelection = (this as any).genCommaSelection
-      }
-
-      while (length--) {
-        children[length] = genSelection(
-          (this as any).selectedItems[length],
-          length,
-          length === children.length - 1
-        )
-      }
-
-      return this.$createElement('div', {
-        staticClass: 'v-select__selections'
-      }, children)
-    },
 
     selectItem (item: object) {
       /* change parent item if item has children */
@@ -190,19 +135,6 @@ export default VAutocompleteA.extend({
       }
       return []
     },
-    // filterDuplicates (arr) {
-    //   const uniqueValues = new Map()
-    //   const arrChildren = this.getChildren()
-    //   if (!arrChildren | !Array.isArray(arrChildren) | arrChildren.length < 1) return []
-    //   for (let index = 0; index < arrChildren.length; ++index) {
-    //     const item = arrChildren[index]
-    //     const val = this.getValue(item)
-
-    //     // TODO: comparator
-    //     !uniqueValues.has(val) && uniqueValues.set(val, item)
-    //   }
-    //   return Array.from(uniqueValues.values())
-    // },
     setValue (value: any) {
       const oldValue = (this as any).internalValue;
       (this as any).internalValue.push = value
