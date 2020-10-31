@@ -1,5 +1,6 @@
 import Vue, { VNode } from 'vue'
 import { VBtnA, VIconA, VTooltipA } from '../../shims-vuetify'
+import { ScopedSlot } from 'vue/types/vnode'
 
 export default Vue.extend({
   name: 'v-tooltip-btn',
@@ -9,25 +10,34 @@ export default Vue.extend({
     btnIcon: String,
     ...(VBtnA as any).options.props
   },
+  methods: {
+    genActivator (listeners: any, attrs: any): any {
+      const btn = this.$createElement(VBtnA, {
+        props: this.$props,
+        slot: 'activator',
+        on: listeners,
+        attrs: attrs
+      }, [
+        this.$props.icon ? this.$createElement(VIconA, {
+          props: {
+            color: this.$props.color
+          }
+        }, this.$props.btnIcon) : undefined]
+      )
+      return () => btn
+    }
+  },
   render (): VNode {
-    const btn = this.$createElement(VBtnA, {
-      props: this.$props,
-      slot: 'activator',
-      on: this.$listeners
-    }, [
-      this.$props.icon ? this.$createElement(VIconA, {
-        props: {
-          color: this.$props.color
-        }
-      }, this.$props.btnIcon) : undefined]
-    )
-    // rrn btn
     return this.$createElement(VTooltipA, {
       props: {
-        // activator: btn
+        top: true,
+        internalActivator: true
+      },
+      scopedSlots: {
+        default: () => this.$createElement('span', this.$props.hint),
+        activator: () => this.genActivator(this.$listeners, this.$attrs)
       }
     }, [
-      btn,
       this.$createElement('span', this.$props.hint)
     ])
   }

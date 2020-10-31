@@ -91,40 +91,6 @@ export default Vue.extend({
           color: v.iconColor
         }
       })
-      // const icon = v.icon ? this.$createElement(VIconA, {
-      //   props: {
-      //     color: v.iconColor
-      //   }
-      // }, v.icon) : undefined
-      // const button = this.$createElement(VBtnA, {
-      //   props: {
-      //     icon: !!v.icon,
-      //     outlined: this.$props.toolbarButtonOutlined,
-      //     rounded: this.$props.toolbarButtonRounded,
-      //     tile: this.$props.toolbarButtonTile
-      //   },
-      //   on: {
-      //     click: (e: any) => {
-      //       if (v.action instanceof String) {
-      //         this.$emit(e, v.action)
-      //       }
-      //     }
-      //   }
-      // }, [icon])
-      // if (v.text) {
-      //   return this.$createElement(VTooltipA, {},
-      //     [
-      //       this.$createElement('template', {
-      //         slot: 'activator'
-      //       }, [button]),
-      //       this.$createElement('span', {
-      //         domProps: {
-      //           innerHTML: v.text
-      //         }
-      //       })
-      //     ])
-      // }
-      // return button
     },
     genToolbar (): VNode {
       const buttons: VNode[] = []
