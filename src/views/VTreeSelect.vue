@@ -87,6 +87,16 @@
           <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
           <v-switch v-model="independent" class="ma-2" :label="getSelectionType()"></v-switch>
         </v-row>
+        <v-card outlined>
+          Toolbar position
+          <v-row justify="space-around">
+          <v-checkbox v-model="toolbarTopLeft" @click="SetToolbar ('top-left')" class="ma-2" label="top-left"></v-checkbox>
+          <v-checkbox v-model="toolbarTopRight" @click="SetToolbar ('top-right')" class="ma-2" label="top-right"></v-checkbox>
+          <v-checkbox v-model="toolbarBottomLeft" @click="SetToolbar ('bottom-left')" class="ma-2" label="bottom-left"></v-checkbox>
+          <v-checkbox v-model="toolbarBottomRight" @click="SetToolbar ('bottom-right')" class="ma-2" label="bottom-right"></v-checkbox>
+          <v-switch v-model="toolbarFlat" class="ma-2" label="toolbarFlat"></v-switch>
+          </v-row>
+        </v-card>
         <v-tree-select
           v-model = "selectedItems"
           :autocomplete="autocomplete"
@@ -99,6 +109,8 @@
           :selectionType = "getSelectionType()"
           :smallChips = "smallChips"
           :deletableChips = "deletableChips"
+          :toolbarPosition = "toolbarPosition"
+          :toolbarFlat = "toolbarFlat"
         >
           <template v-if="customSlots" v-slot:prependTree="{ item, open }">
             <v-icon v-if = "item.children">{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
@@ -181,6 +193,12 @@ export default Vue.extend({
     deletableChips: false,
     smallChips: false,
     selectedItems: [],
+    toolbarPosition: '',
+    toolbarFlat: false,
+    toolbarTopLeft: false,
+    toolbarTopRight: false,
+    toolbarBottomLeft: false,
+    toolbarBottomRight: false,
     //
     codeSandbox: false,
     sandboxTemplate: sandboxTemplateHTML,
@@ -188,7 +206,34 @@ export default Vue.extend({
     dataSource: staticitems
   }),
   methods: {
-    getSelectionType () { return (this.independent) ? 'independent' : 'leaf' }
+    getSelectionType () { return (this.independent) ? 'independent' : 'leaf' },
+    SetToolbar (position: string) {
+      this.toolbarPosition = position
+      if (position === 'top-left') {
+        this.toolbarTopLeft = true
+        this.toolbarTopRight = false
+        this.toolbarBottomLeft = false
+        this.toolbarBottomRight = false
+      } else if (position === 'top-right') {
+        this.toolbarTopLeft = false
+        this.toolbarTopRight = true
+        this.toolbarBottomLeft = false
+        this.toolbarBottomRight = false
+      } else if (position === 'bottom-left') {
+        this.toolbarTopLeft = false
+        this.toolbarTopRight = false
+        this.toolbarBottomLeft = true
+        this.toolbarBottomRight = false
+      } else {
+        this.toolbarTopLeft = false
+        this.toolbarTopRight = false
+        this.toolbarBottomLeft = false
+        this.toolbarBottomRight = true
+      }
+    },
+    GetToolbar (position: string): boolean {
+      return position === this.toolbarPosition
+    }
   }
 })
 </script>

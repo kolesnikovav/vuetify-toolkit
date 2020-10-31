@@ -1,6 +1,7 @@
 import { VNode, PropType } from 'vue'
 import { mixins, VTreeviewNodeProps, Themeable, Colorable } from '../../vuetify-import'
 import { VListItemA, VListItemContentA, VListItemTitleA } from '../../shims-vuetify'
+import { defaultTreeSelectCommands } from '../../utils/ToolbarCommand'
 import commonSelectorCard from '../mixin/commonSelectorCard'
 
 import VTreeViewSelector from './VTreeViewSelector'
@@ -40,7 +41,7 @@ export default commonSelectorCard.extend({
     // custom commands
     toolbarCommands: {
       type: Array,
-      default: () => []
+      default: defaultTreeSelectCommands(this as any)
     },
     ...VTreeviewNodeProps,
     selectionType: {

@@ -3,6 +3,7 @@ import { mixins, Themeable, Colorable } from '../../vuetify-import'
 import { VDataTableA, VListItemA, VListItemContentA, VListItemTitleA } from '../../shims-vuetify'
 import tableScopedSlots from '../../utils/TableScopedSlots'
 import commonSelectorCard from '../mixin/commonSelectorCard'
+import { defaultDataGridSelectCommands } from '../../utils/ToolbarCommand'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const VDataTableProps = ((VDataTableA as any).options as any).props
@@ -34,6 +35,11 @@ export default commonSelectorCard.extend({
     headers: {
       type: Array,
       default: () => []
+    },
+    // custom commands
+    toolbarCommands: {
+      type: Array,
+      default: defaultDataGridSelectCommands(this as any)
     },
     ...VDataTableProps
   },
