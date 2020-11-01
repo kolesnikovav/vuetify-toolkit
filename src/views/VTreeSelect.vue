@@ -74,6 +74,19 @@
         </div>
       </v-tab-item>
     </v-tabs>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          color="primary"
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+          Button
+        </v-btn>
+      </template>
+      <span>Tooltip</span>
+    </v-tooltip>
       <v-card-text>
         <v-row justify="space-around">
           <v-switch v-model="autocomplete" class="ma-2" label="autocomplete"></v-switch>
@@ -95,6 +108,7 @@
           <v-checkbox v-model="toolbarBottomLeft" @click="SetToolbar ('bottom-left')" class="ma-2" label="bottom-left"></v-checkbox>
           <v-checkbox v-model="toolbarBottomRight" @click="SetToolbar ('bottom-right')" class="ma-2" label="bottom-right"></v-checkbox>
           <v-switch v-model="toolbarFlat" class="ma-2" label="toolbarFlat"></v-switch>
+          <v-switch v-model="toolbarButtonTextVisible" class="ma-2" label="toolbar-button-text-visible"></v-switch>
           </v-row>
         </v-card>
         <v-tree-select
@@ -111,6 +125,7 @@
           :deletableChips = "deletableChips"
           :toolbarPosition = "toolbarPosition"
           :toolbarFlat = "toolbarFlat"
+          :toolbarButtonTextVisible = "toolbarButtonTextVisible"
         >
           <template v-if="customSlots" v-slot:prependTree="{ item, open }">
             <v-icon v-if = "item.children">{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
@@ -199,6 +214,7 @@ export default Vue.extend({
     toolbarTopRight: false,
     toolbarBottomLeft: false,
     toolbarBottomRight: false,
+    toolbarButtonTextVisible: false,
     //
     codeSandbox: false,
     sandboxTemplate: sandboxTemplateHTML,

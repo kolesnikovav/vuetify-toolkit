@@ -19,6 +19,10 @@ export default VAutocompleteA.extend({
       type: String as PropType<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'>,
       default: 'top-left',
       validator: (v: string) => ['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(v)
+    },
+    toolbarButtonTextVisible: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
@@ -49,7 +53,11 @@ export default VAutocompleteA.extend({
     },
     listData (): Object {
       const data = (VSelectA as any).options.computed.listData.call(this)
-      Object.assign(data.props, { toolbarPosition: this.$props.toolbarPosition })
+      Object.assign(data.props, {
+        toolbarPosition: this.$props.toolbarPosition,
+        toolbarButtonTextVisible: this.$props.toolbarButtonTextVisible
+
+      })
       return data
     },
     staticList (): VNode {

@@ -1,9 +1,10 @@
-import Vue, { VNode, VueConstructor } from 'vue'
+import Vue, { VueConstructor } from 'vue'
 
 export interface Command {
   icon?: string,
   iconColor?: Number|String,
   text?: string,
+  hint?: string,
   target: VueConstructor<Vue>,
   action: Function | String,
   disabled: ()=> boolean | Boolean
@@ -15,6 +16,7 @@ export function defaultTreeSelectCommands (component: VueConstructor<Vue>): Comm
       target: component,
       action: 'Ok',
       text: 'OK',
+      hint: 'OK',
       icon: 'mdi-check-bold',
       iconColor: 'success',
       disabled: () => false
@@ -23,6 +25,7 @@ export function defaultTreeSelectCommands (component: VueConstructor<Vue>): Comm
       target: component,
       action: 'Close',
       text: 'Close',
+      hint: 'Close',
       icon: 'mdi-close',
       iconColor: 'error',
       disabled: () => false
@@ -30,35 +33,40 @@ export function defaultTreeSelectCommands (component: VueConstructor<Vue>): Comm
     {
       target: component,
       action: 'ExpandAll',
-      text: 'Expand all',
+      text: 'Expand',
+      hint: 'Expand all items',
       icon: 'mdi-arrow-expand-all',
       disabled: () => false
     },
     {
       target: component,
       action: 'CollapseAll',
-      text: 'Collapse all',
+      text: 'Collapse',
+      hint: 'Collapse all items',
       icon: 'mdi-arrow-collapse-all',
       disabled: () => false
     },
     {
       target: component,
       action: 'SelectAll',
-      text: 'Select all',
+      text: 'Select',
+      hint: 'Select all',
       icon: 'mdi-select-all',
       disabled: () => false
     },
     {
       target: component,
       action: 'InvertSelection',
-      text: 'Invert selection',
+      text: 'Invert',
+      hint: 'Invert selection',
       icon: 'mdi-select-inverse',
       disabled: () => false
     },
     {
       target: component,
       action: 'UnselectAll',
-      text: 'Unselect all',
+      text: 'Unselect',
+      hint: 'Unselect all',
       icon: 'mdi-select-off',
       disabled: () => false
     }
@@ -71,6 +79,7 @@ export function defaultDataGridSelectCommands (component: VueConstructor<Vue>): 
       target: component,
       action: 'Ok',
       text: 'OK',
+      hint: 'OK',
       icon: 'mdi-check-bold',
       iconColor: 'success',
       disabled: () => false
@@ -79,6 +88,7 @@ export function defaultDataGridSelectCommands (component: VueConstructor<Vue>): 
       target: component,
       action: 'Close',
       text: 'Close',
+      hint: 'Close',
       icon: 'mdi-close',
       iconColor: 'error',
       disabled: () => false
@@ -86,7 +96,7 @@ export function defaultDataGridSelectCommands (component: VueConstructor<Vue>): 
     {
       target: component,
       action: 'InvertSelection',
-      text: 'Invert selection',
+      hint: 'Invert selection',
       icon: 'mdi-select-inverse',
       disabled: () => false
     }

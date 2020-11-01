@@ -1,9 +1,8 @@
-import Vue, { VNode, PropType } from 'vue'
+import Vue, { VNode } from 'vue'
 import { Themeable, Colorable } from '../../vuetify-import'
-import { VBtnA, VListItemA, VListItemContentA, VListItemTitleA, VToolbarA, VIconA, VSpacerA, VTooltipA } from '../../shims-vuetify'
+import { VListItemA, VListItemContentA, VListItemTitleA, VToolbarA, VSpacerA } from '../../shims-vuetify'
 import { Command } from '../../utils/ToolbarCommand'
-import { VToolBtn } from '../VToolBtn'
-import { PropValidator } from 'vue/types/options'
+import VTootiplBtn from '../VToolBtn/VTBtn.vue'
 
 export default Vue.extend({
   mixins: [
@@ -42,10 +41,10 @@ export default Vue.extend({
     // custom commands
     toolbarCommands: {
       type: Array,
-      default: () => []
-    } as PropValidator<Command[]>,
+      default: () => [] as Command[]
+    },
     toolbarPosition: {
-      type: String as PropType<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'>,
+      type: String,
       default: 'top-left',
       validator: (v: string) => ['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(v)
     },
@@ -64,6 +63,10 @@ export default Vue.extend({
     toolbarButtonTile: {
       type: Boolean,
       default: true
+    },
+    toolbarButtonTextVisible: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -76,6 +79,9 @@ export default Vue.extend({
       return (this as any).$createElement(VListItemA, tile, [
         (this as any).genTileNoDataContent()
       ])
+    },
+    tooltipPosition (): string {
+      return ['bottom-left', 'bottom-right'].includes(this.$props.toolbarPosition) ? 'bottom' : 'top'
     }
   },
   methods: {
@@ -83,12 +89,14 @@ export default Vue.extend({
       return (this as any).$createElement('div')
     },
     genButtonWithTooltip (v: Command): VNode {
-      return this.$createElement(VToolBtn, {
+      return this.$createElement(VTootiplBtn, {
         props: {
-          hint: v.text,
+          hint: v.hint,
           btnIcon: v.icon,
+          btnText: this.toolbarButtonTextVisible ? v.text : '',
           icon: !!v.icon,
-          color: v.iconColor
+          iconColor: v.iconColor,
+          tooltipPosition: this.tooltipPosition
         }
       })
     },
