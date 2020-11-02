@@ -2,7 +2,7 @@ import Vue, { VNode } from 'vue'
 import { Themeable, Colorable } from '../../vuetify-import'
 import { VToolbarA, VSpacerA } from '../../shims-vuetify'
 import { Command } from '../../utils/ToolbarCommand'
-import VTootiplBtn from '../VToolBtn/VTBtn.vue'
+import VTootipBtn from '../VTootipBtn/VTootipBtn.vue'
 
 export default Vue.extend({
   mixins: [
@@ -51,7 +51,7 @@ export default Vue.extend({
   },
   methods: {
     genButtonWithTooltip (v: Command): VNode {
-      return this.$createElement(VTootiplBtn, {
+      return this.$createElement(VTootipBtn, {
         props: {
           hint: v.hint,
           btnIcon: v.icon,

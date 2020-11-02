@@ -5,6 +5,7 @@ import VDataGridSelect from './VDataGridSelect'
 import VDateTimeSelect from './VDateTimeSelect'
 import VMdView from './VMdView'
 import VAdvDataTable from './VAdvDataTable'
+import VTootipBtn from './VTootipBtn'
 
 export interface VuetifyToolkitUseOptions {
   components?: Record<string, Component>
@@ -16,7 +17,8 @@ const defaultComponents = {
   'v-data-grid-select': VDataGridSelect,
   'v-date-time-select': VDateTimeSelect,
   'v-md-view': VMdView,
-  'v-adv-data-table': VAdvDataTable
+  'v-adv-data-table': VAdvDataTable,
+  'v-tooltip-btn': VTootipBtn
 }
 
 function install (v: VueConstructor, args?: VuetifyToolkitUseOptions): VueConstructor<Vue> {
@@ -38,7 +40,8 @@ export {
   VDataGridSelect,
   VDateTimeSelect,
   VMdView,
-  VAdvDataTable
+  VAdvDataTable,
+  VTootipBtn
 }
 
 if (typeof window !== 'undefined' && window.Vue) {

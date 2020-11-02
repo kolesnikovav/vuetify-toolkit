@@ -7,6 +7,7 @@ import VDataGridSelect from './views/VDataGridSelect.vue'
 import VDateTimeSelect from './views/VDateTimeSelect.vue'
 import VMdView from './views/VMdView.vue'
 import VAdvDataTable from './views/VAdvDataTable.vue'
+import VTooltipBtn from './views/VTooltipBtn.vue'
 
 Vue.use(Router)
 
@@ -48,6 +49,11 @@ export default new Router({
       path: '/advdatatable',
       name: 'vadvdatatable',
       component: VAdvDataTable
-    }
+    },
+    {
+      path: '/tooltipbtn',
+      name: 'vtooltip',
+      component: VTooltipBtn
+    }    
   ]
 })
