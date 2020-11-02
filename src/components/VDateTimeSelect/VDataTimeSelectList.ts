@@ -1,5 +1,7 @@
 import Vue, { VNode } from 'vue'
 import { VDatePickerA, VTimePickerA, VRowA, VColA, VBtnA, VSheetA } from '../../shims-vuetify'
+import commonSelectorCard from '../mixin/commonSelectorCard'
+import { defaultDateTimeSelectCommands } from '../../utils/ToolbarCommand'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const VDatePickerProps = ((VDatePickerA as any).options as any).props
@@ -7,7 +9,7 @@ const VDatePickerProps = ((VDatePickerA as any).options as any).props
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const VTimePickerProps = ((VTimePickerA as any).options as any).props
 
-export default Vue.extend({
+export default commonSelectorCard.extend({
   name: 'v-date-time-select-list',
   props: {
     ...VDatePickerProps,
@@ -30,7 +32,12 @@ export default Vue.extend({
     scrollableTime: Boolean,
     disabledDate: Boolean,
     disabledTime: Boolean,
-    widthSelector: Number
+    widthSelector: Number,
+    // custom commands
+    toolbarCommands: {
+      type: Array,
+      default: defaultDateTimeSelectCommands(this as any)
+    }
   },
   data: () => ({
     selectedDate: '',
@@ -172,31 +179,21 @@ export default Vue.extend({
           }
         })
       ])
-    }
-  },
-  render (): VNode {
-    const children = []
-    // if (!this.items || !Array.isArray(this.items) || this.items.length < 1) {
-    //   children.push(this.$slots['no-data'] || this.staticNoDataTile)
-    // }
-    this.$slots['prepend-item'] && children.unshift(this.$slots['prepend-item'])
-    const childrenAppend = []
-    this.$slots['append-item'] && childrenAppend.push(this.$slots['append-item'])
-
-    return this.$createElement(VSheetA, {
-      // staticClass: 'v-select-list v-card'
-      // class: this.themeClasses
     },
-    [
-      this.genHeader(),
-      children,
-      this.$createElement(VRowA, {
-        props: {
-          align: 'stretch'
-        }
-      }, [
-        this.$props.selectionType === 'date' || this.$props.selectionType === 'datetime' ? this.genDatePicker() : undefined,
-        this.$props.selectionType === 'time' || this.$props.selectionType === 'datetime' ? this.genTimePicker() : undefined]), [...childrenAppend]
-    ])
+    genSelectList (): VNode {
+      return this.$createElement(VSheetA, {
+        // staticClass: 'v-select-list v-card'
+        // class: this.themeClasses
+      },
+      [
+        this.$createElement(VRowA, {
+          props: {
+            align: 'stretch'
+          }
+        }, [
+          this.$props.selectionType === 'date' || this.$props.selectionType === 'datetime' ? this.genDatePicker() : undefined,
+          this.$props.selectionType === 'time' || this.$props.selectionType === 'datetime' ? this.genTimePicker() : undefined])
+      ])
+    }
   }
 })

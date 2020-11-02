@@ -102,3 +102,34 @@ export function defaultDataGridSelectCommands (component: VueConstructor<Vue>): 
     }
   ]
 }
+
+export function defaultDateTimeSelectCommands (component: VueConstructor<Vue>): Command[] {
+  return [
+    {
+      target: component,
+      action: 'Ok',
+      text: 'OK',
+      hint: 'OK',
+      icon: 'mdi-check-bold',
+      iconColor: 'success',
+      disabled: () => false
+    },
+    {
+      target: component,
+      action: 'Close',
+      text: 'Close',
+      hint: 'Close',
+      icon: 'mdi-close',
+      iconColor: 'error',
+      disabled: () => false
+    },
+    {
+      target: component,
+      action: 'InvertSelection',
+      text: 'Now',
+      hint: 'Now',
+      icon: 'mdi-clock',
+      disabled: () => false
+    }
+  ]
+}
