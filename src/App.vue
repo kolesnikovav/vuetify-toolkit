@@ -1,42 +1,53 @@
 <template>
   <v-app>
     <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" app v-model="drawer">
-      <v-list>
-        <v-list-item>
+      <v-list dense>
+        <v-list-item dense>
           <v-list-item-action>
             <v-btn text :to="{path: '/'}">Quick Start</v-btn>
           </v-list-item-action>
         </v-list-item>
         <v-divider />
         <v-subheader>Components</v-subheader>
-        <v-list-item>
+        <v-list-item dense>
           <v-list-item-action>
             <v-btn text :to="{path: '/treeselect'}">VTreeSelect</v-btn>
           </v-list-item-action>
         </v-list-item>
-        <v-list-item>
+        <v-list-item dense>
           <v-list-item-action>
             <v-btn text :to="{path: '/cascader'}">VCascader</v-btn>
           </v-list-item-action>
         </v-list-item>
-        <v-list-item>
+        <v-list-item dense>
           <v-list-item-action>
             <v-btn text :to="{path: '/datagridselect'}">VDataGridSelect</v-btn>
           </v-list-item-action>
         </v-list-item>
-        <v-list-item>
+        <v-list-item dense>
           <v-list-item-action>
             <v-btn text :to="{path: '/datetimeselect'}">VDateTimeSelect</v-btn>
           </v-list-item-action>
         </v-list-item>
-        <v-list-item>
+        <v-list-item dense>
           <v-list-item-action>
             <v-btn text :to="{path: '/mdview'}">VMdView</v-btn>
           </v-list-item-action>
         </v-list-item>
-        <v-list-item>
+        <v-list-item dense>
           <v-list-item-action>
             <v-btn text :to="{path: '/advdatatable'}">VAdvDataTable</v-btn>
+          </v-list-item-action>
+        </v-list-item>
+        <v-subheader>Mixins</v-subheader>
+        <v-list-item dense>
+          <v-list-item-action>
+            <v-btn text :to="{path: '/toolbar'}">CommonToolbar</v-btn>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item dense>
+          <v-list-item-action>
+            <v-btn text :to="{path: '/contextmenu'}">ContextMenu</v-btn>
           </v-list-item-action>
         </v-list-item>
       </v-list>
