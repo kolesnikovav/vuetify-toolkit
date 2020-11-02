@@ -43,7 +43,7 @@
           <v-list-item-action>
             <v-btn text :to="{path: '/tooltipbtn'}">VTooltipBtn</v-btn>
           </v-list-item-action>
-        </v-list-item>        
+        </v-list-item>
         <v-subheader>Mixins</v-subheader>
         <v-list-item dense>
           <v-list-item-action>

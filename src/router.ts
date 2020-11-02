@@ -54,6 +54,6 @@ export default new Router({
       path: '/tooltipbtn',
       name: 'vtooltip',
       component: VTooltipBtn
-    }    
+    }
   ]
 })
