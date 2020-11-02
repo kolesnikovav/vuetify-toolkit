@@ -1,12 +1,11 @@
 import Vue, { VNode } from 'vue'
 import { Themeable, Colorable } from '../../vuetify-import'
-import { VListItemA, VListItemContentA, VListItemTitleA, VToolbarA, VSpacerA } from '../../shims-vuetify'
-import { Command } from '../../utils/ToolbarCommand'
-import VTootiplBtn from '../VToolBtn/VTBtn.vue'
+import { VListItemA, VListItemContentA, VListItemTitleA } from '../../shims-vuetify'
+import CommonToolbar from './commonToolbar'
 
 export default Vue.extend({
   mixins: [
-    Themeable, Colorable
+    Themeable, Colorable, CommonToolbar
   ],
   props: {
     selectedItems: {
@@ -33,40 +32,6 @@ export default Vue.extend({
     filter: {
       type: Function,
       default: undefined
-    },
-    useDefaultToolbarCommand: {
-      type: Boolean,
-      default: false
-    },
-    // custom commands
-    toolbarCommands: {
-      type: Array,
-      default: () => [] as Command[]
-    },
-    toolbarPosition: {
-      type: String,
-      default: 'top-left',
-      validator: (v: string) => ['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(v)
-    },
-    toolbarFlat: {
-      type: Boolean,
-      default: true
-    },
-    toolbarButtonOutlined: {
-      type: Boolean,
-      default: true
-    },
-    toolbarButtonRounded: {
-      type: Boolean,
-      default: false
-    },
-    toolbarButtonTile: {
-      type: Boolean,
-      default: true
-    },
-    toolbarButtonTextVisible: {
-      type: Boolean,
-      default: false
     }
   },
   computed: {
@@ -80,41 +45,13 @@ export default Vue.extend({
         (this as any).genTileNoDataContent()
       ])
     },
-    tooltipPosition (): string {
-      return ['bottom-left', 'bottom-right'].includes(this.$props.toolbarPosition) ? 'bottom' : 'top'
+    hasData (): boolean {
+      return !(!this.items || !Array.isArray(this.items) || this.items.length < 1)
     }
   },
   methods: {
     genSelectList (): VNode {
       return (this as any).$createElement('div')
-    },
-    genButtonWithTooltip (v: Command): VNode {
-      return this.$createElement(VTootiplBtn, {
-        props: {
-          hint: v.hint,
-          btnIcon: v.icon,
-          btnText: this.toolbarButtonTextVisible ? v.text : '',
-          icon: !!v.icon,
-          iconColor: v.iconColor,
-          tooltipPosition: this.tooltipPosition
-        }
-      })
-    },
-    genToolbar (): VNode {
-      const buttons: VNode[] = []
-      if (['top-right', 'bottom-right'].includes(this.$props.toolbarPosition)) {
-        buttons.push(this.$createElement(VSpacerA))
-      }
-      this.$props.toolbarCommands.map((v: Command) => buttons.push(this.genButtonWithTooltip(v)))
-      return (this as any).$createElement(VToolbarA, {
-        style: {
-          border: '1px solid'
-        },
-        props: {
-          flat: this.$props.toolbarFlat,
-          dense: this.$props.dense
-        }
-      }, buttons)
     },
     genTileNoDataContent (): VNode {
       const innerHTML = (this as any).noDataText
@@ -127,17 +64,17 @@ export default Vue.extend({
   },
   render (): VNode {
     const children = []
-    if (this.$props.toolbarCommands.length > 0 && ['top-left', 'top-right'].includes(this.$props.toolbarPosition)) {
-      children.push(this.genToolbar())
+    if (this.$props.toolbarCommands.length > 0 && ['top-left', 'top-right'].includes(this.$props.toolbarPosition) && this.hasData) {
+      children.push((this as any).genToolbar())
     }
-    if (!this.items || !Array.isArray(this.items) || this.items.length < 1) {
+    if (!this.hasData) {
       children.push(this.$slots['no-data'] || this.staticNoDataTile)
     }
     this.$slots['prepend-item'] && children.unshift(this.$slots['prepend-item'])
     const childrenAppend = []
     this.$slots['append-item'] && childrenAppend.push(this.$slots['append-item'])
-    if (this.$props.toolbarCommands.length > 0 && ['bottom-left', 'bottom-right'].includes(this.$props.toolbarPosition)) {
-      childrenAppend.push(this.genToolbar())
+    if (this.$props.toolbarCommands.length > 0 && ['bottom-left', 'bottom-right'].includes(this.$props.toolbarPosition) && this.hasData) {
+      childrenAppend.push((this as any).genToolbar())
     }
     return this.$createElement('div', {
       staticClass: 'v-select-list v-card',

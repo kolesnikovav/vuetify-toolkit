@@ -74,19 +74,6 @@
         </div>
       </v-tab-item>
     </v-tabs>
-    <v-tooltip bottom>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Button
-        </v-btn>
-      </template>
-      <span>Tooltip</span>
-    </v-tooltip>
       <v-card-text>
         <v-row justify="space-around">
           <v-switch v-model="autocomplete" class="ma-2" label="autocomplete"></v-switch>
