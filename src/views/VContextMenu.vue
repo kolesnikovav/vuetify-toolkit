@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>VAdvDataTable</h1>
+    <h1>VContextMenu</h1>
     <span></span>
     <p>
       VAdvDataTable means "Advanced Data Table". This component wraps <a

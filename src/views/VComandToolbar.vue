@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>commonToolbar</h1>
+    <h1>ComandToolbar</h1>
     <span></span>
     <p>
       Some components needs a toolbar.

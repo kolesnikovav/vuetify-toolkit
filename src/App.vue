@@ -47,7 +47,7 @@
         <v-subheader>Mixins</v-subheader>
         <v-list-item dense>
           <v-list-item-action>
-            <v-btn text :to="{path: '/toolbar'}">CommonToolbar</v-btn>
+            <v-btn text :to="{path: '/comandtoolbar'}">ComandToolbar</v-btn>
           </v-list-item-action>
         </v-list-item>
         <v-list-item dense>

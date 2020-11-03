@@ -1,11 +1,11 @@
 import Vue, { VNode } from 'vue'
 import { Themeable, Colorable } from '../../vuetify-import'
 import { VListItemA, VListItemContentA, VListItemTitleA } from '../../shims-vuetify'
-import CommonToolbar from './commonToolbar'
+import ComandToolbar from './comandToolbar'
 
 export default Vue.extend({
   mixins: [
-    Themeable, Colorable, CommonToolbar
+    Themeable, Colorable, ComandToolbar
   ],
   props: {
     selectedItems: {

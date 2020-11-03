@@ -1,30 +1,56 @@
 <template>
-<v-tooltip :top = "computedTop" :bottom = "computedBottom">
+  <div>
+    <v-tooltip :top="computedTop" :bottom="computedBottom" v-if="hasTooltip">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           v-bind="attrs"
           v-on="on"
-          :icon = false
-          :tile = "tile"
-          :fab = "fab"
-          :height = "height"
-          :rounded = "rounded"
-          :outlined = "outlined"
-          :shaped = "shaped"
-          :width = "width"
-          :disabled = "disabled"
-          :depressed = "depressed"
+          :icon="false"
+          :tile="tile"
+          :fab="fab"
+          :height="height"
+          :rounded="rounded"
+          :outlined="outlined"
+          :shaped="shaped"
+          :width="width"
+          :disabled="disabled"
+          :depressed="depressed"
+          :to="to"
+          :href="href"
+          :elevation="elevation"
         >
-        <div v-if = "hasIcon">
-          <v-icon
-          :color="iconColor"
-          >{{btnIcon}}</v-icon>
-        </div>
-          {{btnText}}
+          <div v-if="hasIcon">
+            <v-icon :color="iconColor">{{ btnIcon }}</v-icon>
+          </div>
+          {{ btnText }}
         </v-btn>
       </template>
-      <span>{{hint}}</span>
-</v-tooltip>
+      <span>{{ hint }}</span>
+    </v-tooltip>
+    <v-btn
+      v-else
+      v-bind="attrs"
+      v-on="on"
+      :icon="false"
+      :tile="tile"
+      :fab="fab"
+      :height="height"
+      :rounded="rounded"
+      :outlined="outlined"
+      :shaped="shaped"
+      :width="width"
+      :disabled="disabled"
+      :depressed="depressed"
+      :to="to"
+      :href="href"
+      :elevation="elevation"
+    >
+      <div v-if="hasIcon">
+        <v-icon :color="iconColor">{{ btnIcon }}</v-icon>
+      </div>
+      {{ btnText }}
+    </v-btn>
+  </div>
 </template>
 
 <script lang="ts">
@@ -50,6 +76,18 @@ export default Vue.extend({
       type: [Number, String],
       default: undefined
     },
+    elevation: {
+      type: [Number, String],
+      default: undefined
+    },
+    to: {
+      type: [String, Object],
+      default: undefined
+    },
+    href: {
+      type: [String, Object],
+      default: undefined
+    },
     btnIcon: String,
     iconColor: String,
     tooltipPosition: {
@@ -60,7 +98,7 @@ export default Vue.extend({
   },
   computed: {
     computedTop (): boolean {
-      return !!((!this.tooltipPosition || this.tooltipPosition === 'top'))
+      return !!(!this.tooltipPosition || this.tooltipPosition === 'top')
     },
     computedBottom (): boolean {
       return !this.computedTop
@@ -70,8 +108,10 @@ export default Vue.extend({
     },
     hasText (): boolean {
       return !!this.btnText && this.hasIcon
+    },
+    hasTooltip (): boolean {
+      return this.hint.length > 0
     }
   }
 })
-
 </script>
