@@ -5,7 +5,15 @@
           v-bind="attrs"
           v-on="on"
           :icon = false
-          text
+          :tile = "tile"
+          :fab = "fab"
+          :height = "height"
+          :rounded = "rounded"
+          :outlined = "outlined"
+          :shaped = "shaped"
+          :width = "width"
+          :disabled = "disabled"
+          :depressed = "depressed"
         >
         <div v-if = "hasIcon">
           <v-icon
@@ -27,6 +35,21 @@ export default Vue.extend({
   props: {
     hint: String,
     btnText: String,
+    tile: Boolean,
+    fab: Boolean,
+    rounded: Boolean,
+    shaped: Boolean,
+    disabled: Boolean,
+    depressed: Boolean,
+    outlined: Boolean,
+    height: {
+      type: [Number, String],
+      default: undefined
+    },
+    width: {
+      type: [Number, String],
+      default: undefined
+    },
     btnIcon: String,
     iconColor: String,
     tooltipPosition: {

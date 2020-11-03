@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
-import { VTreeSelect, VCascader, VDataGridSelect, VDateTimeSelect, VMdView, VAdvDataTable } from '../components'
+import { VTreeSelect, VCascader, VDataGridSelect, VDateTimeSelect, VMdView, VAdvDataTable, VTootipBtn } from '../components'
 
 Vue.use(Vuetify,
   {
@@ -10,9 +10,11 @@ Vue.use(Vuetify,
       VDataGridSelect,
       VDateTimeSelect,
       VMdView,
-      VAdvDataTable
+      VAdvDataTable,
+      VTootipBtn
     }
-  })
+  }
+)
 
 export default new Vuetify({
   icons: {

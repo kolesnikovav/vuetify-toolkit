@@ -1,4 +1,4 @@
-import { VueConstructor, Component } from 'vue'
+import Vue, { VueConstructor, Component } from 'vue'
 import VTreeSelect from './VTreeSelect'
 import VCascader from './VCascader'
 import VDataGridSelect from './VDataGridSelect'
@@ -20,6 +20,7 @@ const defaultComponents = {
   'v-adv-data-table': VAdvDataTable,
   'v-tooltip-btn': VTootipBtn
 }
+console.log(defaultComponents)
 
 function install (v: VueConstructor, args?: VuetifyToolkitUseOptions): VueConstructor<Vue> {
   const components = args ? args.components : defaultComponents
@@ -44,6 +45,4 @@ export {
   VTootipBtn
 }
 
-if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(install)
-}
+Vue.use(install)

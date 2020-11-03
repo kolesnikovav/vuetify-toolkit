@@ -3,7 +3,7 @@
     <h1>VTooltipBtn</h1>
     <span></span>
     <p>
-      VTooltipBtn is the combined button with hint. This component is designed to simplify template markup
+      VTooltipBtn is the combined button with icon and hint. This component is designed to simplify template markup
     </p>
     <p>Added properties are below</p>
     <v-expansion-panels>
@@ -141,10 +141,33 @@
       </v-tabs>
       <v-card-text>
         <v-row justify="space-around">
-          <v-switch v-model="dense" class="ma-2" label="dense"></v-switch>
-          <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
-          <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
+          <v-switch v-model="tile" class="ma-2" label="tile"></v-switch>
+          <v-switch v-model="fab" class="ma-2" label="fab"></v-switch>
+          <v-switch v-model="outlined" class="ma-2" label="outlined"></v-switch>
+          <v-switch v-model="rounded" class="ma-2" label="rounded"></v-switch>
+          <v-switch v-model="shaped" class="ma-2" label="shaped"></v-switch>
+          <v-switch v-model="disabled" class="ma-2" label="disabled"></v-switch>
+          <v-switch v-model="depressed" class="ma-2" label="depressed"></v-switch>
+          <v-select v-model="iconColor" class="ma-2" label="iconColor" :items = "colors"></v-select>
         </v-row>
+  <v-row
+    align="center"
+    justify="space-around"
+  >
+        <v-tooltip-btn
+        :tile = "tile"
+        :fab = "fab"
+        :rounded = "rounded"
+        :outlined = "outlined"
+        :shaped = "shaped"
+        :disabled = "disabled"
+        :depressed = "depressed"
+        :btnIcon = "btnIcon"
+        :iconColor = "iconColor"
+        :hint = "hint"
+        :btnText = "btnText"
+        ></v-tooltip-btn>
+  </v-row>
       </v-card-text>
     </v-card>
     <span />
@@ -172,19 +195,19 @@ const sandboxCode = 'export default ({\n' +
 
 export default Vue.extend({
   data: () => ({
-    showSelect: true,
-    singleSelect: false,
-    dense: false,
+    hint: 'This is tooltip text for my button',
+    btnText: 'My button',
+    tile: false,
+    fab: false,
+    rounded: false,
+    outlined: false,
+    shaped: false,
+    disabled: false,
+    depressed: false,
+    btnIcon: 'mdi-close',
+    iconColor: 'error',
+    colors: ['success', 'error', 'primary'],
     dark: false,
-    customSlots: false,
-    filterIcon: 'mdi-text-subject',
-    filterIconColor: 'red',
-    filterActiveIconColor: 'green',
-    folderIcon: 'folder',
-    folderOpenIcon: 'folder-open',
-    itemIcon: 'file',
-    itemIconColor: 'cyan',
-    folderIconColor: 'amber',
 
     codeSandbox: false,
     sandboxTemplate: sandboxTemplateHTML,

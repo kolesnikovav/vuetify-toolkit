@@ -52,7 +52,7 @@ export default new Router({
     },
     {
       path: '/tooltipbtn',
-      name: 'vtooltip',
+      name: 'vtooltipbtn',
       component: VTooltipBtn
     }
   ]
