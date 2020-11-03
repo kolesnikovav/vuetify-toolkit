@@ -3,12 +3,15 @@
     <h1>VTooltipBtn</h1>
     <span></span>
     <p>
-      VTooltipBtn is the combined button with icon and hint. This component is designed to simplify template markup
+      VTooltipBtn is the combined button with icon and hint. This component is
+      designed to simplify template markup
     </p>
     <p>Added properties are below</p>
     <v-expansion-panels>
       <v-expansion-panel>
-        <v-expansion-panel-header>Icon and style properties </v-expansion-panel-header>
+        <v-expansion-panel-header
+          >Icon and style properties
+        </v-expansion-panel-header>
         <v-expansion-panel-content>
           <table class="v-card__text v-data-table elevation-1 theme--light">
             <thead>
@@ -79,7 +82,9 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel>
-        <v-expansion-panel-header>Datatable header modifications </v-expansion-panel-header>
+        <v-expansion-panel-header
+          >Datatable header modifications
+        </v-expansion-panel-header>
         <v-expansion-panel-content>
           <p>Original vuetifyjs datatable header object is changed</p>
           <table class="v-card__text v-data-table elevation-1 theme--light">
@@ -102,7 +107,11 @@
                 <td>datatype</td>
                 <td>['number', 'date, 'string']</td>
                 <td>'string'</td>
-                <td>Determines column datatype. If type is 'date' or 'number', then compare for equal than, more than, less than and between to becomes available</td>
+                <td>
+                  Determines column datatype. If type is 'date' or 'number',
+                  then compare for equal than, more than, less than and between
+                  to becomes available
+                </td>
               </tr>
             </tbody>
           </table>
@@ -123,14 +132,18 @@
         <v-tab>Template</v-tab>
         <v-tab>Script</v-tab>
         <v-tab-item>
-          <div class="v-markup v-card v-card--outlined v-sheet theme--light grey darken-4">
+          <div
+            class="v-markup v-card v-card--outlined v-sheet theme--light grey darken-4"
+          >
             <pre class="language-html">
            <code class="language-html code-text">{{sandboxTemplate}}</code>
           </pre>
           </div>
         </v-tab-item>
         <v-tab-item>
-          <div class="v-markup v-card v-card--outlined v-sheet theme--light grey darken-4">
+          <div
+            class="v-markup v-card v-card--outlined v-sheet theme--light grey darken-4"
+          >
             <pre class="language-javascript">
            <code class="language-javascript code-text">{{sandboxCode}}</code>
           </pre>
@@ -145,27 +158,58 @@
           <v-switch v-model="rounded" class="ma-2" label="rounded"></v-switch>
           <v-switch v-model="shaped" class="ma-2" label="shaped"></v-switch>
           <v-switch v-model="disabled" class="ma-2" label="disabled"></v-switch>
-          <v-switch v-model="depressed" class="ma-2" label="depressed"></v-switch>
-          <v-select v-model="iconColor" class="ma-2" label="iconColor" :items = "colors"></v-select>
+          <v-switch
+            v-model="depressed"
+            class="ma-2"
+            label="depressed"
+          ></v-switch>
+          <v-select
+            v-model="iconColor"
+            class="ma-2"
+            label="iconColor"
+            :items="colors"
+          ></v-select>
+          <v-select
+            v-model="currenticon"
+            class="ma-2"
+            label="icon"
+            :items="icons"
+          ></v-select>
+          <v-text-field
+            v-model="btnText"
+            class="ma-2"
+            label="Button text"
+          ></v-text-field>
         </v-row>
-  <v-row
-    align="center"
-    justify="space-around"
-  >
-        <v-tooltip-btn
-        :tile = "tile"
-        :fab = "fab"
-        :rounded = "rounded"
-        :outlined = "outlined"
-        :shaped = "shaped"
-        :disabled = "disabled"
-        :depressed = "depressed"
-        :btnIcon = "btnIcon"
-        :iconColor = "iconColor"
-        :hint = "hint"
-        :btnText = "btnText"
-        ></v-tooltip-btn>
-  </v-row>
+        <v-row justify="space-around">
+          <v-slider
+            v-model="elevation"
+            max="24"
+            min="0"
+            label="elevation"
+          ></v-slider>
+          <v-text-field
+            v-model="hint"
+            class="ma-2"
+            label="Hint text"
+          ></v-text-field>
+        </v-row>
+        <v-row align="center" justify="space-around">
+          <v-tooltip-btn
+            :tile="tile"
+            :fab="fab"
+            :rounded="rounded"
+            :outlined="outlined"
+            :shaped="shaped"
+            :disabled="disabled"
+            :depressed="depressed"
+            :btnIcon="currenticon"
+            :iconColor="iconColor"
+            :hint="hint"
+            :btnText="btnText"
+            :elevation="elevation"
+          ></v-tooltip-btn>
+        </v-row>
       </v-card-text>
     </v-card>
     <span />
@@ -175,21 +219,23 @@
 <script lang="ts">
 import Vue from 'vue'
 
-const sandboxTemplateHTML = '<v-tooltip-btn\n' +
-' :dense = "dense"\n' +
-' :dark = "dark"\n' +
-'</v-tooltip-btn>\n'
+const sandboxTemplateHTML =
+  '<v-tooltip-btn\n' +
+  ' :dense = "dense"\n' +
+  ' :dark = "dark"\n' +
+  '</v-tooltip-btn>\n'
 
-const sandboxCode = 'export default ({\n' +
-'  data: () => ({\n' +
-'    items: desserts, // see items\n' +
-'    dataGridHeaders: dataGridHeaders, // see headers\n' +
-'    multiple: false,\n' +
-'    dense: false,\n' +
-'    dark: false,\n' +
-'    customSlots: false,\n' +
-'  }),\n' +
-'})'
+const sandboxCode =
+  'export default ({\n' +
+  '  data: () => ({\n' +
+  '    items: desserts, // see items\n' +
+  '    dataGridHeaders: dataGridHeaders, // see headers\n' +
+  '    multiple: false,\n' +
+  '    dense: false,\n' +
+  '    dark: false,\n' +
+  '    customSlots: false,\n' +
+  '  }),\n' +
+  '})'
 
 export default Vue.extend({
   data: () => ({
@@ -202,15 +248,16 @@ export default Vue.extend({
     shaped: false,
     disabled: false,
     depressed: false,
-    btnIcon: 'mdi-close',
     iconColor: 'error',
     colors: ['success', 'error', 'primary'],
+    icons: ['', 'mdi-close', 'mdi-check-bold', 'mdi-upload'],
+    currenticon: '',
+    elevation: 4,
     dark: false,
 
     codeSandbox: false,
     sandboxTemplate: sandboxTemplateHTML,
     sandboxCode: sandboxCode
-
   })
 })
 </script>
