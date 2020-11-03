@@ -5,12 +5,12 @@ export interface Command {
   iconColor?: Number|String,
   text?: string,
   hint?: string,
-  target: VueConstructor<Vue>,
+  target?: VueConstructor<Vue>,
   action: Function | String,
   disabled: ()=> boolean | Boolean
 }
 
-export function defaultTreeSelectCommands (component: VueConstructor<Vue>): Command[] {
+export function defaultTreeSelectCommands (component?: VueConstructor<Vue>): Command[] {
   return [
     {
       target: component,

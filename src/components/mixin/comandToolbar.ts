@@ -42,6 +42,10 @@ export default Vue.extend({
     toolbarButtonTextVisible: {
       type: Boolean,
       default: false
+    },
+    toolbarButtonElevation: {
+      type: [Number, String],
+      default: undefined
     }
   },
   computed: {
@@ -72,6 +76,7 @@ export default Vue.extend({
         style: {
           border: '1px solid'
         },
+        slot: 'toolbar',
         props: {
           flat: this.$props.toolbarFlat,
           dense: this.$props.dense

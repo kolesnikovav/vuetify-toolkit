@@ -20,7 +20,6 @@ const defaultComponents = {
   'v-adv-data-table': VAdvDataTable,
   'v-tooltip-btn': VTootipBtn
 }
-console.log(defaultComponents)
 
 function install (v: VueConstructor, args?: VuetifyToolkitUseOptions): VueConstructor<Vue> {
   const components = args ? args.components : defaultComponents

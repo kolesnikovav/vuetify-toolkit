@@ -145,21 +145,16 @@
           </pre>
           </div>
         </v-tab-item>
-        <v-tab-item>
-          <div class="v-markup v-card v-card--outlined v-sheet theme--light grey darken-4">
-            <pre class="language-json">
-           <code class="language-json code-text">{{headers}}</code>
-          </pre>
-          </div>
-        </v-tab-item>
       </v-tabs>
       <v-card-text>
         <v-row justify="space-around">
         </v-row>
-        <v-treeview
+        <v-tree-extended
         :items = "items"
         :toolbarCommands = "toolbarCommandsTreeView"
-        ></v-treeview>
+        >
+        <!-- <template v-slot:toolbar></template> -->
+        </v-tree-extended>
 
       </v-card-text>
     </v-card>
@@ -168,10 +163,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+// eslint-disable-next-line no-unused-vars
+import Vue, { VNode } from 'vue'
 import ComandToolbar from '../components/mixin/comandToolbar'
 import { staticitems } from '../example-data'
 import { defaultTreeSelectCommands } from '../utils/ToolbarCommand'
+import { VTreeview } from 'vuetify/lib'
 
 const sandboxTemplateHTML = '<v-adv-data-table\n' +
 ' :dense = "dense"\n' +
@@ -214,13 +211,27 @@ const sandboxCode = 'export default ({\n' +
 '  }\n' +
 '})'
 
-export default Vue.extend({
+const VTreeViewExtended = VTreeview.extend({
+  name: 'v-tree-extended',
   mixins: [
     ComandToolbar
-  ],
+  ]
+  // render (): VNode {
+  //   return this.$createElement(VTreeview, {
+  //     props: this.$options.props
+  //   }, [
+  //     (this as any).genToolbar()
+  //   ])
+  // }
+})
+
+Vue.component('v-tree-extended', VTreeViewExtended)
+// Vue.use(VTreeViewExtended)
+
+export default Vue.extend({
   data: () => ({
     items: staticitems,
-    toolbarCommandsTreeView: defaultTreeSelectCommands((this as any)),
+    toolbarCommandsTreeView: defaultTreeSelectCommands(),
     codeSandbox: false,
     sandboxTemplate: sandboxTemplateHTML,
     sandboxCode: sandboxCode
