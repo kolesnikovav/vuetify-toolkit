@@ -155,29 +155,12 @@
       </v-tabs>
       <v-card-text>
         <v-row justify="space-around">
-          <v-switch v-model="showSelect" class="ma-2" label="showSelect"></v-switch>
-          <v-switch v-model="singleSelect" class="ma-2" label="singleSelect"></v-switch>
-          <v-switch v-model="dense" class="ma-2" label="dense"></v-switch>
-          <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
-          <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
         </v-row>
-        <v-adv-data-table :items="items" :dark="dark" :headers="headers" headerIcon="mdi-settings"
-        upIcon = "mdi-arrow-expand-up"
-        downIcon = "mdi-arrow-expand-down"
-          headerIconColor="error" :showSelect="showSelect" :singleSelect="singleSelect" :dense="dense"
-          :folder-icon="folderIcon" :folder-open-icon="folderOpenIcon" :item-icon="itemIcon"
-          :folder-icon-color="folderIconColor" :item-icon-color="itemIconColor" :filter-icon="filterIcon"
-          :filter-icon-color="filterIconColor" :filter-active-icon-color="filterActiveIconColor" :items-per-page=5>
-          <template v-if="customSlots" v-slot:header.fat>
-            <v-icon color="red">mdi-cake</v-icon>
-          </template>
-          <template v-if="customSlots" v-slot:item.calories="{ item }">
-            <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip>
-          </template>
-          <template v-if="customSlots" v-slot:item.fat="{ item }">
-            <v-chip :color="getColorFat(item.fat)" dark>{{ item.fat }}</v-chip>
-          </template>
-        </v-adv-data-table>
+        <v-treeview
+        :items = "items"
+        :toolbarCommands = "toolbarCommandsTreeView"
+        ></v-treeview>
+
       </v-card-text>
     </v-card>
     <span />
@@ -186,8 +169,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
-import { dataGridHeaders, desserts } from '../example-data'
+import ComandToolbar from '../components/mixin/comandToolbar'
+import { staticitems } from '../example-data'
+import { defaultTreeSelectCommands } from '../utils/ToolbarCommand'
 
 const sandboxTemplateHTML = '<v-adv-data-table\n' +
 ' :dense = "dense"\n' +
@@ -231,23 +215,12 @@ const sandboxCode = 'export default ({\n' +
 '})'
 
 export default Vue.extend({
+  mixins: [
+    ComandToolbar
+  ],
   data: () => ({
-    items: desserts,
-    headers: dataGridHeaders,
-    showSelect: true,
-    singleSelect: false,
-    dense: false,
-    dark: false,
-    customSlots: false,
-    filterIcon: 'mdi-text-subject',
-    filterIconColor: 'red',
-    filterActiveIconColor: 'green',
-    folderIcon: 'folder',
-    folderOpenIcon: 'folder-open',
-    itemIcon: 'file',
-    itemIconColor: 'cyan',
-    folderIconColor: 'amber',
-
+    items: staticitems,
+    toolbarCommandsTreeView: defaultTreeSelectCommands((this as any)),
     codeSandbox: false,
     sandboxTemplate: sandboxTemplateHTML,
     sandboxCode: sandboxCode
