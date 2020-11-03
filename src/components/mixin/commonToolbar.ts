@@ -2,7 +2,7 @@ import Vue, { VNode } from 'vue'
 import { Themeable, Colorable } from '../../vuetify-import'
 import { VToolbarA, VSpacerA } from '../../shims-vuetify'
 import { Command } from '../../utils/ToolbarCommand'
-import VTootipBtn from '../VTootipBtn/VTootipBtn.vue'
+import VTootipBtn from '../VTootipBtn'
 
 export default Vue.extend({
   mixins: [

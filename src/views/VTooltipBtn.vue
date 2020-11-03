@@ -122,8 +122,6 @@
       <v-tabs v-if="codeSandbox" :dark="dark" right>
         <v-tab>Template</v-tab>
         <v-tab>Script</v-tab>
-        <v-tab>Items</v-tab>
-        <v-tab>Headers</v-tab>
         <v-tab-item>
           <div class="v-markup v-card v-card--outlined v-sheet theme--light grey darken-4">
             <pre class="language-html">
