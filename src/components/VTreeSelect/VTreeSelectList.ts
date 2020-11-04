@@ -1,7 +1,7 @@
 import { VNode, PropType } from 'vue'
 import { mixins, VTreeviewNodeProps, Themeable, Colorable } from '../../vuetify-import'
 import { VListItemA, VListItemContentA, VListItemTitleA } from '../../shims-vuetify'
-import { defaultTreeSelectCommands } from '../../utils/ToolbarCommand'
+import { Command, defaultTreeSelectCommands } from '../../utils/ToolbarCommand'
 import commonSelectorCard from '../mixin/commonSelectorCard'
 
 import VTreeViewSelector from './VTreeViewSelector'
@@ -34,15 +34,6 @@ export default commonSelectorCard.extend({
       type: Function,
       default: undefined
     },
-    useDefaultToolbarCommand: {
-      type: Boolean,
-      default: false
-    },
-    // custom commands
-    toolbarCommands: {
-      type: Array,
-      default: defaultTreeSelectCommands(this as any)
-    },
     ...VTreeviewNodeProps,
     selectionType: {
       type: String as PropType<'leaf' | 'independent'>,
@@ -60,6 +51,9 @@ export default commonSelectorCard.extend({
       return (this as any).$createElement(VListItemA, tile, [
         (this as any).genTileNoDataContent()
       ])
+    },
+    computedToolbarCommands (): Command[] {
+      return this.$props.toolbarCommands.length > 0 ? this.$props.toolbarCommands : defaultTreeSelectCommands(this as any)
     }
   },
   methods: {
@@ -76,6 +70,7 @@ export default commonSelectorCard.extend({
         props: {
           dense: this.$props.dense,
           items: this.items,
+          toolbarCommands: this.computedToolbarCommands,
           // itemDisabled: this.itemDisabled,
           // itemText: this.itemText,
           // itemKey: this.itemKey,
@@ -84,18 +79,18 @@ export default commonSelectorCard.extend({
           selectable: true,
           returnObject: true,
           selectOnly: true,
-          selectedItems: this.selectedItems
+          selectedItems: this.selectedItems,
           // openAll: this.openAll,
           // shaped: this.shaped,
           // rounded: this.rounded,
-          // selectionType: this.selectionType
+          selectionType: this.$props.selectionType
+        },
+        scopedSlots: this.$scopedSlots,
+        on: {
+          input: (e: any[]) => {
+            this.$emit('select', e)
+          }
         }
-        // scopedSlots: this.$scopedSlots,
-        // on: {
-        //   input: (e: any[]) => {
-        //     this.$emit('select', e)
-        //   }
-        // }
       })
     }
   }

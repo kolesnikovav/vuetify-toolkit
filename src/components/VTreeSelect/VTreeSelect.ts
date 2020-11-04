@@ -44,9 +44,9 @@ export default commonSelect.extend({
         shaped: this.$props.shaped,
         rounded: this.$props.rounded,
         openAll: this.$props.openAll,
-        openOnClick: this.$props.openOnClick,
-        useDefaultToolbarCommand: this.$props.useDefaultToolbarCommand,
-        toolbarCommands: this.$props.toolbarCommands
+        openOnClick: this.$props.openOnClick
+        // useDefaultToolbarCommand: this.$props.useDefaultToolbarCommand,
+        // toolbarCommands: this.$props.toolbarCommands
       })
       Object.assign(data.on, {
         select: (e: any[]) => {

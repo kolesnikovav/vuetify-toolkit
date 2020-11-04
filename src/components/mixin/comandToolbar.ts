@@ -1,6 +1,6 @@
 import Vue, { VNode } from 'vue'
 import { Themeable, Colorable } from '../../vuetify-import'
-import { VToolbarA, VSpacerA } from '../../shims-vuetify'
+import { VToolbarA, VToolbarTitleA, VSpacerA } from '../../shims-vuetify'
 import { Command } from '../../utils/ToolbarCommand'
 import VTootipBtn from '../VTootipBtn'
 
@@ -35,6 +35,14 @@ export default Vue.extend({
       type: Boolean,
       default: false
     },
+    toolbarButtonShaped: {
+      type: Boolean,
+      default: false
+    },
+    toolbarButtonFab: {
+      type: Boolean,
+      default: false
+    },
     toolbarButtonTile: {
       type: Boolean,
       default: true
@@ -46,11 +54,18 @@ export default Vue.extend({
     toolbarButtonElevation: {
       type: [Number, String],
       default: undefined
+    },
+    toolbarHeader: {
+      type: String,
+      default: undefined
     }
   },
   computed: {
     tooltipPosition (): string {
       return ['bottom-left', 'bottom-right'].includes(this.$props.toolbarPosition) ? 'bottom' : 'top'
+    },
+    computedToolbarCommands (): Command[] {
+      return this.$props.toolbarCommands
     }
   },
   methods: {
@@ -62,16 +77,28 @@ export default Vue.extend({
           btnText: this.toolbarButtonTextVisible ? v.text : '',
           icon: !!v.icon,
           iconColor: v.iconColor,
-          tooltipPosition: this.tooltipPosition
+          tooltipPosition: this.tooltipPosition,
+          tile: this.toolbarButtonTile,
+          fab: this.toolbarButtonFab,
+          rounded: this.toolbarButtonRounded,
+          shaped: this.toolbarButtonShaped,
+          outlined: this.toolbarButtonOutlined,
+          elevation: this.toolbarButtonElevation
         }
       })
     },
     genToolbar (): VNode {
       const buttons: VNode[] = []
       if (['top-right', 'bottom-right'].includes(this.$props.toolbarPosition)) {
+        if (this.toolbarHeader) buttons.push(this.$createElement(VToolbarTitleA, this.toolbarHeader))
         buttons.push(this.$createElement(VSpacerA))
       }
-      this.$props.toolbarCommands.map((v: Command) => buttons.push(this.genButtonWithTooltip(v)))
+      this.computedToolbarCommands.map((v: Command) => buttons.push(this.genButtonWithTooltip(v)))
+
+      if (this.toolbarHeader && ['top-left', 'bottom-left'].includes(this.$props.toolbarPosition)) {
+        buttons.push(this.$createElement(VSpacerA))
+        buttons.push(this.$createElement(VToolbarTitleA, this.toolbarHeader))
+      }
       return (this as any).$createElement(VToolbarA, {
         style: {
           border: '1px solid'

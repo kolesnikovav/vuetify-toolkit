@@ -2,6 +2,7 @@ import { VNode, VNodeData, PropType } from 'vue'
 import { consoleError } from '../../vuetify-import'
 import { VAutocompleteA, VSelectA, VChipA } from '../../shims-vuetify'
 import DefaultMenuProps from '../../utils/MenuProps'
+import ComandToolbar from './comandToolbar'
 
 export default VAutocompleteA.extend({
   props: {
@@ -15,15 +16,7 @@ export default VAutocompleteA.extend({
       type: [String, Array, Object],
       default: () => DefaultMenuProps
     },
-    toolbarPosition: {
-      type: String as PropType<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'>,
-      default: 'top-left',
-      validator: (v: string) => ['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(v)
-    },
-    toolbarButtonTextVisible: {
-      type: Boolean,
-      default: false
-    }
+    ...(ComandToolbar as any).options.props
   },
   data: () => ({
     selectedItems: [] as any[]
@@ -55,8 +48,15 @@ export default VAutocompleteA.extend({
       const data = (VSelectA as any).options.computed.listData.call(this)
       Object.assign(data.props, {
         toolbarPosition: this.$props.toolbarPosition,
-        toolbarButtonTextVisible: this.$props.toolbarButtonTextVisible
-
+        toolbarButtonTextVisible: this.$props.toolbarButtonTextVisible,
+        toolbarFlat: this.$props.toolbarFlat,
+        toolbarButtonOutlined: this.$props.toolbarButtonOutlined,
+        toolbarButtonRounded: this.$props.toolbarButtonRounded,
+        toolbarButtonShaped: this.$props.toolbarButtonShaped,
+        toolbarButtonFab: this.$props.toolbarButtonFab,
+        toolbarButtonTile: this.$props.toolbarButtonTile,
+        toolbarButtonElevation: this.$props.toolbarButtonElevation,
+        toolbarHeader: this.$props.toolbarHeader
       })
       return data
     },

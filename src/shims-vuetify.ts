@@ -31,6 +31,7 @@ import {
   VCardActions,
   VTreeview,
   VToolbar,
+  VToolbarTitle,
   VTooltip,
   VRow,
   VCol,
@@ -73,6 +74,7 @@ let VCardC
 let VCardActionsC
 let VTreeviewC
 let VToolbarC
+let VToolbarTitleC
 let VTooltipC
 let VRowC
 let VColC
@@ -110,6 +112,7 @@ try {
   VCardActionsC = VCardActions
   VTreeviewC = VTreeview
   VToolbarC = VToolbar
+  VToolbarTitleC = VToolbarTitle
   VTooltipC = VTooltip
   VRowC = VRow
   VColC = VCol
@@ -146,6 +149,7 @@ try {
   VCardActionsC = undefined
   VTreeviewC = undefined
   VToolbarC = undefined
+  VToolbarTitleC = undefined
   VTooltipC = undefined
   VRowC = undefined
   VColC = undefined
@@ -183,6 +187,7 @@ export const VCardA = VueComponent(VCardC, 'VCard')
 export const VCardActionsA = VueComponent(VCardActionsC, 'VCardActions')
 export const VTreeviewA = VueComponent(VTreeviewC, 'VTreeview')
 export const VToolbarA = VueComponent(VToolbarC, 'VToolbar')
+export const VToolbarTitleA = VueComponent(VToolbarTitleC, 'VToolbarTitle')
 export const VTooltipA = VueComponent(VTooltipC, 'VTooltip')
 export const VRowA = VueComponent(VRowC, 'VRow')
 export const VColA = VueComponent(VColC, 'VCol')

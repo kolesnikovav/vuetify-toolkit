@@ -113,6 +113,7 @@
           :toolbarPosition = "toolbarPosition"
           :toolbarFlat = "toolbarFlat"
           :toolbarButtonTextVisible = "toolbarButtonTextVisible"
+          toolbarHeader = "Press something"
         >
           <template v-if="customSlots" v-slot:prependTree="{ item, open }">
             <v-icon v-if = "item.children">{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
