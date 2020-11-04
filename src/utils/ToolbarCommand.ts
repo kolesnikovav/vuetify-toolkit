@@ -48,7 +48,7 @@ export function defaultTreeSelectCommands (component?: VueConstructor<Vue>): Com
     },
     {
       target: component,
-      action: 'SelectAll',
+      action: 'selectAll',
       text: 'Select',
       hint: 'Select all',
       icon: 'mdi-select-all',
@@ -73,7 +73,7 @@ export function defaultTreeSelectCommands (component?: VueConstructor<Vue>): Com
   ]
 }
 
-export function defaultDataGridSelectCommands (component: VueConstructor<Vue>): Command[] {
+export function defaultDataGridSelectCommands (component?: VueConstructor<Vue>): Command[] {
   return [
     {
       target: component,
@@ -103,7 +103,7 @@ export function defaultDataGridSelectCommands (component: VueConstructor<Vue>): 
   ]
 }
 
-export function defaultDateTimeSelectCommands (component: VueConstructor<Vue>): Command[] {
+export function defaultDateTimeSelectCommands (component?: VueConstructor<Vue>): Command[] {
   return [
     {
       target: component,

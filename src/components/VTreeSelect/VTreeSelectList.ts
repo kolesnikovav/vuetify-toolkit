@@ -1,6 +1,6 @@
 import { VNode, PropType } from 'vue'
-import { mixins, VTreeviewNodeProps, Themeable, Colorable } from '../../vuetify-import'
-import { VListItemA, VListItemContentA, VListItemTitleA } from '../../shims-vuetify'
+import { VTreeviewNodeProps } from '../../vuetify-import'
+import { VListItemA, VListItemContentA, VListItemTitleA, VTreeviewA } from '../../shims-vuetify'
 import { Command, defaultTreeSelectCommands } from '../../utils/ToolbarCommand'
 import commonSelectorCard from '../mixin/commonSelectorCard'
 
@@ -91,6 +91,11 @@ export default commonSelectorCard.extend({
             this.$emit('select', e)
           }
         }
+      })
+    },
+    selectAll () {
+      this.$nextTick(() => {
+        (VTreeviewA as any).options.methods.updateAll.call(this, false)
       })
     }
   }

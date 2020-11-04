@@ -27,11 +27,11 @@ export default VTreeviewA.extend({
       })
     },
     selectAll () {
-      this.selectedCache.clear()
-      Object.keys(this.$data.nodes).forEach(key => {
-        this.$data.nodes[key].isSelected = true
-        this.$data.nodes[key].isIndeterminate = false
-      })
+      // this.selectedCache.clear()
+      // Object.keys(this.$data.nodes).forEach(key => {
+      //   this.$data.nodes[key].isSelected = true
+      //   this.$data.nodes[key].isIndeterminate = false
+      // })
     }
   }
 })

@@ -18,6 +18,7 @@
           :to="to"
           :href="href"
           :elevation="elevation"
+          @click="BtnClick"
         >
           <div v-if="hasIcon">
             <v-icon :color="iconColor">{{ btnIcon }}</v-icon>
@@ -44,6 +45,7 @@
       :to="to"
       :href="href"
       :elevation="elevation"
+      @click="BtnClick"
     >
       <div v-if="hasIcon">
         <v-icon :color="iconColor">{{ btnIcon }}</v-icon>
@@ -94,6 +96,10 @@ export default Vue.extend({
       type: String,
       default: 'top',
       validator: (v: string) => ['top', 'bottom'].includes(v)
+    },
+    action: {
+      type: [String],
+      default: undefined
     }
   },
   computed: {
@@ -111,6 +117,11 @@ export default Vue.extend({
     },
     hasTooltip (): boolean {
       return this.hint.length > 0
+    }
+  },
+  methods: {
+    BtnClick () {
+      this.$emit('click', this.action)
     }
   }
 })

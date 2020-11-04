@@ -1,4 +1,4 @@
-import Vue, { VNode } from 'vue'
+import Vue, { VNode, VueConstructor } from 'vue'
 import { Themeable, Colorable } from '../../vuetify-import'
 import { VToolbarA, VToolbarTitleA, VSpacerA } from '../../shims-vuetify'
 import { Command } from '../../utils/ToolbarCommand'
@@ -83,7 +83,18 @@ export default Vue.extend({
           rounded: this.toolbarButtonRounded,
           shaped: this.toolbarButtonShaped,
           outlined: this.toolbarButtonOutlined,
-          elevation: this.toolbarButtonElevation
+          elevation: this.toolbarButtonElevation,
+          action: v.action
+        },
+        on: {
+          click: (e: string | Function) => {
+            if (v.action && v.action instanceof Function) {
+              v.action.call(v.target)
+            } else if (v.action && typeof v.action === 'string') {
+              const methodName = v.action;
+              (v.target as any)[methodName].call(v.target)
+            }
+          }
         }
       })
     },
