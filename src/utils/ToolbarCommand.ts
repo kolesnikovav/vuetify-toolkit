@@ -48,7 +48,7 @@ export function defaultTreeSelectCommands (component?: VueConstructor<Vue>): Com
     },
     {
       target: component,
-      action: 'selectAll',
+      action: 'SelectAll',
       text: 'Select',
       hint: 'Select all',
       icon: 'mdi-select-all',

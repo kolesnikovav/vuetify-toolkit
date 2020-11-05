@@ -19,7 +19,8 @@ export default VAutocompleteA.extend({
     ...(ComandToolbar as any).options.props
   },
   data: () => ({
-    selectedItems: [] as any[]
+    selectedItems: [] as any[],
+    currentItem: null as any
   }),
   computed: {
     classes (): Object {

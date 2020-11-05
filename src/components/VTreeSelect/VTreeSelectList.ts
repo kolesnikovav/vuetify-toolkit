@@ -1,39 +1,12 @@
 import { VNode, PropType } from 'vue'
 import { VTreeviewNodeProps } from '../../vuetify-import'
-import { VListItemA, VListItemContentA, VListItemTitleA, VTreeviewA } from '../../shims-vuetify'
+import { VListItemA, VTreeviewA } from '../../shims-vuetify'
 import { Command, defaultTreeSelectCommands } from '../../utils/ToolbarCommand'
 import commonSelectorCard from '../mixin/commonSelectorCard'
-
-import VTreeViewSelector from './VTreeViewSelector'
 
 export default commonSelectorCard.extend({
   name: 'v-tree-select-list',
   props: {
-    selectedItems: {
-      type: Array,
-      default: () => ([])
-    },
-    noDataText: String,
-    dense: Boolean,
-    multiple: Boolean,
-    items: {
-      type: Array,
-      default: () => ([])
-    },
-    openAll: Boolean,
-    returnObject: {
-      type: Boolean,
-      default: false // TODO: Should be true in next major
-    },
-    value: {
-      type: Array,
-      default: () => ([])
-    },
-    search: String,
-    filter: {
-      type: Function,
-      default: undefined
-    },
     ...VTreeviewNodeProps,
     selectionType: {
       type: String as PropType<'leaf' | 'independent'>,
@@ -57,21 +30,15 @@ export default commonSelectorCard.extend({
     }
   },
   methods: {
-    genTileNoDataContent (): VNode {
-      const innerHTML = (this as any).noDataText
-      return (this as any).$createElement(VListItemContentA,
-        [(this as any).$createElement(VListItemTitleA, {
-          domProps: { innerHTML }
-        })]
-      )
-    },
     genSelectList (): VNode {
-      return (this as any).$createElement(VTreeViewSelector, {
+      return (this as any).$createElement(VTreeviewA, {
+        ref: 'selectList',
         props: {
+          activatable: true,
           dense: this.$props.dense,
           items: this.items,
           toolbarCommands: this.computedToolbarCommands,
-          // itemDisabled: this.itemDisabled,
+          itemDisabled: this.$props.itemDisabled,
           // itemText: this.itemText,
           // itemKey: this.itemKey,
           // itemChildren: this.itemChildren,
@@ -93,10 +60,25 @@ export default commonSelectorCard.extend({
         }
       })
     },
-    selectAll () {
-      this.$nextTick(() => {
-        (VTreeviewA as any).options.methods.updateAll.call(this, false)
-      })
+    ExpandAll () {
+      console.log(this.$refs.selectList);
+      (this.$refs.selectList as any).updateAll(true)
+    },
+    CollapseAll () {
+      (this.$refs.selectList as any).updateAll(false)
+    },
+    SelectAll () {
+      // (this.$refs.selectList as any).$data.nodes
+      // array.forEach(element => {
+      // });
+      // console.log((this.$refs.selectList as any).$data.nodes);
+      // (this.$refs.selectList as any).$data.nodes.map((v: any) => {
+      //   console.log(v)
+      //   v.isSelected = true
+      // })
+    },
+    UnselectAll () {
+      (this.$refs.selectList as any).$data.nodes.map((v: any) => { v.isSelected = false })
     }
   }
 })

@@ -21,7 +21,7 @@ export default commonSelect.extend({
       Object.assign(data.props, { ...VTreeviewNodeProps })
       /* to remove console warns and type conflicts */
       Object.assign(data.props, {
-        activatable: this.$props.activatable,
+        activatable: true,
         activeClass: this.$props.activeClass,
         color: this.$props.color,
         chips: this.$props.chips,
