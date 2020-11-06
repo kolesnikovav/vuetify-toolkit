@@ -1,51 +1,12 @@
 import { VNode, PropType } from 'vue'
-import { mixins, VTreeviewNodeProps, Themeable, Colorable } from '../../vuetify-import'
-import { VListItemA, VListItemContentA, VListItemTitleA } from '../../shims-vuetify'
+import { VTreeviewNodeProps } from '../../vuetify-import'
+import { VTreeviewA } from '../../shims-vuetify'
+import { Command, defaultTreeSelectCommands } from '../../utils/ToolbarCommand'
+import commonSelectorCard from '../mixin/commonSelectorCard'
 
-import VTreeViewSelector from './VTreeViewSelector'
-
-const mixinsComponent = mixins as any
-
-export default mixinsComponent(
-  Themeable, Colorable
-  /* @vue/component */
-).extend({
+export default commonSelectorCard.extend({
   name: 'v-tree-select-list',
   props: {
-    selectedItems: {
-      type: Array,
-      default: () => ([])
-    },
-    noDataText: String,
-    dense: Boolean,
-    multiple: Boolean,
-    items: {
-      type: Array,
-      default: () => ([])
-    },
-    openAll: Boolean,
-    returnObject: {
-      type: Boolean,
-      default: false // TODO: Should be true in next major
-    },
-    value: {
-      type: Array,
-      default: () => ([])
-    },
-    search: String,
-    filter: {
-      type: Function,
-      default: undefined
-    },
-    useDefaultToolbarCommand: {
-      type: Boolean,
-      default: false
-    },
-    // custom commands
-    toolbarCommands: {
-      type: Array,
-      default: () => []
-    },
     ...VTreeviewNodeProps,
     selectionType: {
       type: String as PropType<'leaf' | 'independent'>,
@@ -54,58 +15,32 @@ export default mixinsComponent(
     }
   },
   computed: {
-    staticNoDataTile (): VNode {
-      const tile = {
-        on: {
-          mousedown: (e: any) => e.preventDefault() // Prevent onBlur from being called
-        }
-      }
-      return (this as any).$createElement(VListItemA, tile, [
-        (this as any).genTileNoDataContent()
-      ])
+    computedToolbarCommands (): Command[] {
+      return this.$props.toolbarCommands.length > 0 ? this.$props.toolbarCommands : defaultTreeSelectCommands(this as any)
     }
   },
   methods: {
-    genTileNoDataContent (): VNode {
-      const innerHTML = (this as any).noDataText
-      return (this as any).$createElement(VListItemContentA,
-        [(this as any).$createElement(VListItemTitleA, {
-          domProps: { innerHTML }
-        })]
-      )
-    }
-  },
-  render (): VNode {
-    const children = []
-    if (!this.items || !Array.isArray(this.items) || this.items.length < 1) {
-      children.push(this.$slots['no-data'] || this.staticNoDataTile)
-    }
-    this.$slots['prepend-item'] && children.unshift(this.$slots['prepend-item'])
-    const childrenAppend = []
-    this.$slots['append-item'] && childrenAppend.push(this.$slots['append-item'])
-
-    return this.$createElement('div', {
-      staticClass: 'v-select-list v-card',
-      class: this.themeClasses
-    }, [
-      children,
-      this.$createElement(VTreeViewSelector, {
+    genSelectList (): VNode {
+      return (this as any).$createElement(VTreeviewA, {
+        ref: 'selectList',
         props: {
-          dense: this.dense,
+          activatable: true,
+          dense: this.$props.dense,
           items: this.items,
-          itemDisabled: this.itemDisabled,
-          itemText: this.itemText,
-          itemKey: this.itemKey,
-          itemChildren: this.itemChildren,
-          loadChildren: this.loadChildren,
+          toolbarCommands: this.computedToolbarCommands,
+          itemDisabled: this.$props.itemDisabled,
+          // itemText: this.itemText,
+          // itemKey: this.itemKey,
+          // itemChildren: this.itemChildren,
+          // loadChildren: this.loadChildren,
           selectable: true,
           returnObject: true,
           selectOnly: true,
           selectedItems: this.selectedItems,
-          openAll: this.openAll,
-          shaped: this.shaped,
-          rounded: this.rounded,
-          selectionType: this.selectionType
+          // openAll: this.openAll,
+          // shaped: this.shaped,
+          // rounded: this.rounded,
+          selectionType: this.$props.selectionType
         },
         scopedSlots: this.$scopedSlots,
         on: {
@@ -113,7 +48,26 @@ export default mixinsComponent(
             this.$emit('select', e)
           }
         }
-      }), childrenAppend
-    ])
+      })
+    },
+    ExpandAll () {
+      (this.$refs.selectList as any).updateAll(true)
+    },
+    CollapseAll () {
+      (this.$refs.selectList as any).updateAll(false)
+    },
+    SelectAll () {
+      // (this.$refs.selectList as any).$data.nodes
+      // array.forEach(element => {
+      // });
+      // console.log((this.$refs.selectList as any).$data.nodes);
+      // (this.$refs.selectList as any).$data.nodes.map((v: any) => {
+      //   console.log(v)
+      //   v.isSelected = true
+      // })
+    },
+    UnselectAll () {
+      (this.$refs.selectList as any).$data.nodes.map((v: any) => { v.isSelected = false })
+    }
   }
 })

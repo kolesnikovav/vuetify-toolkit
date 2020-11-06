@@ -59,13 +59,15 @@
 export default {
   data: () => ({
     htmlDefault:
-      '<template>\n' +
-      '  <v-app>\n    <v-tree-select>\n    </v-tree-select>' +
-      '\n    <v-cascader>\n    </v-cascader>' +
-      '\n    <v-data-grid-select>\n    </v-data-grid-select>' +
-      '\n    <v-md-view>\n    </v-md-view>' +
-      '\n  </v-app>\n' +
-      '</template>'
+      `<template>
+        <v-app>
+         <v-tree-select>
+         </v-tree-select>
+         <v-cascader></v-cascader>
+         <v-data-grid-select> </v-data-grid-select>
+         <v-md-view> </v-md-view>
+         </v-app>
+      </template>`
   })
 }
 </script>

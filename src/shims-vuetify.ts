@@ -5,6 +5,7 @@ import {
   VDivider,
   VBtn,
   VCheckbox,
+  VChip,
   VExpansionPanels,
   VExpansionPanel,
   VExpansionPanelHeader,
@@ -30,6 +31,7 @@ import {
   VCardActions,
   VTreeview,
   VToolbar,
+  VToolbarTitle,
   VTooltip,
   VRow,
   VCol,
@@ -46,6 +48,7 @@ let VAutocompleteC
 let VDividerC
 let VBtnC
 let VCheckboxC
+let VChipC
 let VExpansionPanelsC
 let VExpansionPanelC
 let VExpansionPanelHeaderC
@@ -71,6 +74,7 @@ let VCardC
 let VCardActionsC
 let VTreeviewC
 let VToolbarC
+let VToolbarTitleC
 let VTooltipC
 let VRowC
 let VColC
@@ -82,6 +86,7 @@ try {
   VDividerC = VDivider
   VBtnC = VBtn
   VCheckboxC = VCheckbox
+  VChipC = VChip
   VExpansionPanelsC = VExpansionPanels
   VExpansionPanelC = VExpansionPanel
   VExpansionPanelHeaderC = VExpansionPanelHeader
@@ -107,6 +112,7 @@ try {
   VCardActionsC = VCardActions
   VTreeviewC = VTreeview
   VToolbarC = VToolbar
+  VToolbarTitleC = VToolbarTitle
   VTooltipC = VTooltip
   VRowC = VRow
   VColC = VCol
@@ -117,6 +123,7 @@ try {
   VDividerC = undefined
   VBtnC = undefined
   VCheckboxC = undefined
+  VChipC = undefined
   VExpansionPanelsC = undefined
   VExpansionPanelC = undefined
   VExpansionPanelHeaderC = undefined
@@ -142,6 +149,7 @@ try {
   VCardActionsC = undefined
   VTreeviewC = undefined
   VToolbarC = undefined
+  VToolbarTitleC = undefined
   VTooltipC = undefined
   VRowC = undefined
   VColC = undefined
@@ -153,6 +161,7 @@ export const VAutocompleteA = VueComponent(VAutocompleteC, 'VAutocomplete')
 export const VDividerA = VueComponent(VDividerC, 'VDivider')
 export const VBtnA = VueComponent(VBtnC, 'VBtn')
 export const VCheckboxA = VueComponent(VCheckboxC, 'VCheckbox')
+export const VChipA = VueComponent(VChipC, 'VChip')
 export const VExpansionPanelsA = VueComponent(VExpansionPanelsC, 'VExpansionPanels')
 export const VExpansionPanelA = VueComponent(VExpansionPanelC, 'VExpansionPanel')
 export const VExpansionPanelHeaderA = VueComponent(VExpansionPanelHeaderC, 'VExpansionPanelHeader')
@@ -178,6 +187,7 @@ export const VCardA = VueComponent(VCardC, 'VCard')
 export const VCardActionsA = VueComponent(VCardActionsC, 'VCardActions')
 export const VTreeviewA = VueComponent(VTreeviewC, 'VTreeview')
 export const VToolbarA = VueComponent(VToolbarC, 'VToolbar')
+export const VToolbarTitleA = VueComponent(VToolbarTitleC, 'VToolbarTitle')
 export const VTooltipA = VueComponent(VTooltipC, 'VTooltip')
 export const VRowA = VueComponent(VRowC, 'VRow')
 export const VColA = VueComponent(VColC, 'VCol')
