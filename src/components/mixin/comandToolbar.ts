@@ -1,4 +1,4 @@
-import Vue, { VNode, VueConstructor } from 'vue'
+import Vue, { VNode } from 'vue'
 import { Themeable, Colorable } from '../../vuetify-import'
 import { VToolbarA, VToolbarTitleA, VSpacerA } from '../../shims-vuetify'
 import { Command } from '../../utils/ToolbarCommand'
@@ -9,7 +9,7 @@ export default Vue.extend({
     Themeable, Colorable
   ],
   props: {
-    useDefaultToolbarCommand: {
+    useToolbar: {
       type: Boolean,
       default: false
     },
@@ -84,7 +84,8 @@ export default Vue.extend({
           shaped: this.toolbarButtonShaped,
           outlined: this.toolbarButtonOutlined,
           elevation: this.toolbarButtonElevation,
-          action: v.action
+          action: v.action,
+          disabled: v.disabled()
         },
         on: {
           click: (e: string | Function) => {

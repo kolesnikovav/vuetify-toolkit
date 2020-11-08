@@ -58,7 +58,7 @@ export function defaultTreeSelectCommands (component?: VueConstructor<Vue>): Com
       text: 'Select',
       hint: 'Select all',
       icon: 'mdi-select-all',
-      disabled: () => false
+      disabled: () => true
     },
     {
       target: component,
@@ -66,7 +66,7 @@ export function defaultTreeSelectCommands (component?: VueConstructor<Vue>): Com
       text: 'Invert',
       hint: 'Invert selection',
       icon: 'mdi-select-inverse',
-      disabled: () => false
+      disabled: () => true
     },
     {
       target: component,
@@ -74,7 +74,7 @@ export function defaultTreeSelectCommands (component?: VueConstructor<Vue>): Com
       text: 'Unselect',
       hint: 'Unselect all',
       icon: 'mdi-select-off',
-      disabled: () => false
+      disabled: () => true
     }
   ]
 }

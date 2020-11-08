@@ -1,4 +1,4 @@
-import { VNode, VNodeData, PropType } from 'vue'
+import { VNode } from 'vue'
 import { consoleError } from '../../vuetify-import'
 import { VAutocompleteA, VSelectA, VChipA } from '../../shims-vuetify'
 import DefaultMenuProps from '../../utils/MenuProps'

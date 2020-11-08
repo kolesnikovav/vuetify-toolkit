@@ -57,17 +57,19 @@ export default commonSelectorCard.extend({
       (this.$refs.selectList as any).updateAll(false)
     },
     SelectAll () {
-      // (this.$refs.selectList as any).$data.nodes
-      // array.forEach(element => {
-      // });
-      // console.log((this.$refs.selectList as any).$data.nodes);
-      // (this.$refs.selectList as any).$data.nodes.map((v: any) => {
-      //   console.log(v)
-      //   v.isSelected = true
-      // })
+      for (var node in (this.$refs.selectList as any).nodes) {
+        (this.$refs.selectList as any).nodes[node].isSelected = true
+      }
     },
     UnselectAll () {
-      (this.$refs.selectList as any).$data.nodes.map((v: any) => { v.isSelected = false })
+      for (var node in (this.$refs.selectList as any).nodes) {
+        (this.$refs.selectList as any).nodes[node].isSelected = false
+      }
+    },
+    InvertSelection () {
+      for (var node in (this.$refs.selectList as any).nodes) {
+        (this.$refs.selectList as any).nodes[node].isSelected = !(this.$refs.selectList as any).nodes[node].isSelected
+      }
     }
   }
 })

@@ -138,34 +138,35 @@
 import Vue from 'vue'
 import { staticitems } from '../example-data'
 
-const sandboxTemplateHTML = '<v-tree-select\n' +
-          '  :autocomplete="autocomplete"\n' +
-          '  :chips="chips"\n' +
-          '  :dense="dense"\n' +
-          '  :multiple="multiple"\n' +
-          '  :items="items"\n' +
-          '  :clearable="clearable"\n' +
-          '  :dark="dark"\n' +
-          '>\n' +
-          '<template v-if="customSlots" v-slot:prependTree="{ item, open }">\n' +
-          '  <v-icon v-if = "item.children">{{ open ? "mdi-folder-open" : "mdi-folder" }}</v-icon>\n' +
-          '  <v-icon v-else>mdi-file</v-icon>\n' +
-          '</template>\n' +
-          '</v-tree-select>'
+const sandboxTemplateHTML =
+`<v-tree-select
+:autocomplete="autocomplete"
+  :chips="chips"
+  :dense="dense"
+  :multiple="multiple"
+  :items="items"
+  :clearable="clearable"
+  :dark="dark"
+>
+<template v-if="customSlots" v-slot:prependTree="{ item, open }">
+  <v-icon v-if = "item.children">{{ open ? "mdi-folder-open" : "mdi-folder" }}</v-icon>
+  <v-icon v-else>mdi-file</v-icon>
+</template>
+</v-tree-select>`
 
-const sandboxCode = '\n' +
-'export default ({\n' +
-'  data: () => ({\n' +
-'    items: staticitems, // see data source \n' +
-'    chips: false,\n' +
-'    multiple: false,\n' +
-'    dense: false,\n' +
-'    clearable: false,\n' +
-'    dark: false,\n' +
-'    autocomplete: false,\n' +
-'    customSlots: false\n' +
-'  })\n' +
-'})\n'
+const sandboxCode =
+`export default ({
+  data: () => ({
+    items: staticitems, // see data source
+    chips: false,
+    multiple: false,
+    dense: false,
+    clearable: false,
+    dark: false,
+    autocomplete: false,
+    customSlots: false
+  })
+})`
 
 export default Vue.extend({
   data: () => ({
