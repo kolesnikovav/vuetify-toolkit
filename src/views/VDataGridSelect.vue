@@ -114,54 +114,56 @@
 import Vue from 'vue'
 import { dataGridHeaders, desserts } from '../example-data'
 
-const sandboxTemplate = '<v-data-grid-select\n' +
-' :autocomplete = "autocomplete"\n' +
-' :chips = "chips"\n' +
-' :dense = "dense"\n' +
-' :multiple = "multiple"\n' +
-' :items="items"\n' +
-' :clearable = "clearable"\n' +
-' :headers="dataGridHeaders"\n' +
-' item-key = "name"\n' +
-' item-text = "name"\n' +
-' :dark = "dark"\n' +
-'          >\n' +
-'          <template v-if="customSlots" v-slot:headerTable.fat="{ header }">\n' +
-'            <v-icon color ="red">mdi-cake</v-icon>\n' +
-'          </template>\n' +
-'          <template v-if="customSlots" v-slot:itemTable.calories="{ item }">\n' +
-'            <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip>\n' +
-'          </template>\n' +
-'          <template v-if="customSlots" v-slot:itemTable.fat="{ item }">\n' +
-'            <v-chip :color="getColorFat(item.fat)" dark>{{ item.fat }}</v-chip>\n' +
-'          </template>\n' +
-'</v-data-grid-select>\n'
+const sandboxTemplate =
+`<v-data-grid-select
+ :autocomplete = "autocomplete"
+ :chips = "chips"
+ :dense = "dense"
+ :multiple = "multiple"
+ :items="items"
+ :clearable = "clearable"
+ :headers="dataGridHeaders"
+ item-key = "name"
+ item-text = "name"
+ :dark = "dark"
+          >
+          <template v-if="customSlots" v-slot:headerTable.fat="{ header }">
+            <v-icon color ="red">mdi-cake</v-icon>
+          </template>
+          <template v-if="customSlots" v-slot:itemTable.calories="{ item }">
+            <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip>
+          </template>
+          <template v-if="customSlots" v-slot:itemTable.fat="{ item }">
+            <v-chip :color="getColorFat(item.fat)" dark>{{ item.fat }}</v-chip>
+          </template>
+</v-data-grid-select>`
 
-const sandboxCode = 'export default ({\n' +
-'  data: () => ({\n' +
-'    items: desserts, // see items\n' +
-'    dataGridHeaders: dataGridHeaders, // see headers\n' +
-'    chips: false,\n' +
-'    multiple: false,\n' +
-'    dense: false,\n' +
-'    clearable: false,\n' +
-'    dark: false,\n' +
-'    autocomplete: false,\n' +
-'    customSlots: false,\n' +
-'  }),\n' +
-'  methods: {\n' +
-'    getColor (calories) {\n' +
-'      if (calories > 400) return "red"\n' +
-'      else if (calories > 200) return "orange"\n' +
-'      else return "green"\n' +
-'    },\n' +
-'    getColorFat (fat: any) {\n' +
-'      if (fat > 20) return "red"\n' +
-'      else if (fat > 10) return "orange"\n' +
-'      else return "green"\n' +
-'    }\n' +
-'  }\n' +
-'})'
+const sandboxCode =
+`export default ({
+  data: () => ({
+    items: desserts, // see items
+    dataGridHeaders: dataGridHeaders, // see headers
+    chips: false,
+    multiple: false,
+    dense: false,
+    clearable: false,
+    dark: false,
+    autocomplete: false,
+    customSlots: false,
+  }),
+  methods: {
+    getColor (calories) {
+      if (calories > 400) return "red"
+      else if (calories > 200) return "orange"
+      else return "green"
+    },
+    getColorFat (fat: any) {
+      if (fat > 20) return "red"
+      else if (fat > 10) return "orange"
+      else return "green"
+    }
+  }
+})`
 
 export default Vue.extend({
   data: () => ({

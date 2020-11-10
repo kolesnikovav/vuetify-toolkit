@@ -154,42 +154,43 @@ import {
   mdvHeaders
 } from '../example-data'
 
-const sandboxTemplateHTML = '<v-md-view\n' +
-'          :items="items"\n' +
-'          :dark="dark"\n' +
-'          :headers="mdvHeaders"\n' +
-'          :selectable="selectable"\n' +
-'          :multiple="multiple"\n' +
-'          :dense="dense"\n' +
-'          :hierarchy = "hierarchy"\n' +
-'          :items-per-page = 5\n' +
-'          header-icon = "mdi-settings"' +
-'          upIcon = "mdi-arrow-expand-up"' +
-'          downIcon = "mdi-arrow-expand-down"' +
-'          filterIcon = "mdi-text-subject"' +
-'          filterActiveIconColor = "red"' +
-'        >\n' +
-'          <template v-if="customSlots" v-slot:prependTree="{ item, open }">\n' +
-'            <v-icon >{{ open ? "mdi-folder-open" : "mdi-folder" }}</v-icon>\n' +
-'          </template>\n' +
-'          <template v-if="customSlots" v-slot:itemTable.data-table-select="{ isSelected, select }">\n' +
-'            <v-simple-checkbox color="green" :value="isSelected" @input="select($event)"></v-simple-checkbox>\n' +
-'          </template>\n' +
-'</v-md-view>'
+const sandboxTemplateHTML =
+`<v-md-view
+          :items="items"
+          :dark="dark"
+          :headers="mdvHeaders"
+          :selectable="selectable"
+          :multiple="multiple"
+          :dense="dense"
+          :hierarchy = "hierarchy"
+          :items-per-page = 5
+          header-icon = "mdi-settings"
+          upIcon = "mdi-arrow-expand-up"
+          downIcon = "mdi-arrow-expand-down"
+          filterIcon = "mdi-text-subject"
+          filterActiveIconColor = "red"
+        >
+          <template v-if="customSlots" v-slot:prependTree="{ item, open }">
+            <v-icon >{{ open ? "mdi-folder-open" : "mdi-folder" }}</v-icon>
+          </template>
+          <template v-if="customSlots" v-slot:itemTable.data-table-select="{ isSelected, select }">
+            <v-simple-checkbox color="green" :value="isSelected" @input="select($event)"></v-simple-checkbox>
+          </template>
+</v-md-view>`
 
-const sandboxCode = '\n' +
-'export default ({\n' +
-'  data: () => ({\n' +
-'    items: staticitems, // see items\n' +
-'    mdvHeaders: mdvHeaders, // see headers\n' +
-'    selectable: true,\n' +
-'    multiple: false,\n' +
-'    dense: false,\n' +
-'    dark: false,\n' +
-'    customSlots: false,\n' +
-'    hierarchy: false\n' +
-'  })\n' +
-'})\n'
+const sandboxCode =
+`export default ({
+  data: () => ({
+    items: staticitems, // see items
+    mdvHeaders: mdvHeaders, // see headers
+    selectable: true,
+    multiple: false,
+    dense: false,
+    dark: false,
+    customSlots: false,
+    hierarchy: false
+  })
+})`
 
 export default Vue.extend({
   data: () => ({

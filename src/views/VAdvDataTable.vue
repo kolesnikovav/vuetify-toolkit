@@ -192,46 +192,48 @@ import Vue from 'vue'
 
 import { dataGridHeaders, desserts } from '../example-data'
 
-const sandboxTemplateHTML = '<v-adv-data-table\n' +
-' :dense = "dense"\n' +
-' :showSelect = "showSelect"\n' +
-' :items="items"\n' +
-' :headers="dataGridHeaders"\n' +
-' :dark = "dark"\n' +
-'          >\n' +
-'          <template v-if="customSlots" v-slot:header.fat="{ header }">\n' +
-'            <v-icon color ="red">mdi-cake</v-icon>\n' +
-'          </template>\n' +
-'          <template v-if="customSlots" v-slot:item.calories="{ item }">\n' +
-'            <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip>\n' +
-'          </template>\n' +
-'          <template v-if="customSlots" v-slot:item.fat="{ item }">\n' +
-'            <v-chip :color="getColorFat(item.fat)" dark>{{ item.fat }}</v-chip>\n' +
-'          </template>\n' +
-'</v-adv-data-table>\n'
+const sandboxTemplateHTML =
+`<v-adv-data-table
+ :dense = "dense"
+ :showSelect = "showSelect"
+ :items="items"
+ :headers="dataGridHeaders"
+ :dark = "dark"
+          >
+          <template v-if="customSlots" v-slot:header.fat="{ header }">
+            <v-icon color ="red">mdi-cake</v-icon>
+          </template>
+          <template v-if="customSlots" v-slot:item.calories="{ item }">
+            <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip>
+          </template>
+          <template v-if="customSlots" v-slot:item.fat="{ item }">
+            <v-chip :color="getColorFat(item.fat)" dark>{{ item.fat }}</v-chip>
+          </template>
+</v-adv-data-table>`
 
-const sandboxCode = 'export default ({\n' +
-'  data: () => ({\n' +
-'    items: desserts, // see items\n' +
-'    dataGridHeaders: dataGridHeaders, // see headers\n' +
-'    multiple: false,\n' +
-'    dense: false,\n' +
-'    dark: false,\n' +
-'    customSlots: false,\n' +
-'  }),\n' +
-'  methods: {\n' +
-'    getColor (calories) {\n' +
-'      if (calories > 400) return "red"\n' +
-'      else if (calories > 200) return "orange"\n' +
-'      else return "green"\n' +
-'    },\n' +
-'    getColorFat (fat: any) {\n' +
-'      if (fat > 20) return "red"\n' +
-'      else if (fat > 10) return "orange"\n' +
-'      else return "green"\n' +
-'    }\n' +
-'  }\n' +
-'})'
+const sandboxCode =
+`export default ({
+  data: () => ({
+    items: desserts, // see items
+    dataGridHeaders: dataGridHeaders, // see headers
+    multiple: false,
+    dense: false,
+    dark: false,
+    customSlots: false,
+  }),
+  methods: {
+    getColor (calories) {
+      if (calories > 400) return "red"
+      else if (calories > 200) return "orange"
+      else return "green"
+    },
+    getColorFat (fat: any) {
+      if (fat > 20) return "red"
+      else if (fat > 10) return "orange"
+      else return "green"
+    }
+  }
+})`
 
 export default Vue.extend({
   data: () => ({
