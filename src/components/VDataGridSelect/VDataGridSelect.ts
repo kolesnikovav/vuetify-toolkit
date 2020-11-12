@@ -28,9 +28,7 @@ export default commonSelect.extend({
         itemText: this.$props.itemText,
         multiple: this.$props.multiple,
         transition: this.$props.transition,
-        selectedItems: this.$props.selectedItems,
-        //   openAll: this.$props.openAll,
-        //   openOnClick: this.$props.openOnClick,
+        selectedItems: this.selectedItems,
         headers: this.$props.headers,
         headersLength: this.$props.headersLength,
         headerText: this.$props.headerText,
@@ -38,7 +36,6 @@ export default commonSelect.extend({
         hideHeaders: this.$props.hideHeaders,
         rowsPerPageText: this.$props.rowsPerPageText,
         customFilter: this.$props.customFilter
-      //   useDefaultCommands: this.$props.useDefaultCommands
       })
       Object.assign(data.on, {
         input: (e: any[]) => {
@@ -54,7 +51,7 @@ export default commonSelect.extend({
       }
       const slots: VNodeChildren = []
       slots.push((this.$scopedSlots.items as any))
-      return this.$createElement(VDataGridSelectList, (this as any).listData, slots)
+      return this.$createElement(VDataGridSelectList, this.listData, slots)
     }
   },
   methods: {

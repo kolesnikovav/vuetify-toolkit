@@ -1,5 +1,5 @@
 import { VNode } from 'vue'
-import { VDataTableA, VListItemContentA, VListItemTitleA } from '../../shims-vuetify'
+import { VDataTableA } from '../../shims-vuetify'
 import tableScopedSlots from '../../utils/TableScopedSlots'
 import commonSelectorCard from '../mixin/commonSelectorCard'
 import { Command, defaultDataGridSelectCommands } from '../../utils/ToolbarCommand'
@@ -17,12 +17,34 @@ export default commonSelectorCard.extend({
       return this.$props.toolbarCommands.length > 0 ? this.$props.toolbarCommands : defaultDataGridSelectCommands(this as any)
     }
   },
+  watch: {
+    selectedItems: {
+      immediate: true,
+      handler (val, oldVal) {
+        if (this.$refs.selectList) {
+          val.map((v: any) => {
+            (this.$refs.selectList as any).select(v, true, false)
+          })
+        }
+      }
+    },
+    currentItem: {
+      immediate: true,
+      handler (val) {
+        if (val && this.$refs.selectList) {
+        }
+      }
+    }
+  },
   methods: {
     genSelectList (): VNode {
       const inputHandler = {
-        input: (e: any[]) => { this.$emit('input', e) }
+        input: (e: any[]) => {
+          this.$emit('input', e)
+        }
       }
       return (this as any).$createElement(VDataTableA, {
+        ref: 'selectList',
         props: {
           selected: true,
           dense: this.dense,
@@ -39,7 +61,7 @@ export default commonSelectorCard.extend({
           customFilter: this.$props.customFilter,
           showSelect: true,
           singleSelect: !this.multiple,
-          value: this.value
+          value: this.selectedItems
         },
         scopedSlots: tableScopedSlots(this.$scopedSlots),
         on: inputHandler
@@ -47,6 +69,12 @@ export default commonSelectorCard.extend({
     },
     OK () {
       this.$emit('close-menu')
+    },
+    InvertSelection () {
+      this.items.map((v: any) => {
+        const isSelected = (this.$refs.selectList as any).isSelected(v);
+        (this.$refs.selectList as any).select(v, !isSelected, false)
+      })
     }
   }
 })

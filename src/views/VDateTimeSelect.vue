@@ -56,7 +56,6 @@
     </v-tabs>
       <v-card-text>
         <v-row justify="space-around">
-          <v-switch v-model= "autocomplete" class="ma-2" label="autocomplete"></v-switch>
           <v-switch v-model= "dense" class="ma-2" label="dense"></v-switch>
           <v-switch v-model= "clearable" class="ma-2" label="clearable"></v-switch>
           <v-switch v-model = "dark" class="ma-2" label="dark"></v-switch>
@@ -67,7 +66,6 @@
           <v-select label = "text align" :items = "textAlignVarians" v-model = "textAlign"></v-select>
         </v-row>
         <v-date-time-select
-          :autocomplete="autocomplete"
           :chips="chips"
           :dense="dense"
           :clearable="clearable"
@@ -85,31 +83,29 @@
 
 <script lang="ts">
 import Vue from 'vue'
-const sandboxTemplateHTML = '<v-date-time-select\n' +
-          '  :autocomplete="autocomplete"\n' +
-          '  :chips="chips"\n' +
-          '  :dense="dense"\n' +
-          '  :multiple="multiple"\n' +
-          '  :clearable="clearable"\n' +
-          '  :dark="dark"\n' +
-          '  :locale="currentLocale"\n' +
-          '  :selectionType="selectionType"\n' +
-          '>\n' +
-          '</v-date-time-select>'
+const sandboxTemplateHTML =
+`<v-date-time-select
+            :chips="chips"
+            :dense="dense"
+            :clearable="clearable"
+            :dark="dark"
+            :locale="currentLocale"
+            :selectionType="selectionType"
+          >
+</v-date-time-select>`
 
-const sandboxCode = '\n' +
-'export default ({\n' +
-'  data: () => ({\n' +
-'    items: staticitems, // see data source \n' +
-'    chips: false,\n' +
-'    dense: false,\n' +
-'    clearable: false,\n' +
-'    dark: false,\n' +
-'    autocomplete: false,\n' +
-'    locale: \'en\',\n' +
-'    selectionType: \'datetime\',\n' +
-'  })\n' +
-'})\n'
+const sandboxCode =
+`export default ({
+  data: () => ({
+    chips: false,
+    dense: false,
+    clearable: false,
+    dark: false,
+    autocomplete: false,
+    locale: 'en'
+    selectionType: 'datetime',
+  })
+})`
 
 export default Vue.extend({
   data: () => ({

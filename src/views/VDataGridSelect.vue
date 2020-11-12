@@ -83,10 +83,13 @@
           <v-switch v-model="clearable" class="ma-2"    label="clearable"></v-switch>
           <v-switch v-model="dark" class="ma-2"    label="dark"></v-switch>
           <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
+          <v-switch v-model="useToolbar" class="ma-2" label="useToolbar"></v-switch>
           </v-row>
           <v-data-grid-select v-model = "selectedItems" :autocomplete = "autocomplete" :chips = "chips" :dense = "dense" :multiple = "multiple" :items="items" :clearable = "clearable"
             :headers="dataGridHeaders" item-key = "name" item-text = "name" :dark = "dark"
             :smallChips = "smallChips" :deletableChips = "deletableChips"
+            :useToolbar = "useToolbar"
+            toolbarHeader = "Press something"
           >
           <template v-if="customSlots" v-slot:headerTable.fat>
             <v-icon color ="red">mdi-cake</v-icon>
@@ -181,6 +184,7 @@ export default Vue.extend({
     deletableChips: false,
     smallChips: false,
     selectedItems: [],
+    useToolbar: false,
     //
     codeSandbox: false,
     sandboxTemplate: sandboxTemplate,

@@ -48,6 +48,7 @@ export default VAutocompleteA.extend({
     listData (): Object {
       const data = (VSelectA as any).options.computed.listData.call(this)
       Object.assign(data.props, {
+        useToolbar: this.$props.useToolbar,
         toolbarPosition: this.$props.toolbarPosition,
         toolbarButtonTextVisible: this.$props.toolbarButtonTextVisible,
         toolbarFlat: this.$props.toolbarFlat,
@@ -57,7 +58,10 @@ export default VAutocompleteA.extend({
         toolbarButtonFab: this.$props.toolbarButtonFab,
         toolbarButtonTile: this.$props.toolbarButtonTile,
         toolbarButtonElevation: this.$props.toolbarButtonElevation,
-        toolbarHeader: this.$props.toolbarHeader
+        toolbarHeader: this.$props.toolbarHeader,
+        currentItem: this.currentItem,
+        selectedItems: this.selectedItems,
+        transition: this.$props.transition
       })
       Object.assign(data.on, {
         'close-menu': () => { this.$data.isMenuActive = false },
@@ -87,7 +91,16 @@ export default VAutocompleteA.extend({
             this.selectedItems = val.flat()
           } else {
             this.selectedItems = []
+            this.currentItem = null
           }
+        }
+      }
+    },
+    currentItem: {
+      immediate: true,
+      handler (val) {
+        if (this.$refs.menu) {
+          (this.$refs.menu as any).updateDimensions()
         }
       }
     }
@@ -118,36 +131,44 @@ export default VAutocompleteA.extend({
           close: this.$props.deletableChips && !isDisabled,
           disabled: isDisabled,
           inputValue: item, // index === (this as any).selectedIndex,
-          small: this.$props.smallChips
+          small: this.$props.smallChips,
+          value: item
         },
         on: {
           click: (e: MouseEvent) => {
             if (isDisabled) return
-
-            // e.stopPropagation()
-
+            this.currentItem = item as any
             (this as any).selectedIndex = index
           },
-          'click:close': () => (this as any).onChipInput(item)
+          'click:close': () => {
+            this.selectedItems = this.selectedItems.filter(v => v !== item)
+          }
         },
         key: JSON.stringify((this as any).getValue(item))
       }, (this as any).getText(item))
     },
-    // genCommaSelection (item: object, index: number, last: boolean) {
-    //   const color = index === this.selectedIndex && this.computedColor
-    //   const isDisabled = (
-    //     !this.isInteractive ||
-    //     this.getDisabled(item)
-    //   )
+    genCommaSelection (item: object, index: number, last: boolean) {
+      const color = index === (this as any).selectedIndex && (this as any).computedColor
+      const isDisabled = false // (
+      //   !(this as any).isInteractive ||
+      //   (this as any).getDisabled(item)
+      // )
 
-    //   return this.$createElement('div', this.setTextColor(color, {
-    //     staticClass: 'v-select__selection v-select__selection--comma',
-    //     class: {
-    //       'v-select__selection--disabled': isDisabled,
-    //     },
-    //     key: JSON.stringify(this.getValue(item)),
-    //   }), `${this.getText(item)}${last ? '' : ', '}`)
-    // },
+      return this.$createElement('div', (this as any).setTextColor(color, {
+        staticClass: 'v-select__selection v-select__selection--comma',
+        class: {
+          'v-select__selection--disabled': isDisabled
+        },
+        on: {
+          click: (e: MouseEvent) => {
+            if (isDisabled) return
+            this.currentItem = item as any
+            (this as any).selectedIndex = index
+          }
+        },
+        key: JSON.stringify((this as any).getValue(item))
+      }), `${(this as any).getText(item)}${last ? '' : ', '}`)
+    },
     genSelections (): VNode {
       let length = this.selectedItems.length
       const children = new Array(length)
@@ -178,6 +199,7 @@ export default VAutocompleteA.extend({
       this.$emit('input', items)
     },
     clearableCallback () {
+      this.currentItem = null
       this.selectedItems = []
       this.$emit('change', [])
       this.$emit('input', [])

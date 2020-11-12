@@ -32,12 +32,7 @@ export default commonSelectorCard.extend({
     scrollableTime: Boolean,
     disabledDate: Boolean,
     disabledTime: Boolean,
-    widthSelector: Number,
-    // custom commands
-    toolbarCommands: {
-      type: Array,
-      default: defaultDateTimeSelectCommands(this as any)
-    }
+    widthSelector: Number
   },
   data: () => ({
     selectedDate: '',
@@ -52,52 +47,54 @@ export default commonSelectorCard.extend({
   },
   methods: {
     genDatePicker (): VNode {
-      return this.$createElement(VColA, {},
-        [
-          this.$createElement(VDatePickerA, {
-            props: {
-              locale: this.$props.locale,
-              dark: this.$props.dark,
-              allowedDates: this.$props.allowedDates,
-              dayFormat: this.$props.dayFormat,
-              disabledDate: this.$props.disabledDate,
-              events: this.$props.events,
-              eventColor: this.$props.eventColor,
-              firstDayOfWeek: this.$props.firstDayOfWeek,
-              headerDateFormat: this.$props.headerDateFormat,
-              max: this.$props.maxDate,
-              min: this.$props.minDate,
-              monthFormat: this.$props.monthFormat,
-              multiple: this.$props.multiple,
-              nextIcon: this.$props.nextIcon,
-              picker: this.$props.pickerDate,
-              prevIcon: this.$props.prevIcon,
-              range: this.$props.range,
-              reactive: this.$props.reactive,
-              readonlyDate: this.$props.readonlyDate,
-              scrollable: this.$props.scrollableDate,
-              showCurrent: this.$props.showCurrent,
-              selectedItemsText: this.$props.selectedItemsText,
-              showWeek: this.$props.showWeek,
-              titleDateFormat: this.$props.titleDateFormat,
-              valueDate: this.$props.valueDate,
-              weekdayFormat: this.$props.weekdayFormat,
-              yearFormat: this.$props.yearFormat,
-              yearIcon: this.$props.yearIcon,
-              noTitle: true,
-              width: this.$props.selectionType === 'datetime' ? this.$props.widthSelector - 310 : this.$props.widthSelector
-            },
-            style: {
-              'padding-right': this.$props.selectionType === 'datetime' ? 0 : 15
-            },
-            on: {
-              input: (e: string) => {
-                this.$data.selectedDate = e;
-                (this.$refs.timepicker as any).$data.selecting = 1
-              }
+      return this.$createElement(VColA, {
+
+      },
+      [
+        this.$createElement(VDatePickerA, {
+          props: {
+            locale: this.$props.locale,
+            dark: this.$props.dark,
+            allowedDates: this.$props.allowedDates,
+            dayFormat: this.$props.dayFormat,
+            disabledDate: this.$props.disabledDate,
+            events: this.$props.events,
+            eventColor: this.$props.eventColor,
+            firstDayOfWeek: this.$props.firstDayOfWeek,
+            headerDateFormat: this.$props.headerDateFormat,
+            max: this.$props.maxDate,
+            min: this.$props.minDate,
+            monthFormat: this.$props.monthFormat,
+            multiple: this.$props.multiple,
+            nextIcon: this.$props.nextIcon,
+            picker: this.$props.pickerDate,
+            prevIcon: this.$props.prevIcon,
+            range: this.$props.range,
+            reactive: this.$props.reactive,
+            readonlyDate: this.$props.readonlyDate,
+            scrollable: this.$props.scrollableDate,
+            showCurrent: this.$props.showCurrent,
+            selectedItemsText: this.$props.selectedItemsText,
+            showWeek: this.$props.showWeek,
+            titleDateFormat: this.$props.titleDateFormat,
+            valueDate: this.$props.valueDate,
+            weekdayFormat: this.$props.weekdayFormat,
+            yearFormat: this.$props.yearFormat,
+            yearIcon: this.$props.yearIcon,
+            noTitle: true,
+            width: this.$props.selectionType === 'datetime' ? this.$props.widthSelector - 310 : this.$props.widthSelector
+          },
+          style: {
+            'padding-right': this.$props.selectionType === 'datetime' ? 0 : 15
+          },
+          on: {
+            input: (e: string) => {
+              this.$data.selectedDate = e;
+              (this.$refs.timepicker as any).$data.selecting = 1
             }
-          })
-        ])
+          }
+        })
+      ])
     },
     genTimePicker (): VNode {
       return this.$createElement(VColA, {
@@ -135,6 +132,7 @@ export default commonSelectorCard.extend({
     },
     genSelectList (): VNode {
       return this.$createElement(VSheetA, {
+        ref: 'selectList'
         // staticClass: 'v-select-list v-card'
         // class: this.themeClasses
       },

@@ -38,20 +38,18 @@ export default commonSelect.extend({
         itemText: this.$props.itemText,
         itemChildren: this.$props.itemChildren,
         itemDisabled: this.$props.itemDisabled,
-        transition: this.$props.transition,
-        selectedItems: this.selectedItems,
         selectionType: this.$props.selectionType,
         shaped: this.$props.shaped,
         rounded: this.$props.rounded,
         openAll: this.$props.openAll,
-        openOnClick: this.$props.openOnClick
-        // useDefaultToolbarCommand: this.$props.useDefaultToolbarCommand,
-        // toolbarCommands: this.$props.toolbarCommands
+        openOnClick: this.$props.openOnClick,
+        transition: this.$props.transition
       })
       Object.assign(data.on, {
         select: (e: any[]) => {
           this.selectItems(e)
-        }
+        },
+        'update-dimensions': () => (this.$refs.menu as any).updateDimensions()
       })
       Object.assign(data.scopedSlots, treeviewScopedSlots(this.$scopedSlots))
       return data

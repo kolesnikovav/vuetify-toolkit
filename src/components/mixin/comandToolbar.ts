@@ -9,11 +9,11 @@ export default Vue.extend({
     Themeable, Colorable
   ],
   props: {
+    // custom commands
     useToolbar: {
       type: Boolean,
       default: false
     },
-    // custom commands
     toolbarCommands: {
       type: Array,
       default: () => [] as Command[]
