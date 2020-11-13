@@ -1,5 +1,5 @@
 import { VNode, VNodeChildren } from 'vue'
-import { VMenuA, VTextFieldA, VDatePickerA, VTimePickerA, VSelectA } from '../../shims-vuetify'
+import { VDatePickerA, VTimePickerA, VSelectA } from '../../shims-vuetify'
 import VDateTimeSelectList from './VDataTimeSelectList'
 import commonSelect from '../mixin/commonSelect'
 
@@ -9,11 +9,42 @@ const VDatePickerProps = ((VDatePickerA as any).options as any).props
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const VTimePickerProps = ((VTimePickerA as any).options as any).props
 
+const DefaultMenuProps = {
+  closeOnClick: false,
+  closeOnContentClick: false,
+  openOnClick: false,
+  maxHeight: 'auto',
+  maxWidth: '620',
+  offsetY: true,
+  offsetOverflow: true,
+  transition: false
+}
+const DEFAULT_DATE = '00010101'
+const DEFAULT_TIME = '00:00:00'
+const DEFAULT_DATE_FORMAT = 'yyyy-MM-dd'
+const DEFAULT_TIME_FORMAT = 'HH:mm:ss'
+
 export default commonSelect.extend({
   name: 'v-date-time-select',
   props: {
     ...VDatePickerProps,
     ...VTimePickerProps,
+    menuProps: {
+      type: [String, Array, Object],
+      default: () => DefaultMenuProps
+    },
+    value: {
+      type: [String, Date],
+      default: () => DEFAULT_DATE
+    },
+    dateFormat: {
+      type: String,
+      default: DEFAULT_DATE_FORMAT
+    },
+    timeFormat: {
+      type: String,
+      default: 'HH:mm'
+    },
     selectionType: {
       type: String,
       default: 'datetime',
@@ -36,15 +67,63 @@ export default commonSelect.extend({
     disabledTime: Boolean
   },
   data: () => ({
-    // // internalValue: '',
-    // widthSelector: 0,
-    // isMenuActive: false,
-    // x: 0,
-    // y: 0,
-    // bottom: 0,
-    // right: 0
+    date: DEFAULT_DATE,
+    time: DEFAULT_TIME
   }),
   computed: {
+    dateTimeFormat (): string {
+      return this.$props.dateFormat + ' ' + this.$props.timeFormat
+    },
+    defaultDateTimeFormat (): string {
+      return DEFAULT_DATE_FORMAT + ' ' + DEFAULT_TIME_FORMAT
+    },
+    selectedDatetime (): Date|string|undefined {
+      // if (this.$props.selectionType === 'date') {
+      //   return new Date(this.date)
+      // } else if (this.$props.selectionType === 'datetime') {
+      //   let time = this.time ? this.time : DEFAULT_TIME
+      //   if (time.length === 5) {
+      //     time += ':00'
+      //   }
+      //   return new Date(this.date + ' ' + time)
+      // }
+      // return this.time
+      return new Date(this.date + ' ' + this.time)
+    },
+    formatedDate (): string {
+      if (this.$props.selectionType === 'date') {
+        return this.date.toLocaleString()
+      } else if (this.$props.selectionType === 'datetime') {
+        if (this.selectedDatetime instanceof Date) {
+          return this.selectedDatetime.toISOString()
+        } else return this.selectedDatetime ? this.selectedDatetime : ''
+      }
+      return ''
+    },
+    listData (): Object {
+      const data = (commonSelect as any).options.computed.listData.call(this)
+      Object.assign(data.props, {
+        maxDate: this.$props.maxDate,
+        minDate: this.$props.minDate,
+        maxTime: this.$props.maxTime,
+        minTime: this.$props.minTime,
+        readonlyDate: this.$props.readonlyDate,
+        readonlyTime: this.$props.readonlyTime,
+        scrollableDate: this.$props.scrollableDate,
+        scrollableTime: this.$props.scrollableTime,
+        disabledDate: this.$props.disabledDate,
+        disabledTime: this.$props.disabledTime,
+        toolbarHeader: this.formatedDate,
+        selectionType: this.$props.selectionType
+      })
+      Object.assign(data.on, {
+        input: (e: any[]) => {
+          (this as any).selectItems(e)
+        }
+      })
+      Object.assign(data.scopedSlots, this.$scopedSlots)
+      return data
+    },
     internalSearch: {
       get (): string {
         return ''

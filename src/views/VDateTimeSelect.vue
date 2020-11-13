@@ -18,8 +18,8 @@
         </thead>
         <tbody>
            <tr>
-            <td>autocomplete</td> <td>boolean</td> <td>true</td>
-            <td>Switch between autocomplete/select behavior</td>
+            <td>selectionType</td> <td>string</td> <td>datetime</td>
+            <td>Can be 'datetime', 'date' or 'time'</td>
            </tr>
         </tbody>
     </table>
@@ -73,6 +73,7 @@
           :locale ="currentLocale"
           :selectionType ="selectionType"
           :text-align = "textAlign"
+          use-toolbar
         >
         </v-date-time-select>
       </v-card-text>

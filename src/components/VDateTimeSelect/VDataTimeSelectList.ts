@@ -132,14 +132,12 @@ export default commonSelectorCard.extend({
     },
     genSelectList (): VNode {
       return this.$createElement(VSheetA, {
-        ref: 'selectList'
-        // staticClass: 'v-select-list v-card'
-        // class: this.themeClasses
+        ref: 'selectList',
+        staticClass: 'v-select-list v-card'
       },
       [
         this.$createElement(VRowA, {
           props: {
-            align: 'stretch',
             toolbarCommands: this.computedToolbarCommands
           }
         }, [
