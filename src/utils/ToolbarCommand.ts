@@ -97,7 +97,7 @@ export function defaultDateTimeSelectCommands (component?: VueConstructor<Vue>):
     ...openCloseCommands(component),
     {
       target: component,
-      action: 'InvertSelection',
+      action: 'Now',
       text: 'Now',
       hint: 'Now',
       icon: 'mdi-clock',

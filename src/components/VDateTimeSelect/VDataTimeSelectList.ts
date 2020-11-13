@@ -144,6 +144,9 @@ export default commonSelectorCard.extend({
           this.$props.selectionType === 'date' || this.$props.selectionType === 'datetime' ? this.genDatePicker() : undefined,
           this.$props.selectionType === 'time' || this.$props.selectionType === 'datetime' ? this.genTimePicker() : undefined])
       ])
+    },
+    Now () {
+      this.selectedDate = new Date().toDateString()
     }
   }
 })

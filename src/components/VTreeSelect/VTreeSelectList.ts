@@ -32,23 +32,14 @@ export default commonSelectorCard.extend({
             val.map((v: any) => {
               const key = getObjectValueByPath(v, iKey)
               selected.push(key);
-              (this.$refs.selectList as any).updateSelected(key, true)
+              (this.$refs.selectList as any).updateSelected(key, true, false)
             })
-            if (oldVal && oldVal.length > 0) {
-              oldVal.map((v: any) => {
-                const key = getObjectValueByPath(v, iKey)
-                if (selected.indexOf(key) === -1) {
-                  (this.$refs.selectList as any).updateSelected(key, false)
-                }
-              })
-            }
-            // const iKey = this.$props.itemKey
-            // const deselected = oldVal.filter((v: any) => val.indexOf(v) > -1) as any[]
-            // deselected.map(v => {
-            //   const key = getObjectValueByPath(val, iKey)
-            //   console.log(key);
-            //   (this.$refs.selectList as any).updateSelected(key, false)
-            // })
+            oldVal.map((v: any) => {
+              const key = getObjectValueByPath(v, iKey)
+              if (selected.indexOf(key) === -1) {
+                (this.$refs.selectList as any).updateSelected(key, false, false)
+              }
+            })
           }
         }
       }
@@ -78,10 +69,10 @@ export default commonSelectorCard.extend({
           items: this.items,
           toolbarCommands: this.computedToolbarCommands,
           itemDisabled: this.$props.itemDisabled,
-          // itemText: this.itemText,
-          // itemKey: this.itemKey,
-          // itemChildren: this.itemChildren,
-          // loadChildren: this.loadChildren,
+          itemText: this.$props.itemText,
+          itemKey: this.$props.itemKey,
+          itemChildren: this.$props.itemChildren,
+          loadChildren: this.$props.loadChildren,
           selectable: true,
           returnObject: true,
           selectOnly: true,
@@ -94,7 +85,15 @@ export default commonSelectorCard.extend({
         scopedSlots: this.$scopedSlots,
         on: {
           input: (e: any[]) => {
-            this.$emit('select', e)
+            if (this.$props.multiple) {
+              this.$emit('select', e)
+            } else {
+            // select last added item
+              const lastAdded = e.filter(v => this.selectedItems.indexOf(v) === -1)
+              if (lastAdded.length > 0) {
+                this.$emit('select', lastAdded)
+              }
+            }
           }
         }
       })
@@ -112,14 +111,17 @@ export default commonSelectorCard.extend({
       }
     },
     SelectAll () {
-      for (var node in (this.$refs.selectList as any).nodes) {
-        (this.$refs.selectList as any).nodes[node].isSelected = true
-      }
+      const keys = (this.$refs.selectList as any).getKeys(this.items)
+      keys.map((v: any) => {
+        (this.$refs.selectList as any).updateSelected(v, true, false)
+      })
     },
     UnselectAll () {
-      for (var node in (this.$refs.selectList as any).nodes) {
-        (this.$refs.selectList as any).nodes[node].isSelected = false
-      }
+      const keys = (this.$refs.selectList as any).getKeys(this.items)
+      keys.map((v: any) => {
+        (this.$refs.selectList as any).updateSelected(v, false, false);
+        (this.$refs.selectList as any).updateActive(v, false, false)
+      })
     },
     InvertSelection () {
       for (var node in (this.$refs.selectList as any).nodes) {

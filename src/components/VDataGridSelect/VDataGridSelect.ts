@@ -26,7 +26,6 @@ export default commonSelect.extend({
         loadingIcon: this.$props.loadingIcon,
         itemKey: this.$props.itemKey,
         itemText: this.$props.itemText,
-        multiple: this.$props.multiple,
         transition: this.$props.transition,
         selectedItems: this.selectedItems,
         headers: this.$props.headers,

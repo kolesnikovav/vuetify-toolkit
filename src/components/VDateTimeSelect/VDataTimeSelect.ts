@@ -114,7 +114,8 @@ export default commonSelect.extend({
         disabledDate: this.$props.disabledDate,
         disabledTime: this.$props.disabledTime,
         toolbarHeader: this.formatedDate,
-        selectionType: this.$props.selectionType
+        selectionType: this.$props.selectionType,
+        locale: this.$props.locale
       })
       Object.assign(data.on, {
         input: (e: any[]) => {
