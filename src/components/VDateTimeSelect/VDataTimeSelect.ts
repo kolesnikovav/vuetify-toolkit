@@ -19,8 +19,9 @@ const DefaultMenuProps = {
   offsetOverflow: true,
   transition: false
 }
-const DEFAULT_DATE = '00010101'
+const DEFAULT_DATE = '1980-01-01'
 const DEFAULT_TIME = '00:00:00'
+const DEFAULT_DATE_TIME = '1980-01-01T00:00:00'
 const DEFAULT_DATE_FORMAT = 'yyyy-MM-dd'
 const DEFAULT_TIME_FORMAT = 'HH:mm:ss'
 
@@ -68,7 +69,8 @@ export default commonSelect.extend({
   },
   data: () => ({
     date: DEFAULT_DATE,
-    time: DEFAULT_TIME
+    time: DEFAULT_TIME,
+    datetime: DEFAULT_DATE_TIME
   }),
   computed: {
     dateTimeFormat (): string {
@@ -77,31 +79,18 @@ export default commonSelect.extend({
     defaultDateTimeFormat (): string {
       return DEFAULT_DATE_FORMAT + ' ' + DEFAULT_TIME_FORMAT
     },
-    selectedDatetime (): Date|string|undefined {
-      // if (this.$props.selectionType === 'date') {
-      //   return new Date(this.date)
-      // } else if (this.$props.selectionType === 'datetime') {
-      //   let time = this.time ? this.time : DEFAULT_TIME
-      //   if (time.length === 5) {
-      //     time += ':00'
-      //   }
-      //   return new Date(this.date + ' ' + time)
-      // }
-      // return this.time
-      return new Date(this.date + ' ' + this.time)
-    },
     formatedDate (): string {
-      if (this.$props.selectionType === 'date') {
-        return this.date.toLocaleString()
-      } else if (this.$props.selectionType === 'datetime') {
-        if (this.selectedDatetime instanceof Date) {
-          return this.selectedDatetime.toISOString()
-        } else return this.selectedDatetime ? this.selectedDatetime : ''
-      }
-      return ''
+      if (this.$props.selectionType === 'date') return this.date
+      if (this.$props.selectionType === 'time') return this.time
+      else return this.datetime
     },
     listData (): Object {
       const data = (commonSelect as any).options.computed.listData.call(this)
+      let selectorValue
+      if (this.$props.selectionType === 'date') selectorValue = this.date
+      if (this.$props.selectionType === 'time') selectorValue = this.time
+      else selectorValue = this.datetime
+
       Object.assign(data.props, {
         maxDate: this.$props.maxDate,
         minDate: this.$props.minDate,
@@ -115,12 +104,11 @@ export default commonSelect.extend({
         disabledTime: this.$props.disabledTime,
         toolbarHeader: this.formatedDate,
         selectionType: this.$props.selectionType,
-        locale: this.$props.locale
+        locale: this.$props.locale,
+        value: selectorValue
       })
       Object.assign(data.on, {
-        input: (e: any[]) => {
-          (this as any).selectItems(e)
-        }
+        input: (e: string) => this.handleInput(e)
       })
       Object.assign(data.scopedSlots, this.$scopedSlots)
       return data
@@ -153,6 +141,12 @@ export default commonSelect.extend({
   methods: {
     genInput (): VNode {
       return (VSelectA as any).options.methods.genInput.call(this)
+    },
+    handleInput (e: string): void {
+      if (this.$props.selectionType === 'date') this.date = e
+      if (this.$props.selectionType === 'time') this.time = e
+      else this.datetime = e
+      this.selectedItems = [e]
     }
   }
 })

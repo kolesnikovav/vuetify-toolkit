@@ -62,7 +62,8 @@ export default VAutocompleteA.extend({
         currentItem: this.currentItem,
         selectedItems: this.selectedItems,
         transition: this.$props.transition,
-        multiple: this.$props.multiple
+        multiple: this.$props.multiple,
+        dark: this.$props.dark
       })
       Object.assign(data.on, {
         'close-menu': () => { this.$data.isMenuActive = false },
