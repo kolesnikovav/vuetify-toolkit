@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`VCascader.js renders 1`] = `
-<div class="v-input theme--light v-text-field v-select v-autocomplete">
+<div class="v-input theme--light v-text-field v-select">
   <div class="v-input__control">
     <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-1" class="v-input__slot">
       <div class="v-select__slot">
