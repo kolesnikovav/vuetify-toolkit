@@ -1,7 +1,5 @@
-import Vue, { VueConstructor, VNodeData, VNode, VNodeChildren } from 'vue'
-import { getPropertyFromItem, getObjectValueByPath } from '../../vuetify-import'
-import { VAutocompleteA, VSelectA, VChipA } from '../../shims-vuetify'
-import DefaultMenuProps from '../../utils/MenuProps'
+import { VNodeData, VNode, VNodeChildren } from 'vue'
+import { getObjectValueByPath } from '../../vuetify-import'
 import VCascaderSelectList from './VCascaderSelectList'
 import commonSelect from '../mixin/commonSelect'
 
@@ -33,13 +31,15 @@ export default commonSelect.extend({
   data: (vm: any) => ({
     currentNode: null,
     parents: new Map(),
+    childNodes: new Map(),
     treeviewCashe: new Map(),
     currentParents: [] as any[],
-    currentParentKey: null
+    currentParentKey: undefined
   }),
   computed: {
     computedItems (): any[] {
-      return (this as any).buildTree((this as any).$props.items)
+      return (this as any).$data.childNodes.get((this as any).currentParentKey)
+      // return (this as any).buildTree((this as any).$props.items)
     },
     computedChildren (): any[] {
       if (!(this as any).$data.currentParentKey) return (this as any).computedItems
@@ -69,7 +69,6 @@ export default commonSelect.extend({
         },
         on: {
           select: (item: object) => {
-            console.log(item);
             (this as any).selectItem(item)
           },
           'select-parent': (item: object) => {
@@ -90,8 +89,17 @@ export default commonSelect.extend({
       return (this as any).$createElement(VCascaderSelectList, this.listData, slots)
     }
   },
+  watch: {
+    items: {
+      immediate: true,
+      handler (val) {
+        (this as any).buildTree(val, undefined)
+      }
+    }
+  },
   methods: {
     buildTree (items: any, parentkey?: any): any[] {
+      if (this.$data.childNodes.has(parentkey)) return this.$data.childNodes.get(parentkey)
       const newItems: any[] = []
       items.map((item: any) => {
         const localChildren = getObjectValueByPath(item, this.$props.itemChildren, [])
@@ -100,6 +108,7 @@ export default commonSelect.extend({
           const newChildren = (this as any).buildTree(localChildren, itemKey)
           const clone = Object.assign({}, item)
           clone[this.$props.itemChildren] = newChildren
+          clone.hasChildren = true
           newItems.push(clone)
           this.$data.treeviewCashe.set(itemKey, localChildren)
           this.$data.parents.set(itemKey, parentkey)
@@ -107,8 +116,7 @@ export default commonSelect.extend({
           this.$data.parents.set(itemKey, parentkey)
         }
       })
-      // console.log(newItems)
-      // console.log(this.$props.items)
+      this.$data.childNodes.set(parentkey, newItems)
       return newItems
     },
     getParents (key: number|string): any[] {
@@ -121,10 +129,6 @@ export default commonSelect.extend({
       }
       return result
     },
-    // getText (item: object): string {
-    //   // if (!this.$props.showFullPath) return (this as any).getText(item)
-    //   return (this as any).getText(item)
-    // },
     genListWithSlot (): VNode {
       const slots = ['prepend-item', 'no-data', 'append-item']
         .filter(slotName => this.$slots[slotName])
@@ -137,7 +141,6 @@ export default commonSelect.extend({
       return this.$createElement(VCascaderSelectList, ({ ...this.listData }) as VNodeData, slots)
     },
     selectItem (item: object) {
-      this.$data.currentParents = []
       const itemKey = getObjectValueByPath(item, this.$props.itemKey, [])
       const chld = (this as any).$data.treeviewCashe.get(itemKey)
       if (chld) {
@@ -145,18 +148,34 @@ export default commonSelect.extend({
         this.$data.currentParents.push(item)
       } else {
         // selected item
-        const itemToAdd = [this.$data.currentParents, item]
-        console.log(this.$data.currentParents)
-        console.log(itemToAdd)
+        let txt = ''
+        if (this.$props.showFullPath) {
+          this.$data.currentParents.map((v:any) => {
+            txt += (this as any).getText(v) + this.$props.delimeter
+          })
+        }
+        txt += (this as any).getText(item)
+        const itemToAdd = { name: txt }
         if (this.$props.multiple && this.$data.selectedItems.indexOf(itemToAdd) === -1) {
           this.$data.selectedItems.push(itemToAdd)
         } else if (!this.$props.multiple) {
-          this.$data.selectedItems = itemToAdd
+          this.$data.selectedItems = [itemToAdd]
         }
-        this.$data.currentParentKey = null
+        this.$data.currentParentKey = undefined
+        this.$data.currentParents = []
       }
     },
     selectParent (item: object) {
+      let itemKey = getObjectValueByPath(item, this.$props.itemKey, [])
+      this.$data.currentParentKey = this.$data.parents.get(itemKey)
+      this.$data.currentParents = []
+      while (true) {
+        const p = this.$data.parents.get(itemKey)
+        if (p) {
+          this.$data.currentParents.unshift(p)
+          itemKey = p
+        } else break
+      }
     }
   }
 })

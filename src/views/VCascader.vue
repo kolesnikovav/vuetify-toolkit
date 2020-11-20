@@ -108,6 +108,7 @@
           :clearable="clearable"
           :dark="dark"
           :showFullPath = "showFullPath"
+          :delimeter = "delimeter"
           item-key ="name"
         ></v-cascader>
       </v-card-text>
@@ -115,7 +116,7 @@
     <span />
     <h2>Examples</h2>
     <h3>v-cascader example (chips selections)</h3>
-    <v-cascader :items="items" :itemText="name" clearable></v-cascader>
+    <v-cascader :items="items" :itemText="name" item-key ="name" clearable></v-cascader>
   </div>
 </template>
 

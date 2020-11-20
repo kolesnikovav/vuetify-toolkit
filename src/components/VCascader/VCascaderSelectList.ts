@@ -1,6 +1,6 @@
 import { VNode } from 'vue'
 import {
-  VListA, VListItemA, VDividerA
+  VListA, VListItemA, VDividerA, VIconA
 } from '../../shims-vuetify'
 import { getPropertyFromItem } from '../../vuetify-import'
 import commonSelectorCard from '../mixin/commonSelectorCard'
@@ -18,15 +18,18 @@ export default commonSelectorCard.extend({
     }
   },
   methods: {
+    genIcon (item: object): VNode|undefined {
+      if (!(item as any).hasChildren) return undefined
+      return this.$createElement(VIconA, 'mdi-chevron-right')
+    },
     genItem (item: object): VNode {
-      const a = getPropertyFromItem(item, this.$props.itemText)
       return (this as any).$createElement(VListItemA, {
         on: {
           click: () => {
             this.$emit('select', item)
           }
         }
-      }, getPropertyFromItem(item, this.$props.itemText))
+      }, [getPropertyFromItem(item, this.$props.itemText), this.genIcon(item)])
     },
     genDivider (): VNode {
       return (this as any).$createElement(VDividerA)
@@ -40,7 +43,8 @@ export default commonSelectorCard.extend({
               this.$emit('select-parent', v)
             }
           }
-        }, getPropertyFromItem(v, this.$props.itemText)))
+        }, [
+          getPropertyFromItem(v, this.$props.itemText), this.$createElement(VIconA, 'mdi-chevron-left')]))
       })
       return parents
     },
