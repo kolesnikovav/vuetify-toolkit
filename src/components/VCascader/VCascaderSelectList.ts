@@ -1,108 +1,85 @@
 import { VNode } from 'vue'
-import { Themeable, Colorable } from '../../vuetify-import'
 import {
-  VSelectA,
-  VExpansionPanelsA,
-  VExpansionPanelA,
-  VExpansionPanelHeaderA,
-  VExpansionPanelContentA
+  VListA, VListItemA, VDividerA
 } from '../../shims-vuetify'
-import mixins from '../../utils/mixins'
+import { getPropertyFromItem } from '../../vuetify-import'
+import commonSelectorCard from '../mixin/commonSelectorCard'
 
-export default mixins(
-  Themeable, Colorable
-  /* @vue/component */
-).extend({
+export default commonSelectorCard.extend({
   name: 'v-cascader-select-list',
   props: {
-    itemChildren: {
-      type: [String, Function],
-      default: 'children'
-    },
-    selectedItems: {
+    parents: {
       type: Array,
       default: () => ([])
     },
-    ...(VSelectA as any).options.props
+    itemText: {
+      type: [String, Array, Function],
+      default: 'text'
+    }
   },
   methods: {
-    getChildren (item: object) {
-      return (item as any)[this.$props.itemChildren]
-    },
-    genItemContent (item: object): VNode {
-      const chld = this.getChildren(item)
-
-      if (chld) {
-        const content: VNode[] = []
-        const a = chld.map((v: object) => {
-          const el = this.genItem(v)
-          content.push(el)
-        })
-        const wrapper = this.$createElement(VExpansionPanelsA, content)
-        return wrapper
-      } else {
-        return this.$createElement(VExpansionPanelContentA, {})
-      }
-    },
-    genHeader (item: object): VNode {
-      return this.$createElement(VExpansionPanelHeaderA, (item as any).name)
-    },
     genItem (item: object): VNode {
-      const children = this.getChildren(item)
-      if (children) {
-        return this.$createElement(VExpansionPanelA, {},
-          [
-            this.genHeader(item),
-            this.genItemContent(item)
-          ])
-      } else {
-        return this.genHeader(item)
+      const a = getPropertyFromItem(item, this.$props.itemText)
+      return (this as any).$createElement(VListItemA, {
+        on: {
+          click: () => {
+            this.$emit('select', item)
+          }
+        }
+      }, getPropertyFromItem(item, this.$props.itemText))
+    },
+    genDivider (): VNode {
+      return (this as any).$createElement(VDividerA)
+    },
+    genParents (): VNode[] {
+      const parents: VNode[] = []
+      this.$props.parents.map((v: any) => {
+        parents.push(this.$createElement(VListItemA, {
+          on: {
+            click: () => {
+              this.$emit('select-parent', v)
+            }
+          }
+        }, getPropertyFromItem(v, this.$props.itemText)))
+      })
+      return parents
+    },
+    genSelectList (): VNode {
+      const inputHandler = {
+        input: (e: any[]) => {
+          this.$emit('input', e)
+        }
       }
+      const content: any[] = []
+      if (this.$props.parents.length > 0) {
+        content.push(this.genParents())
+        content.push(this.genDivider())
+      }
+      this.$props.items.map((v: any) => {
+        content.push(this.genItem(v))
+      })
+      return (this as any).$createElement(VListA, {
+        ref: 'selectList',
+        props: {
+          selected: true,
+          dense: this.dense,
+          items: this.$props.items,
+          itemKey: this.$props.itemKey,
+          returnObject: false,
+          itemText: this.$props.itemText,
+          headers: this.$props.headers,
+          headersLength: this.$props.headersLength,
+          headerText: this.$props.headerText,
+          headerKey: this.$props.headerKey,
+          hideHeaders: this.$props.hideHeaders,
+          rowsPerPageText: this.$props.rowsPerPageText,
+          customFilter: this.$props.customFilter,
+          showSelect: true,
+          singleSelect: !this.multiple,
+          value: this.selectedItems
+        },
+        on: inputHandler
+      }, content)
     }
-  },
-  render (): VNode {
-    const children = []
-    if (!this.$props.items || !Array.isArray(this.$props.items) || this.$props.items.length < 1) {
-      children.push(this.$slots['no-data'] || (this as any).staticNoDataTile)
-    }
-    this.$slots['prepend-item'] && children.unshift(this.$slots['prepend-item'])
-    const childrenAppend = []
-    this.$slots['append-item'] && childrenAppend.push(this.$slots['append-item'])
-    const content:VNode[] = []
-    this.$props.items.map((item: object) => {
-      content.push(this.genItem(item))
-    })
-    return this.$createElement('div', {
-      staticClass: 'v-select-list v-card',
-      class: (this as any).themeClasses
-    }, [
-      children,
-      // this.genHeader(),
-      this.$createElement(VExpansionPanelsA, {
-        // props: {
-        //   selected: true,
-        //   dense: this.dense,
-        //   items: this.items,
-        //   itemKey: this.itemKey,
-        //   returnObject: false,
-        //   itemText: this.itemText,
-        //   headers: this.headers,
-        //   headersLength: this.headersLength,
-        //   headerText: this.headerText,
-        //   headerKey: this.headerKey,
-        //   hideHeaders: this.hideHeaders,
-        //   rowsPerPageText: this.rowsPerPageText,
-        //   customFilter: this.customFilter,
-        //   showSelect: true,
-        //   singleSelect: !this.multiple
-        // },
-        // scopedSlots: this.$scopedSlots,
-        // on: {
-        //   input: (e: any[]) => {
-        //     this.$emit('input', e)
-        //   }
-        // }
-      }, content), childrenAppend
-    ])
   }
 })

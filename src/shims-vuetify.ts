@@ -6,10 +6,6 @@ import {
   VBtn,
   VCheckbox,
   VChip,
-  VExpansionPanels,
-  VExpansionPanel,
-  VExpansionPanelHeader,
-  VExpansionPanelContent,
   VIcon,
   VList,
   VMenu,
@@ -49,14 +45,11 @@ let VDividerC
 let VBtnC
 let VCheckboxC
 let VChipC
-let VExpansionPanelsC
-let VExpansionPanelC
-let VExpansionPanelHeaderC
-let VExpansionPanelContentC
 let VIconC
 let VListC
 let VMenuC
 let VSelectC
+let VSelectListC
 let VTextFieldC
 let VListItemC
 let VListItemContentC
@@ -87,10 +80,6 @@ try {
   VBtnC = VBtn
   VCheckboxC = VCheckbox
   VChipC = VChip
-  VExpansionPanelsC = VExpansionPanels
-  VExpansionPanelC = VExpansionPanel
-  VExpansionPanelHeaderC = VExpansionPanelHeader
-  VExpansionPanelContentC = VExpansionPanelContent
   VIconC = VIcon
   VListC = VList
   VMenuC = VMenu
@@ -124,14 +113,11 @@ try {
   VBtnC = undefined
   VCheckboxC = undefined
   VChipC = undefined
-  VExpansionPanelsC = undefined
-  VExpansionPanelC = undefined
-  VExpansionPanelHeaderC = undefined
-  VExpansionPanelContentC = undefined
   VIconC = undefined
   VListC = undefined
   VMenuC = undefined
   VSelectC = undefined
+  VSelectListC = undefined
   VTextFieldC = undefined
   VListItemC = undefined
   VListItemContentC = undefined
@@ -162,10 +148,6 @@ export const VDividerA = VueComponent(VDividerC, 'VDivider')
 export const VBtnA = VueComponent(VBtnC, 'VBtn')
 export const VCheckboxA = VueComponent(VCheckboxC, 'VCheckbox')
 export const VChipA = VueComponent(VChipC, 'VChip')
-export const VExpansionPanelsA = VueComponent(VExpansionPanelsC, 'VExpansionPanels')
-export const VExpansionPanelA = VueComponent(VExpansionPanelC, 'VExpansionPanel')
-export const VExpansionPanelHeaderA = VueComponent(VExpansionPanelHeaderC, 'VExpansionPanelHeader')
-export const VExpansionPanelContentA = VueComponent(VExpansionPanelContentC, 'VExpansionPanelContent')
 export const VIconA = VueComponent(VIconC, 'VIcon')
 export const VListA = VueComponent(VListC, 'VList')
 export const VMenuA = VueComponent(VMenuC, 'VMenu')

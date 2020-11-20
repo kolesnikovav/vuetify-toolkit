@@ -35,6 +35,18 @@
           <td>'children'</td>
           <td>Is the name or function of children items property</td>
         </tr>
+        <tr>
+          <td>show-full-path</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>Show item with all parents in selection</td>
+        </tr>
+        <tr>
+          <td>delimeter</td>
+          <td>string</td>
+          <td>','</td>
+          <td>Delimeter between item and parent</td>
+        </tr>
       </tbody>
     </table>
     <span />
@@ -77,19 +89,26 @@
           <v-switch v-model="autocomplete" class="ma-2" label="autocomplete"></v-switch>
           <v-switch v-model="multiple" class="ma-2" label="multiple"></v-switch>
           <v-switch v-model="chips" class="ma-2" label="chips"></v-switch>
+          <v-switch v-model="smallChips" class="ma-2" label="smallChips"></v-switch>
+          <v-switch v-model="deletableChips" class="ma-2" label="deletableChips"></v-switch>
           <v-switch v-model="dense" class="ma-2" label="dense"></v-switch>
           <v-switch v-model="clearable" class="ma-2" label="clearable"></v-switch>
-          <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
+          <v-switch v-model="showFullPath" class="ma-2" label="showFullPath"></v-switch>
+          <v-text-field v-if = "showFullPath" v-model="delimeter" class="ls-1" label="delimeter"></v-text-field>
         </v-row>
         <v-cascader
           :autocomplete="autocomplete"
           :itemText="name"
           :chips="chips"
+          :smallChips = "smallChips"
+          :deletableChips = "deletableChips"
           :dense="dense"
           :multiple="multiple"
           :items="items"
           :clearable="clearable"
           :dark="dark"
+          :showFullPath = "showFullPath"
+          item-key ="name"
         ></v-cascader>
       </v-card-text>
     </v-card>
@@ -104,41 +123,46 @@
 import Vue from 'vue'
 import { ofices } from '../example-data'
 
-const sandboxTemplateHTML = '<v-cascader\n' +
-          '  :autocomplete="autocomplete"\n' +
-          '  :chips="chips"\n' +
-          '  :dense="dense"\n' +
-          '  :itemText="name"\n' +
-          '  :multiple="multiple"\n' +
-          '  :items="items"\n' +
-          '  :clearable="clearable"\n' +
-          '  :dark="dark"\n' +
-          '>\n' +
-          '</v-cascader>'
+const sandboxTemplateHTML =
+`<v-cascader
+    :autocomplete="autocomplete"
+    :chips="chips"
+    :dense="dense"
+    :itemText="name"
+    :multiple="multiple"
+    :items="items"
+    :clearable="clearable"
+    :dark="dark"
+    >
+'</v-cascader>`
 
-const sandboxCode = '\n' +
-'export default ({\n' +
-'  data: () => ({\n' +
-'    items: ofices, // see data source \n' +
-'    chips: false,\n' +
-'    multiple: false,\n' +
-'    dense: false,\n' +
-'    clearable: false,\n' +
-'    dark: false,\n' +
-'    autocomplete: false,\n' +
-'  })\n' +
-'})\n'
-
-export default Vue.extend({
+const sandboxCode =
+`export default ({
   data: () => ({
-    items: ofices,
-    name: 'name',
+    items: ofices, // see data source
     chips: false,
     multiple: false,
     dense: false,
     clearable: false,
     dark: false,
     autocomplete: false,
+  })
+})`
+
+export default Vue.extend({
+  data: () => ({
+    items: ofices,
+    name: 'name',
+    chips: false,
+    smallChips: false,
+    deletableChips: false,
+    multiple: false,
+    dense: false,
+    clearable: false,
+    dark: false,
+    autocomplete: false,
+    showFullPath: false,
+    delimeter: '/',
     //
     codeSandbox: false,
     sandboxTemplate: sandboxTemplateHTML,
