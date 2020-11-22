@@ -44,6 +44,11 @@
             <v-btn text :to="{path: '/tooltipbtn'}">VTooltipBtn</v-btn>
           </v-list-item-action>
         </v-list-item>
+        <v-list-item dense>
+          <v-list-item-action>
+            <v-btn text :to="{path: '/contextmenu'}">VContextMenu</v-btn>
+          </v-list-item-action>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app>
@@ -60,6 +65,7 @@
     <v-content>
       <router-view />
     </v-content>
+    <v-context-menu/>
   </v-app>
 </template>
 

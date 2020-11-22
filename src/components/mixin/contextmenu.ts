@@ -11,16 +11,18 @@ export interface ContextMenuCommand extends Command {
 }
 
 export default Vue.extend({
-  name: 'context-menu',
   props: {
     contextMenuCommands: {
       type: [Array, Function],
       default: () => ([])
-    } as CommandArrayOrFunc
+    } as CommandArrayOrFunc,
+    contextMenuItem: {
+      type: [Object, String, Number],
+      default: undefined
+    }
   },
   data: () => ({
-    isContextMenuActive: false,
-    compiledMenu: null as any
+    isContextMenuActive: false
   }),
   computed: {
     computedCommands (): ContextMenuCommand[] {
@@ -40,7 +42,7 @@ export default Vue.extend({
   methods: {
     genContextMenu (e: Event) {
       e.preventDefault()
-      this.$root.$emit('context-menu-call', { event: e, commands: this.computedCommands })
+      this.$root.$emit('context-menu-call', { event: e, commands: this.computedCommands, item: this.contextMenuItem })
     }
   }
 })

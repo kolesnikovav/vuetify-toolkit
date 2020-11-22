@@ -7,6 +7,7 @@ import VMdView from './VMdView'
 import VAdvDataTable from './VAdvDataTable'
 import VTootipBtn from './VTootipBtn'
 import VContextMenu from './VContextMenu'
+import contextmenu from './mixin/contextmenu'
 
 export interface VuetifyToolkitUseOptions {
   components?: Record<string, Component>
@@ -31,6 +32,7 @@ function install (v: VueConstructor, args?: VuetifyToolkitUseOptions): VueConstr
       v.component(key, component as typeof v)
     }
   }
+  v.mixin(contextmenu)
   return v
 }
 

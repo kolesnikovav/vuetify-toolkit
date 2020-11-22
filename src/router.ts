@@ -8,6 +8,7 @@ import VDateTimeSelect from './views/VDateTimeSelect.vue'
 import VMdView from './views/VMdView.vue'
 import VAdvDataTable from './views/VAdvDataTable.vue'
 import VTooltipBtn from './views/VTooltipBtn.vue'
+import VContextMenu from './views/VContextMenu.vue'
 
 Vue.use(Router)
 
@@ -54,6 +55,11 @@ export default new Router({
       path: '/tooltipbtn',
       name: 'vtooltipbtn',
       component: VTooltipBtn
+    },
+    {
+      path: '/contextmenu',
+      name: 'vcontextmenu',
+      component: VContextMenu
     }
   ]
 })
