@@ -1,4 +1,5 @@
 import { VNodeData, VNode, VNodeChildren } from 'vue'
+import { VChipA } from '../../shims-vuetify'
 import { getObjectValueByPath } from '../../vuetify-import'
 import VCascaderSelectList from './VCascaderSelectList'
 import commonSelect from '../mixin/commonSelect'
@@ -33,6 +34,7 @@ export default commonSelect.extend({
     parents: new Map(),
     childNodes: new Map(),
     treeviewCashe: new Map(),
+    itemCashe: new Map(),
     currentParents: [] as any[],
     currentParentKey: undefined
   }),
@@ -73,7 +75,8 @@ export default commonSelect.extend({
           },
           'select-parent': (item: object) => {
             (this as any).selectParent(item)
-          }
+          },
+          'update-dimensions': () => ((this as any).$refs.menu as any).updateDimensions()
         },
         scopedSlots: {
           item: (this.$scopedSlots as any).item
@@ -90,10 +93,40 @@ export default commonSelect.extend({
     }
   },
   watch: {
+    value: {
+      immediate: true,
+      handler (val) {
+        if (val) {
+          if (Array.isArray(val)) {
+            (this as any).$data.selectedItems = []
+            val.map(v => {
+              const itemKey = getObjectValueByPath(v, (this as any).$props.itemKey, [])
+              const itemToAdd = { text: (this as any).textItem(itemKey), key: itemKey };
+              (this as any).$data.selectedItems.push(itemToAdd)
+            })
+          } else {
+            (this as any).$data.selectedItems = []
+            // this.currentItem = null
+          }
+        }
+      }
+    },
     items: {
       immediate: true,
       handler (val) {
         (this as any).buildTree(val, undefined)
+      }
+    },
+    showFullPath: {
+      immediate: true,
+      handler (val) {
+        (this as any).updateSelectedItems()
+      }
+    },
+    delimeter: {
+      immediate: true,
+      handler (val) {
+        (this as any).updateSelectedItems()
       }
     }
   },
@@ -103,7 +136,8 @@ export default commonSelect.extend({
       const newItems: any[] = []
       items.map((item: any) => {
         const localChildren = getObjectValueByPath(item, this.$props.itemChildren, [])
-        const itemKey = getObjectValueByPath(item, this.$props.itemKey, [])
+        const itemKey = getObjectValueByPath(item, this.$props.itemKey, []);
+        (this as any).$data.itemCashe.set(itemKey, item)
         if (localChildren.length > 0) {
           const newChildren = (this as any).buildTree(localChildren, itemKey)
           const clone = Object.assign({}, item)
@@ -129,16 +163,79 @@ export default commonSelect.extend({
       }
       return result
     },
+    genChipSelection (item: object, index: number) {
+      const isDisabled = false // (
+      //   !(this as any).isInteractive ||
+      //   (this as any).getDisabled(item)
+      // )
+      return this.$createElement(VChipA, {
+        staticClass: 'v-chip--select',
+        attrs: { tabindex: -1 },
+        props: {
+          close: this.$props.deletableChips && !isDisabled,
+          disabled: isDisabled,
+          inputValue: (item as any).text,
+          small: this.$props.smallChips,
+          value: (item as any).text
+        },
+        on: {
+          click: (e: MouseEvent) => {
+            if (isDisabled) return
+            this.currentItem = item as any
+            const currentKey = (item as any).key;
+            (this as any).updateParents(currentKey);
+            (this as any).selectedIndex = index
+          },
+          'click:close': () => {
+            this.selectedItems = this.selectedItems.filter(v => v.key !== (item as any).key);
+            (this as any).emitInput()
+          }
+        },
+        key: (item as any).key
+      }, (item as any).text)
+    },
+    genCommaSelection (item: object, index: number, last: boolean) {
+      const color = index === (this as any).selectedIndex && (this as any).computedColor
+      const isDisabled = false // (
+      //   !(this as any).isInteractive ||
+      //   (this as any).getDisabled(item)
+      // )
+
+      return this.$createElement('div', (this as any).setTextColor(color, {
+        staticClass: 'v-select__selection v-select__selection--comma',
+        class: {
+          'v-select__selection--disabled': isDisabled
+        },
+        on: {
+          click: (e: MouseEvent) => {
+            if (isDisabled) return
+            this.currentItem = item as any
+            const currentKey = (item as any).key;
+            (this as any).updateParents(currentKey);
+            (this as any).selectedIndex = index
+          }
+        },
+        key: (item as any).key
+      }), `${(item as any).text}${last ? '' : ', '}`)
+    },
     genListWithSlot (): VNode {
       const slots = ['prepend-item', 'no-data', 'append-item']
         .filter(slotName => this.$slots[slotName])
         .map(slotName => this.$createElement('template', {
           slot: slotName
         }, this.$slots[slotName]))
-      // Requires destructuring due to Vue
-      // modifying the `on` property when passed
-      // as a referenced object
       return this.$createElement(VCascaderSelectList, ({ ...this.listData }) as VNodeData, slots)
+    },
+    textItem (itemkey: any): string {
+      let txt = ''
+      if (this.$props.showFullPath) {
+        const p = (this as any).retriveParents(itemkey)
+        p.map((v:any) => {
+          txt += (this as any).getText(v) + this.$props.delimeter
+        })
+      }
+      txt += (this as any).getText((this as any).itemCashe.get(itemkey))
+      return txt
     },
     selectItem (item: object) {
       const itemKey = getObjectValueByPath(item, this.$props.itemKey, [])
@@ -148,21 +245,52 @@ export default commonSelect.extend({
         this.$data.currentParents.push(item)
       } else {
         // selected item
-        let txt = ''
-        if (this.$props.showFullPath) {
-          this.$data.currentParents.map((v:any) => {
-            txt += (this as any).getText(v) + this.$props.delimeter
-          })
+        if (!this.$props.multiple) {
+          this.$data.isMenuActive = false
         }
-        txt += (this as any).getText(item)
-        const itemToAdd = { name: txt }
-        if (this.$props.multiple && this.$data.selectedItems.indexOf(itemToAdd) === -1) {
+        const itemToAdd = { text: (this as any).textItem(itemKey), key: itemKey }
+        if (this.$props.multiple && this.$data.selectedItems.filter((v: any) => v.key === itemKey).length === 0) {
           this.$data.selectedItems.push(itemToAdd)
         } else if (!this.$props.multiple) {
           this.$data.selectedItems = [itemToAdd]
         }
         this.$data.currentParentKey = undefined
         this.$data.currentParents = []
+      }
+      (this as any).emitInput()
+    },
+    emitInput () {
+      const result: any[] = []
+      this.$data.selectedItems.map((v: any) => {
+        result.push(this.$data.itemCashe.get(v.key))
+      })
+      this.$emit('input', result)
+    },
+    updateSelectedItems () {
+      this.$nextTick(() => {
+        this.$data.selectedItems.map((v: any) => {
+          v.text = (this as any).textItem(v.key)
+        })
+      })
+    },
+    retriveParents (itemKey: any): any[] {
+      const result: any[] = []
+      let parentKey = this.$data.parents.get(itemKey)
+      while (parentKey) {
+        result.unshift((this as any).$data.itemCashe.get(parentKey))
+        parentKey = this.$data.parents.get(parentKey)
+      }
+      return result
+    },
+    updateParents (itemKey: any) {
+      this.$data.currentParentKey = this.$data.parents.get(itemKey)
+      this.$data.currentParents = []
+      while (true) {
+        const p = this.$data.parents.get(itemKey)
+        if (p) {
+          this.$data.currentParents.unshift(p)
+          itemKey = p
+        } else break
       }
     },
     selectParent (item: object) {

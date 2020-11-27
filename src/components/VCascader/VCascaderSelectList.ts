@@ -27,6 +27,7 @@ export default commonSelectorCard.extend({
         on: {
           click: () => {
             this.$emit('select', item)
+            this.$emit('update-dimensions')
           }
         }
       }, [getPropertyFromItem(item, this.$props.itemText), this.genIcon(item)])
@@ -41,6 +42,7 @@ export default commonSelectorCard.extend({
           on: {
             click: () => {
               this.$emit('select-parent', v)
+              this.$emit('update-dimensions')
             }
           }
         }, [
