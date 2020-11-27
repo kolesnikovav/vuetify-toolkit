@@ -10,7 +10,7 @@
       This component extends
       <a href="https://vuetifyjs.com/en/components/autocompletes">VAutocomplete</a> component.
       It contains all properties, slots, events of extended component. Because items can be nested, component includes some properties,
-      similiar as VTreeSelect component.
+      similiar as VTreeSelect component. All items should have unique item-key ('id' by default)
     </p>
     <p>Added properties are below</p>
     <table class="v-card__text v-data-table elevation-1 theme--light">
@@ -92,10 +92,12 @@
           <v-switch v-model="smallChips" class="ma-2" label="smallChips"></v-switch>
           <v-switch v-model="deletableChips" class="ma-2" label="deletableChips"></v-switch>
           <v-switch v-model="dense" class="ma-2" label="dense"></v-switch>
+          <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
           <v-switch v-model="clearable" class="ma-2" label="clearable"></v-switch>
           <v-switch v-model="showFullPath" class="ma-2" label="showFullPath"></v-switch>
           <v-text-field v-if = "showFullPath" v-model="delimeter" class="ls-1" label="delimeter"></v-text-field>
         </v-row>
+        <v-row>
         <v-cascader
           :autocomplete="autocomplete"
           :itemText="name"
@@ -110,7 +112,15 @@
           :showFullPath = "showFullPath"
           :delimeter = "delimeter"
           item-key ="name"
+          v-model = "selectedItems"
         ></v-cascader>
+        </v-row>
+        <v-row>
+          <p>You have selected</p>
+        </v-row>
+        <v-row>
+          <span>{{selectedItems}}</span>
+        </v-row>
       </v-card-text>
     </v-card>
     <span />
@@ -134,6 +144,10 @@ const sandboxTemplateHTML =
     :items="items"
     :clearable="clearable"
     :dark="dark"
+    :showFullPath = "showFullPath"
+    :delimeter = "delimeter"
+    item-key ="name"
+    v-model = "selectedItems"
     >
 '</v-cascader>`
 
@@ -147,6 +161,7 @@ const sandboxCode =
     clearable: false,
     dark: false,
     autocomplete: false,
+    selectedItems: []
   })
 })`
 
@@ -164,6 +179,8 @@ export default Vue.extend({
     autocomplete: false,
     showFullPath: false,
     delimeter: '/',
+
+    selectedItems: [],
     //
     codeSandbox: false,
     sandboxTemplate: sandboxTemplateHTML,

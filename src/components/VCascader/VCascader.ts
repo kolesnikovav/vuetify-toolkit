@@ -34,6 +34,7 @@ export default commonSelect.extend({
     parents: new Map(),
     childNodes: new Map(),
     treeviewCashe: new Map(),
+    itemCashe: new Map(),
     currentParents: [] as any[],
     currentParentKey: undefined
   }),
@@ -92,10 +93,40 @@ export default commonSelect.extend({
     }
   },
   watch: {
+    value: {
+      immediate: true,
+      handler (val) {
+        if (val) {
+          if (Array.isArray(val)) {
+            (this as any).$data.selectedItems = []
+            val.map(v => {
+              const itemKey = getObjectValueByPath(v, (this as any).$props.itemKey, [])
+              const itemToAdd = { text: (this as any).textItem(itemKey), key: itemKey };
+              (this as any).$data.selectedItems.push(itemToAdd)
+            })
+          } else {
+            (this as any).$data.selectedItems = []
+            // this.currentItem = null
+          }
+        }
+      }
+    },
     items: {
       immediate: true,
       handler (val) {
         (this as any).buildTree(val, undefined)
+      }
+    },
+    showFullPath: {
+      immediate: true,
+      handler (val) {
+        (this as any).updateSelectedItems()
+      }
+    },
+    delimeter: {
+      immediate: true,
+      handler (val) {
+        (this as any).updateSelectedItems()
       }
     }
   },
@@ -105,7 +136,8 @@ export default commonSelect.extend({
       const newItems: any[] = []
       items.map((item: any) => {
         const localChildren = getObjectValueByPath(item, this.$props.itemChildren, [])
-        const itemKey = getObjectValueByPath(item, this.$props.itemKey, [])
+        const itemKey = getObjectValueByPath(item, this.$props.itemKey, []);
+        (this as any).$data.itemCashe.set(itemKey, item)
         if (localChildren.length > 0) {
           const newChildren = (this as any).buildTree(localChildren, itemKey)
           const clone = Object.assign({}, item)
@@ -155,7 +187,8 @@ export default commonSelect.extend({
             (this as any).selectedIndex = index
           },
           'click:close': () => {
-            this.selectedItems = this.selectedItems.filter(v => v !== item)
+            this.selectedItems = this.selectedItems.filter(v => v.key !== (item as any).key);
+            (this as any).emitInput()
           }
         },
         key: (item as any).key
@@ -191,10 +224,18 @@ export default commonSelect.extend({
         .map(slotName => this.$createElement('template', {
           slot: slotName
         }, this.$slots[slotName]))
-      // Requires destructuring due to Vue
-      // modifying the `on` property when passed
-      // as a referenced object
       return this.$createElement(VCascaderSelectList, ({ ...this.listData }) as VNodeData, slots)
+    },
+    textItem (itemkey: any): string {
+      let txt = ''
+      if (this.$props.showFullPath) {
+        const p = (this as any).retriveParents(itemkey)
+        p.map((v:any) => {
+          txt += (this as any).getText(v) + this.$props.delimeter
+        })
+      }
+      txt += (this as any).getText((this as any).itemCashe.get(itemkey))
+      return txt
     },
     selectItem (item: object) {
       const itemKey = getObjectValueByPath(item, this.$props.itemKey, [])
@@ -207,14 +248,7 @@ export default commonSelect.extend({
         if (!this.$props.multiple) {
           this.$data.isMenuActive = false
         }
-        let txt = ''
-        if (this.$props.showFullPath) {
-          this.$data.currentParents.map((v:any) => {
-            txt += (this as any).getText(v) + this.$props.delimeter
-          })
-        }
-        txt += (this as any).getText(item)
-        const itemToAdd = { text: txt, key: itemKey }
+        const itemToAdd = { text: (this as any).textItem(itemKey), key: itemKey }
         if (this.$props.multiple && this.$data.selectedItems.filter((v: any) => v.key === itemKey).length === 0) {
           this.$data.selectedItems.push(itemToAdd)
         } else if (!this.$props.multiple) {
@@ -223,6 +257,30 @@ export default commonSelect.extend({
         this.$data.currentParentKey = undefined
         this.$data.currentParents = []
       }
+      (this as any).emitInput()
+    },
+    emitInput () {
+      const result: any[] = []
+      this.$data.selectedItems.map((v: any) => {
+        result.push(this.$data.itemCashe.get(v.key))
+      })
+      this.$emit('input', result)
+    },
+    updateSelectedItems () {
+      this.$nextTick(() => {
+        this.$data.selectedItems.map((v: any) => {
+          v.text = (this as any).textItem(v.key)
+        })
+      })
+    },
+    retriveParents (itemKey: any): any[] {
+      const result: any[] = []
+      let parentKey = this.$data.parents.get(itemKey)
+      while (parentKey) {
+        result.unshift((this as any).$data.itemCashe.get(parentKey))
+        parentKey = this.$data.parents.get(parentKey)
+      }
+      return result
     },
     updateParents (itemKey: any) {
       this.$data.currentParentKey = this.$data.parents.get(itemKey)
