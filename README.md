@@ -40,6 +40,9 @@ See [Live demo & documentation](https://kolesnikovav.github.io/vuetify-toolkit/)
  - VAdvDataTable
  Data table with columns visibitity and order settings by user
   [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit)
+ - VTooltipBtn
+ Button with icon, text and hint
+  [Examples & Sandbox](https://kolesnikovav.github.io/vuetify-toolkit)
 
 ## Installation
 

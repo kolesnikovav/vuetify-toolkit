@@ -101,6 +101,12 @@
             <v-chip :color="getColorFat(item.fat)" dark>{{ item.fat }}</v-chip>
           </template>
           </v-data-grid-select>
+        <v-row>
+          <p>You have selected</p>
+        </v-row>
+        <v-row>
+          <span>{{selectedItems}}</span>
+        </v-row>
         </v-card-text>
       </v-card>
       <h2>Examples</h2>
@@ -119,6 +125,7 @@ import { dataGridHeaders, desserts } from '../example-data'
 
 const sandboxTemplate =
 `<v-data-grid-select
+  v-model = "selectedItems"
  :autocomplete = "autocomplete"
  :chips = "chips"
  :dense = "dense"
@@ -153,6 +160,7 @@ const sandboxCode =
     dark: false,
     autocomplete: false,
     customSlots: false,
+    selectedItems: []
   }),
   methods: {
     getColor (calories) {

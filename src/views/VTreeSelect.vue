@@ -122,6 +122,12 @@
             <v-icon v-else>mdi-file</v-icon>
           </template>
         </v-tree-select>
+        <v-row>
+          <p>You have selected</p>
+        </v-row>
+        <v-row>
+          <span>{{selectedItems}}</span>
+        </v-row>
       </v-card-text>
     </v-card>
     <span />
