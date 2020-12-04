@@ -113,7 +113,9 @@ export default Vue.extend({
       }
       return (this as any).$createElement(VToolbarA, {
         style: {
-          border: '1px solid'
+          border: '1px solid',
+          display: 'block',
+          'content-width': '100%'
         },
         slot: 'toolbar',
         props: {
@@ -122,8 +124,5 @@ export default Vue.extend({
         }
       }, buttons)
     }
-  },
-  render (): VNode {
-    return this.genToolbar()
   }
 })

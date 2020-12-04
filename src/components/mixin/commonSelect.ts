@@ -3,6 +3,8 @@ import { consoleError } from '../../vuetify-import'
 import { VAutocompleteA, VSelectA, VChipA } from '../../shims-vuetify'
 import DefaultMenuProps from '../../utils/MenuProps'
 import ComandToolbar from './comandToolbar'
+import InternalMenu from '../mixin/internalMenu'
+import { mergeProps } from '../../utils/mergeProps'
 
 export default VAutocompleteA.extend({
   props: {
@@ -47,24 +49,26 @@ export default VAutocompleteA.extend({
     },
     listData (): Object {
       const data = (VSelectA as any).options.computed.listData.call(this)
-      Object.assign(data.props, {
-        useToolbar: this.$props.useToolbar,
-        toolbarPosition: this.$props.toolbarPosition,
-        toolbarButtonTextVisible: this.$props.toolbarButtonTextVisible,
-        toolbarFlat: this.$props.toolbarFlat,
-        toolbarButtonOutlined: this.$props.toolbarButtonOutlined,
-        toolbarButtonRounded: this.$props.toolbarButtonRounded,
-        toolbarButtonShaped: this.$props.toolbarButtonShaped,
-        toolbarButtonFab: this.$props.toolbarButtonFab,
-        toolbarButtonTile: this.$props.toolbarButtonTile,
-        toolbarButtonElevation: this.$props.toolbarButtonElevation,
-        toolbarHeader: this.$props.toolbarHeader,
-        currentItem: this.currentItem,
-        selectedItems: this.selectedItems,
-        transition: this.$props.transition,
-        multiple: this.$props.multiple,
-        dark: this.$props.dark
-      })
+      mergeProps(data.props, this.$props, (ComandToolbar as any).options.props)
+      // data.props.useToolbar = this.$props.useToolbar
+      // Object.assign(data.props, {
+      //   useToolbar: this.$props.useToolbar,
+      //   toolbarPosition: this.$props.toolbarPosition,
+      //   toolbarButtonTextVisible: this.$props.toolbarButtonTextVisible,
+      //   toolbarFlat: this.$props.toolbarFlat,
+      //   toolbarButtonOutlined: this.$props.toolbarButtonOutlined,
+      //   toolbarButtonRounded: this.$props.toolbarButtonRounded,
+      //   toolbarButtonShaped: this.$props.toolbarButtonShaped,
+      //   toolbarButtonFab: this.$props.toolbarButtonFab,
+      //   toolbarButtonTile: this.$props.toolbarButtonTile,
+      //   toolbarButtonElevation: this.$props.toolbarButtonElevation,
+      //   toolbarHeader: this.$props.toolbarHeader,
+      //   currentItem: this.currentItem,
+      //   selectedItems: this.selectedItems,
+      //   transition: this.$props.transition,
+      //   multiple: this.$props.multiple,
+      //   dark: this.$props.dark
+      // })
       Object.assign(data.on, {
         'close-menu': () => { this.$data.isMenuActive = false },
         'select-ok': (items: any[]) => {
@@ -112,6 +116,37 @@ export default VAutocompleteA.extend({
     genInput (): VNode {
       return this.$props.autocomplete ? (VAutocompleteA as any).options.methods.genInput.call(this)
         : (VSelectA as any).options.methods.genInput.call(this)
+    },
+    genMenu (): VNode {
+      const props = (this as any).$_menuProps as any
+      props.activator = this.$refs['input-slot']
+
+      // Attach to root el so that
+      // menu covers prepend/append icons
+      if (
+        // TODO: make this a computed property or helper or something
+        (this as any).attach === '' || // If used as a boolean prop (<v-menu attach>)
+        (this as any).attach === true || // If bound to a boolean (<v-menu :attach="true">)
+        (this as any).attach === 'attach' // If bound as boolean prop in pug (v-menu(attach))
+      ) {
+        props.attach = this.$el
+      } else {
+        props.attach = (this as any).attach
+      }
+      mergeProps(props, this.$props, (ComandToolbar as any).options.props)
+
+      return this.$createElement(InternalMenu, {
+        attrs: { role: undefined },
+        props,
+        on: {
+          input: (val: boolean) => {
+            (this as any).isMenuActive = val;
+            (this as any).isFocused = val
+          },
+          scroll: (this as any).onScroll
+        },
+        ref: 'menu'
+      }, [(this as any).genList()])
     },
     genSlots (): VNode[] {
       return ['prepend-item', 'no-data', 'append-item']
