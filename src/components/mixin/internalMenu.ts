@@ -1,7 +1,5 @@
 import { VNode, VNodeData } from 'vue'
-import { consoleError } from '../../vuetify-import'
 import { VMenuA } from '../../shims-vuetify'
-import DefaultMenuProps from '../../utils/MenuProps'
 import ComandToolbar from './comandToolbar'
 
 /* This is internal menu.
