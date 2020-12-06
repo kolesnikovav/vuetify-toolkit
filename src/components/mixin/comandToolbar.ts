@@ -1,6 +1,6 @@
 import Vue, { VNode } from 'vue'
 import { Themeable, Colorable } from '../../vuetify-import'
-import { VToolbarA, VToolbarTitleA, VSpacerA } from '../../shims-vuetify'
+import { VToolbarA, VToolbarTitleA, VSpacerA, VDividerA } from '../../shims-vuetify'
 import { Command } from '../../utils/ToolbarCommand'
 import VTootipBtn from '../VTootipBtn'
 
@@ -58,14 +58,27 @@ export default Vue.extend({
     toolbarHeader: {
       type: String,
       default: undefined
+    },
+    toolbarHeaderStyle: {
+      type: Object,
+      default: undefined
+    },
+    toolbarHasDivider: {
+      type: Boolean,
+      default: true
+    },
+    toolbarStyle: {
+      type: Object,
+      default: undefined
+    },
+    toolbarHeight: {
+      type: [Number, String],
+      default: undefined
     }
   },
   computed: {
     tooltipPosition (): string {
       return ['bottom-left', 'bottom-right'].includes(this.$props.toolbarPosition) ? 'bottom' : 'top'
-    },
-    computedToolbarCommands (): Command[] {
-      return this.$props.toolbarCommands
     }
   },
   methods: {
@@ -99,30 +112,38 @@ export default Vue.extend({
         }
       })
     },
-    genToolbar (): VNode {
+    genToolbar (): VNode|VNode[] {
       const buttons: VNode[] = []
       if (['top-right', 'bottom-right'].includes(this.$props.toolbarPosition)) {
-        if (this.toolbarHeader) buttons.push(this.$createElement(VToolbarTitleA, this.toolbarHeader))
-        buttons.push(this.$createElement(VSpacerA))
+        if (this.toolbarHeader) {
+          buttons.push(this.$createElement(VToolbarTitleA, {
+            style: this.$props.toolbarHeaderStyle
+          }, this.toolbarHeader))
+          buttons.push(this.$createElement(VSpacerA))
+        }
       }
-      this.computedToolbarCommands.map((v: Command) => buttons.push(this.genButtonWithTooltip(v)))
+      this.$props.toolbarCommands.map((v: Command) => buttons.push(this.genButtonWithTooltip(v)))
 
       if (this.toolbarHeader && ['top-left', 'bottom-left'].includes(this.$props.toolbarPosition)) {
         buttons.push(this.$createElement(VSpacerA))
-        buttons.push(this.$createElement(VToolbarTitleA, this.toolbarHeader))
+        buttons.push(this.$createElement(VToolbarTitleA, {
+          style: this.$props.toolbarHeaderStyle
+        }, this.toolbarHeader))
       }
-      return (this as any).$createElement(VToolbarA, {
-        style: {
-          border: '1px solid',
-          display: 'block',
-          'content-width': '100%'
-        },
+      const toolbar = (this as any).$createElement(VToolbarA, {
+        style: this.$props.toolbarStyle,
         slot: 'toolbar',
         props: {
           flat: this.$props.toolbarFlat,
-          dense: this.$props.dense
+          dense: this.$props.dense,
+          height: this.$props.toolbarHeight
         }
       }, buttons)
+      if (!this.$props.toolbarHasDivider) return toolbar
+      if (['top-left', 'top-right'].includes(this.$props.toolbarPosition)) {
+        return [toolbar, this.$createElement(VDividerA)]
+      }
+      return [this.$createElement(VDividerA), toolbar]
     }
   }
 })

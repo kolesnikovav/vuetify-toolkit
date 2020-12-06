@@ -3,6 +3,7 @@ import { consoleError } from '../../vuetify-import'
 import { VAutocompleteA, VSelectA, VChipA } from '../../shims-vuetify'
 import DefaultMenuProps from '../../utils/MenuProps'
 import ComandToolbar from './comandToolbar'
+import { Command, openCloseCommands } from '../../utils/ToolbarCommand'
 import InternalMenu from '../mixin/internalMenu'
 import { mergeProps } from '../../utils/mergeProps'
 
@@ -47,39 +48,27 @@ export default VAutocompleteA.extend({
         }
       }
     },
+    computedToolbarCommands (): Command[] {
+      return openCloseCommands(this as any)
+    },
     listData (): Object {
       const data = (VSelectA as any).options.computed.listData.call(this)
       mergeProps(data.props, this.$props, (ComandToolbar as any).options.props)
-      // data.props.useToolbar = this.$props.useToolbar
-      // Object.assign(data.props, {
-      //   useToolbar: this.$props.useToolbar,
-      //   toolbarPosition: this.$props.toolbarPosition,
-      //   toolbarButtonTextVisible: this.$props.toolbarButtonTextVisible,
-      //   toolbarFlat: this.$props.toolbarFlat,
-      //   toolbarButtonOutlined: this.$props.toolbarButtonOutlined,
-      //   toolbarButtonRounded: this.$props.toolbarButtonRounded,
-      //   toolbarButtonShaped: this.$props.toolbarButtonShaped,
-      //   toolbarButtonFab: this.$props.toolbarButtonFab,
-      //   toolbarButtonTile: this.$props.toolbarButtonTile,
-      //   toolbarButtonElevation: this.$props.toolbarButtonElevation,
-      //   toolbarHeader: this.$props.toolbarHeader,
-      //   currentItem: this.currentItem,
-      //   selectedItems: this.selectedItems,
-      //   transition: this.$props.transition,
-      //   multiple: this.$props.multiple,
-      //   dark: this.$props.dark
-      // })
+      data.props.multiple = this.$props.multiple
+      data.props.ToolbarCommands = this.computedToolbarCommands
       Object.assign(data.on, {
         'close-menu': () => { this.$data.isMenuActive = false },
         'select-ok': (items: any[]) => {
           this.selectItems(items)
           this.$data.isMenuActive = false
-        }
+        },
+        'update-dimensions': () => ((this as any).$refs.menu as any).updateDimensions()
       })
       return data
     },
     staticList (): VNode {
-      if (this.$slots['no-data'] || this.$slots['prepend-item'] || this.$slots['append-item']) {
+      if (this.$slots['no-data'] || this.$slots['prepend-item'] || this.$slots['append-item'] ||
+       this.$slots['search-item'] || this.$slots['search-overflow']) {
         consoleError('assert: staticList should not be called if slots are used')
       }
       return this.$createElement('div', this.listData)
@@ -134,6 +123,7 @@ export default VAutocompleteA.extend({
         props.attach = (this as any).attach
       }
       mergeProps(props, this.$props, (ComandToolbar as any).options.props)
+      props.ToolbarCommands = this.computedToolbarCommands
 
       return this.$createElement(InternalMenu, {
         attrs: { role: undefined },

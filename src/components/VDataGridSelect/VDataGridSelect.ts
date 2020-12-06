@@ -4,6 +4,7 @@ import { VDataTableA } from '../../shims-vuetify'
 import commonSelect from '../mixin/commonSelect'
 import VDataGridSelectList from './VDataGridSelectList'
 import { VNodeChildren } from 'vue/types/vnode'
+import { mergeProps } from '../../utils/mergeProps'
 
 export default commonSelect.extend({
   name: 'v-data-grid-select',
@@ -13,29 +14,9 @@ export default commonSelect.extend({
   computed: {
     listData (): Object {
       const data = (commonSelect as any).options.computed.listData.call(this)
-      Object.assign(data.props, {
-        activatable: this.$props.activatable,
-        activeClass: this.$props.activeClass,
-        dark: this.$props.dark,
-        selectable: true,
-        selectedColor: this.$props.selectedColor,
-        indeterminateIcon: this.$props.indeterminateIcon,
-        onIcon: this.$props.onIcon,
-        offIcon: this.$props.offIcon,
-        expandIcon: this.$props.expandIcon,
-        loadingIcon: this.$props.loadingIcon,
-        itemKey: this.$props.itemKey,
-        itemText: this.$props.itemText,
-        transition: this.$props.transition,
-        selectedItems: this.selectedItems,
-        headers: this.$props.headers,
-        headersLength: this.$props.headersLength,
-        headerText: this.$props.headerText,
-        headerKey: this.$props.headerKey,
-        hideHeaders: this.$props.hideHeaders,
-        rowsPerPageText: this.$props.rowsPerPageText,
-        customFilter: this.$props.customFilter
-      })
+      mergeProps(data.props, this.$props, (VDataTableA as any).options.props)
+      data.props.selectable = true
+      data.props.selectedItems = this.selectedItems
       Object.assign(data.on, {
         input: (e: any[]) => {
           (this as any).selectItems(e)

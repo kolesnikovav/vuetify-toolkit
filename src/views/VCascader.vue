@@ -94,6 +94,7 @@
           <v-switch v-model="dense" class="ma-2" label="dense"></v-switch>
           <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
           <v-switch v-model="clearable" class="ma-2" label="clearable"></v-switch>
+          <v-switch v-model="useToolbar" class="ma-2" label="useToolbar"></v-switch>
           <v-switch v-model="showFullPath" class="ma-2" label="showFullPath"></v-switch>
           <v-text-field v-if = "showFullPath" v-model="delimeter" class="ls-1" label="delimeter"></v-text-field>
         </v-row>
@@ -112,6 +113,7 @@
           :showFullPath = "showFullPath"
           :delimeter = "delimeter"
           item-key ="name"
+          :use-toolbar = "useToolbar"
           v-model = "selectedItems"
         ></v-cascader>
         </v-row>
@@ -179,6 +181,7 @@ export default Vue.extend({
     autocomplete: false,
     showFullPath: false,
     delimeter: '/',
+    useToolbar: false,
 
     selectedItems: [],
     //

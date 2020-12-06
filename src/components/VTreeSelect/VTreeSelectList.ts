@@ -1,8 +1,9 @@
 import { VNode, PropType } from 'vue'
 import { VTreeviewNodeProps, getObjectValueByPath } from '../../vuetify-import'
-import { VTreeviewA } from '../../shims-vuetify'
+import InternalTreeView from './InternalTreeView'
 import { Command, defaultTreeSelectCommands } from '../../utils/ToolbarCommand'
 import commonSelectorCard from '../mixin/commonSelectorCard'
+import { mergeProps } from '../../utils/mergeProps'
 
 export default commonSelectorCard.extend({
   name: 'v-tree-select-list',
@@ -60,28 +61,18 @@ export default commonSelectorCard.extend({
   },
   methods: {
     genSelectList (): VNode {
-      return (this as any).$createElement(VTreeviewA, {
+      const treeviewProps = {} as any
+      mergeProps(treeviewProps, this.$props, VTreeviewNodeProps)
+      treeviewProps.activatable = true
+      treeviewProps.active = [this.currentItem]
+      treeviewProps.selectable = true
+      treeviewProps.returnObject = true
+      treeviewProps.selectedItems = this.selectedItems
+      treeviewProps.items = this.items
+      treeviewProps.toolbarCommands = this.computedToolbarCommands
+      return (this as any).$createElement(InternalTreeView, {
         ref: 'selectList',
-        props: {
-          activatable: true,
-          active: [this.currentItem],
-          dense: this.$props.dense,
-          items: this.items,
-          toolbarCommands: this.computedToolbarCommands,
-          itemDisabled: this.$props.itemDisabled,
-          itemText: this.$props.itemText,
-          itemKey: this.$props.itemKey,
-          itemChildren: this.$props.itemChildren,
-          loadChildren: this.$props.loadChildren,
-          selectable: true,
-          returnObject: true,
-          selectOnly: true,
-          selectedItems: this.selectedItems,
-          // openAll: this.openAll,
-          // shaped: this.shaped,
-          // rounded: this.rounded,
-          selectionType: this.$props.selectionType
-        },
+        props: treeviewProps,
         scopedSlots: this.$scopedSlots,
         on: {
           input: (e: any[]) => {

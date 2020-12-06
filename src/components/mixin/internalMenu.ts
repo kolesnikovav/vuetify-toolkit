@@ -2,16 +2,18 @@ import { VNode, VNodeData } from 'vue'
 import { VMenuA } from '../../shims-vuetify'
 import ComandToolbar from './comandToolbar'
 
-/* This is internal menu.
-This menu can contain fixed header or footer and scrolled content the same as native v-menu
+/* This is headered menu.
+This menu can contains fixed header or footer and scrolled content the same as native v-menu
+For best user expirience, in this component included no-scrolled search results
 */
 
 export default VMenuA.extend({
-  name: 'v-internal-menu',
+  name: 'v-headered-menu',
   mixins: [
     ComandToolbar
   ],
   methods: {
+    /* This method have been overriden for provide no-scroll header/footer and search results in menu */
     genContent (): VNode {
       const menuStyles = Object.assign({}, (this as any).styles)
       menuStyles['overflow-Y'] = this.$props.useToolbar ? 'hidden' : 'auto'

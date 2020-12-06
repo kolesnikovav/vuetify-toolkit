@@ -12,10 +12,15 @@
       outlined
       hide-details="auto"
       use-toolbar
+      toolbar-has-divider
       :menu-props="{
         bottom: true,
         maxHeight: 200
       }"
+      :toolbar-style="{
+        background: 'yellow'
+      }"
+      toolbar-height = 32
       :append-icon="'mdi-chevron-down'"
       color="grey darken-2"
       selected-color="red"
