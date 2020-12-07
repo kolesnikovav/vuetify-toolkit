@@ -1,7 +1,6 @@
 import Vue, { VNode } from 'vue'
 import { VDatePickerA, VTimePickerA, VRowA, VColA, VBtnA, VSheetA } from '../../shims-vuetify'
 import commonSelectorCard from '../mixin/commonSelectorCard'
-import { Command, defaultDateTimeSelectCommands } from '../../utils/ToolbarCommand'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const VDatePickerProps = ((VDatePickerA as any).options as any).props
@@ -43,9 +42,6 @@ export default commonSelectorCard.extend({
     selectedTime: DEFAULT_TIME
   }),
   computed: {
-    computedToolbarCommands (): Command[] {
-      return this.$props.toolbarCommands.length > 0 ? this.$props.toolbarCommands : defaultDateTimeSelectCommands(this as any)
-    },
     computedTime (): string {
       if (this.selectedTime.length === 5) {
         return this.selectedTime + ':00'
@@ -151,9 +147,9 @@ export default commonSelectorCard.extend({
       },
       [
         this.$createElement(VRowA, {
-          props: {
-            toolbarCommands: this.computedToolbarCommands
-          }
+          // props: {
+          //   toolbarCommands: this.computedToolbarCommands
+          // }
         }, [
           this.$props.selectionType === 'date' || this.$props.selectionType === 'datetime' ? this.genDatePicker() : undefined,
           this.$props.selectionType === 'time' || this.$props.selectionType === 'datetime' ? this.genTimePicker() : undefined])
@@ -165,12 +161,6 @@ export default commonSelectorCard.extend({
       } else if (this.$props.selectionType === 'date') {
         this.$emit('input', this.selectedDate)
       } else this.$emit('input', this.selectedTime)
-    },
-    Now () {
-      const dt = new Date()
-      this.selectedDate = dt.toISOString().slice(0, 10)
-      this.selectedTime = dt.toTimeString().slice(0, 8)
-      this.EmitInput()
     }
   }
 })

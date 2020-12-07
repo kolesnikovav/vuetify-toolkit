@@ -2,6 +2,7 @@ import { VNode, VNodeChildren } from 'vue'
 import { VDatePickerA, VTimePickerA, VSelectA } from '../../shims-vuetify'
 import VDateTimeSelectList from './VDataTimeSelectList'
 import commonSelect from '../mixin/commonSelect'
+import { Command, defaultDateTimeSelectCommands } from '../../utils/ToolbarCommand'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const VDatePickerProps = ((VDatePickerA as any).options as any).props
@@ -28,6 +29,10 @@ const DEFAULT_TIME_FORMAT = 'HH:mm:ss'
 export default commonSelect.extend({
   name: 'v-date-time-select',
   props: {
+    toolbarCommands: {
+      type: Array,
+      default: function () { defaultDateTimeSelectCommands(this as any) }
+    },
     ...VDatePickerProps,
     ...VTimePickerProps,
     menuProps: {
@@ -147,6 +152,12 @@ export default commonSelect.extend({
       if (this.$props.selectionType === 'time') this.time = e
       else this.datetime = e
       this.selectedItems = [e]
+    },
+    Now () {
+      // const dt = new Date()
+      // this.selectedDate = dt.toISOString().slice(0, 10)
+      // this.selectedTime = dt.toTimeString().slice(0, 8)
+      // this.EmitInput()
     }
   }
 })

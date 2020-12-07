@@ -5,10 +5,17 @@ import commonSelect from '../mixin/commonSelect'
 import VDataGridSelectList from './VDataGridSelectList'
 import { VNodeChildren } from 'vue/types/vnode'
 import { mergeProps } from '../../utils/mergeProps'
+import { Command, defaultDataGridSelectCommands } from '../../utils/ToolbarCommand'
 
 export default commonSelect.extend({
   name: 'v-data-grid-select',
   props: {
+    toolbarCommands: {
+      type: Array,
+      default: function () {
+        return defaultDataGridSelectCommands(this as any)
+      }
+    },
     ...(VDataTableA as any).options.props
   },
   computed: {

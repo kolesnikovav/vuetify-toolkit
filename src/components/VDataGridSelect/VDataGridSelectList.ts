@@ -2,7 +2,6 @@ import { VNode } from 'vue'
 import { VDataTableA } from '../../shims-vuetify'
 import tableScopedSlots from '../../utils/TableScopedSlots'
 import commonSelectorCard from '../mixin/commonSelectorCard'
-import { Command, defaultDataGridSelectCommands } from '../../utils/ToolbarCommand'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const VDataTableProps = ((VDataTableA as any).options as any).props
@@ -13,9 +12,6 @@ export default commonSelectorCard.extend({
     ...VDataTableProps
   },
   computed: {
-    computedToolbarCommands (): Command[] {
-      return this.$props.toolbarCommands.length > 0 ? this.$props.toolbarCommands : defaultDataGridSelectCommands(this as any)
-    }
   },
   watch: {
     selectedItems: {
@@ -66,9 +62,6 @@ export default commonSelectorCard.extend({
         scopedSlots: tableScopedSlots(this.$scopedSlots),
         on: inputHandler
       })
-    },
-    OK () {
-      this.$emit('close-menu')
     },
     InvertSelection () {
       this.items.map((v: any) => {

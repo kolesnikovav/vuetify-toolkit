@@ -8,6 +8,7 @@
           :icon="false"
           :tile="tile"
           :fab="fab"
+          :text="text"
           :height="height"
           :rounded="rounded"
           :outlined="outlined"
@@ -15,6 +16,11 @@
           :width="width"
           :disabled="disabled"
           :depressed="depressed"
+          :medium:  = "medium"
+          :large = "large"
+          :small = "small"
+          :xSmall = "xSmall"
+          :xLarge = "xLarge"
           :to="to"
           :href="href"
           :elevation="elevation"
@@ -35,6 +41,7 @@
       :icon="false"
       :tile="tile"
       :fab="fab"
+      :text="text"
       :height="height"
       :rounded="rounded"
       :outlined="outlined"
@@ -42,6 +49,11 @@
       :width="width"
       :disabled="disabled"
       :depressed="depressed"
+      :medium:  = "medium"
+      :large = "large"
+      :small = "small"
+      :xSmall = "xSmall"
+      :xLarge = "xLarge"
       :to="to"
       :href="href"
       :elevation="elevation"
@@ -66,10 +78,16 @@ export default Vue.extend({
     tile: Boolean,
     fab: Boolean,
     rounded: Boolean,
+    text: Boolean,
     shaped: Boolean,
     disabled: Boolean,
     depressed: Boolean,
     outlined: Boolean,
+    medium: Boolean,
+    large: Boolean,
+    small: Boolean,
+    xSmall: Boolean,
+    xLarge: Boolean,
     height: {
       type: [Number, String],
       default: undefined

@@ -231,6 +231,9 @@ export default VAutocompleteA.extend({
       this.$emit('change', [])
       this.$emit('input', [])
     },
+    OK () {
+      this.$data.isMenuActive = false
+    },
     closeMenu () {
       this.$data.isMenuActive = false
     }

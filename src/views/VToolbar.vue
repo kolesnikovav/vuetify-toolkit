@@ -83,6 +83,12 @@
           <td>Elevation of toolbar buttons</td>
         </tr>
         <tr>
+          <td>toolbar-button-size</td>
+          <td>String</td>
+          <td>'medium'</td>
+          <td>Sets the size of toolbar button. Can be one of ['medium', 'large', 'xlarge', 'xsmall', 'small']</td>
+        </tr>
+        <tr>
           <td>toolbar-header</td>
           <td>String</td>
           <td>undefined</td>

@@ -3,6 +3,7 @@ import { VChipA } from '../../shims-vuetify'
 import { getObjectValueByPath } from '../../vuetify-import'
 import VCascaderSelectList from './VCascaderSelectList'
 import commonSelect from '../mixin/commonSelect'
+import { Command, openCloseCommands } from '../../utils/ToolbarCommand'
 
 /* @vue/component */
 export default commonSelect.extend({
@@ -27,6 +28,12 @@ export default commonSelect.extend({
     delimeter: {
       type: [String],
       default: ','
+    },
+    toolbarCommands: {
+      type: Array,
+      default: function () {
+        return openCloseCommands(this as any)
+      }
     }
   },
   data: (vm: any) => ({

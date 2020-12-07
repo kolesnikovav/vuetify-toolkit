@@ -12,7 +12,9 @@ export default commonSelect.extend({
     ...VTreeviewNodeProps,
     toolbarCommands: {
       type: Array,
-      default: openCloseCommands(this as any)
+      default: function () {
+        return openCloseCommands(this as any)
+      }
     },
     openAll: Boolean,
     selectionType: {
@@ -28,6 +30,9 @@ export default commonSelect.extend({
       data.props.toolbarCommands = this.computedToolbarCommands
       Object.assign(data.on, {
         select: (e: any[]) => {
+          this.selectItems(e)
+        },
+        'update:open': (e: any[]) => {
           this.selectItems(e)
         },
         'update-dimensions': () => (this.$refs.menu as any).updateDimensions()

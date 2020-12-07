@@ -29,7 +29,7 @@ export default Vue.extend({
     },
     toolbarButtonOutlined: {
       type: Boolean,
-      default: true
+      default: false
     },
     toolbarButtonRounded: {
       type: Boolean,
@@ -45,6 +45,10 @@ export default Vue.extend({
     },
     toolbarButtonTile: {
       type: Boolean,
+      default: false
+    },
+    toolbarButtonText: {
+      type: Boolean,
       default: true
     },
     toolbarButtonTextVisible: {
@@ -54,6 +58,11 @@ export default Vue.extend({
     toolbarButtonElevation: {
       type: [Number, String],
       default: undefined
+    },
+    toolbarButtonSize: {
+      type: String,
+      default: 'small',
+      validator: (v: string) => ['medium', 'large', 'xlarge', 'xsmall', 'small'].includes(v)
     },
     toolbarHeader: {
       type: String,
@@ -85,6 +94,11 @@ export default Vue.extend({
     genButtonWithTooltip (v: Command): VNode {
       return this.$createElement(VTootipBtn, {
         props: {
+          medium: this.$props.toolbarButtonSize === 'medium',
+          large: this.$props.toolbarButtonSize === 'large',
+          small: this.$props.toolbarButtonSize === 'small',
+          xSmall: this.$props.toolbarButtonSize === 'xsmall',
+          xLarge: this.$props.toolbarButtonSize === 'xlarge',
           hint: v.hint,
           btnIcon: v.icon,
           btnText: this.toolbarButtonTextVisible ? v.text : '',
@@ -97,11 +111,15 @@ export default Vue.extend({
           shaped: this.toolbarButtonShaped,
           outlined: this.toolbarButtonOutlined,
           elevation: this.toolbarButtonElevation,
+          text: this.toolbarButtonText,
           action: v.action,
           disabled: v.disabled()
         },
         on: {
           click: (e: string | Function) => {
+            if (!v.target && typeof v.action === 'string') {
+              this.$emit(v.action)
+            }
             if (v.action && v.action instanceof Function) {
               v.action.call(v.target)
             } else if (v.action && typeof v.action === 'string') {
@@ -117,7 +135,10 @@ export default Vue.extend({
       if (['top-right', 'bottom-right'].includes(this.$props.toolbarPosition)) {
         if (this.toolbarHeader) {
           buttons.push(this.$createElement(VToolbarTitleA, {
-            style: this.$props.toolbarHeaderStyle
+            style: this.$props.toolbarHeaderStyle,
+            props: {
+              dense: this.$props.dense
+            }
           }, this.toolbarHeader))
           buttons.push(this.$createElement(VSpacerA))
         }
@@ -127,7 +148,10 @@ export default Vue.extend({
       if (this.toolbarHeader && ['top-left', 'bottom-left'].includes(this.$props.toolbarPosition)) {
         buttons.push(this.$createElement(VSpacerA))
         buttons.push(this.$createElement(VToolbarTitleA, {
-          style: this.$props.toolbarHeaderStyle
+          style: this.$props.toolbarHeaderStyle,
+          props: {
+            dense: this.$props.dense
+          }
         }, this.toolbarHeader))
       }
       const toolbar = (this as any).$createElement(VToolbarA, {
