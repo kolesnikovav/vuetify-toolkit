@@ -46,6 +46,16 @@ export default commonSelect.extend({
       return this.$createElement(VDataGridSelectList, {
         ...(this as any).listData
       }, this.genSlots())
+    },
+    InvertSelection () {
+      if (!this.$props.multiple) return
+      const nSelected = [] as any[]
+      this.$props.items.map((v: any) => {
+        if (this.$data.selectedItems.indexOf(v) === -1) {
+          nSelected.push(v)
+        }
+      })
+      this.$data.selectedItems = nSelected
     }
   }
 })

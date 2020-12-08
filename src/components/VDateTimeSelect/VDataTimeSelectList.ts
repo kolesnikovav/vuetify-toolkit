@@ -95,9 +95,6 @@ export default commonSelectorCard.extend({
               noTitle: true,
               value: this.selectedDate
             },
-            style: {
-              'padding-right': this.$props.selectionType === 'datetime' ? 0 : 15
-            },
             on: {
               'click:date': (e: string) => {
                 this.$data.selectedDate = e

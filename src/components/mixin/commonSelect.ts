@@ -15,6 +15,10 @@ export default VAutocompleteA.extend({
       type: Boolean,
       default: false
     },
+    foundedItemsLimit: {
+      type: Number,
+      default: 20
+    },
     menuProps: {
       type: [String, Array, Object],
       default: () => DefaultMenuProps
@@ -48,14 +52,10 @@ export default VAutocompleteA.extend({
         }
       }
     },
-    computedToolbarCommands (): Command[] {
-      return openCloseCommands(this as any)
-    },
     listData (): Object {
       const data = (VSelectA as any).options.computed.listData.call(this)
       mergeProps(data.props, this.$props, (ComandToolbar as any).options.props)
       data.props.multiple = this.$props.multiple
-      data.props.ToolbarCommands = this.computedToolbarCommands
       Object.assign(data.on, {
         'close-menu': () => { this.$data.isMenuActive = false },
         'select-ok': (items: any[]) => {
@@ -123,7 +123,10 @@ export default VAutocompleteA.extend({
         props.attach = (this as any).attach
       }
       mergeProps(props, this.$props, (ComandToolbar as any).options.props)
-      props.ToolbarCommands = this.computedToolbarCommands
+      props.filteredItems = (this as any).filteredItems
+      props.itemText = this.$props.itemText
+      props.autocomplete = this.$props.autocomplete
+      props.queryText = this.internalSearch ? this.internalSearch : ''
 
       return this.$createElement(InternalMenu, {
         attrs: { role: undefined },

@@ -31,7 +31,7 @@ export default commonSelect.extend({
   props: {
     toolbarCommands: {
       type: Array,
-      default: function () { defaultDateTimeSelectCommands(this as any) }
+      default: function () { return defaultDateTimeSelectCommands(this as any) }
     },
     ...VDatePickerProps,
     ...VTimePickerProps,
@@ -154,10 +154,11 @@ export default commonSelect.extend({
       this.selectedItems = [e]
     },
     Now () {
-      // const dt = new Date()
-      // this.selectedDate = dt.toISOString().slice(0, 10)
-      // this.selectedTime = dt.toTimeString().slice(0, 8)
-      // this.EmitInput()
+      const dt = new Date()
+      this.date = dt.toISOString().slice(0, 10)
+      this.time = dt.toTimeString().slice(0, 8)
+      this.datetime = dt.toISOString()
+      console.log(this.datetime)
     }
   }
 })

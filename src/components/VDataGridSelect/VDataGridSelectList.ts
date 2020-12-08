@@ -62,12 +62,6 @@ export default commonSelectorCard.extend({
         scopedSlots: tableScopedSlots(this.$scopedSlots),
         on: inputHandler
       })
-    },
-    InvertSelection () {
-      this.items.map((v: any) => {
-        const isSelected = (this.$refs.selectList as any).isSelected(v);
-        (this.$refs.selectList as any).select(v, !isSelected, false)
-      })
     }
   }
 })

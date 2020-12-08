@@ -1,7 +1,6 @@
 import { VNode, PropType } from 'vue'
 import { VTreeviewNodeProps, getObjectValueByPath } from '../../vuetify-import'
 import InternalTreeView from './InternalTreeView'
-import { Command, defaultTreeSelectCommands } from '../../utils/ToolbarCommand'
 import commonSelectorCard from '../mixin/commonSelectorCard'
 import { mergeProps } from '../../utils/mergeProps'
 
@@ -9,15 +8,17 @@ export default commonSelectorCard.extend({
   name: 'v-tree-select-list',
   props: {
     ...VTreeviewNodeProps,
+    currentItem: {
+      default: null
+    },
     selectionType: {
       type: String as PropType<'leaf' | 'independent'>,
       default: 'leaf',
       validator: (v: string) => ['leaf', 'independent'].includes(v)
-    }
-  },
-  computed: {
-    computedToolbarCommands (): Command[] {
-      return this.$props.toolbarCommands.length > 0 ? this.$props.toolbarCommands : defaultTreeSelectCommands(this as any)
+    },
+    allowSelectParents: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
@@ -69,7 +70,8 @@ export default commonSelectorCard.extend({
       treeviewProps.returnObject = true
       treeviewProps.selectedItems = this.selectedItems
       treeviewProps.items = this.items
-      treeviewProps.toolbarCommands = this.computedToolbarCommands
+      treeviewProps.initialItem = this.$data.currentItem
+      treeviewProps.allowSelectParents = this.$props.allowSelectParents
       return (this as any).$createElement(InternalTreeView, {
         ref: 'selectList',
         props: treeviewProps,
@@ -85,6 +87,9 @@ export default commonSelectorCard.extend({
                 this.$emit('select', lastAdded)
               }
             }
+          },
+          'update:open': (e: any[]) => {
+            this.$emit('update-dimensions')
           }
         }
       })

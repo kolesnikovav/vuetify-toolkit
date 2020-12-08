@@ -10,6 +10,10 @@ export default commonSelect.extend({
   name: 'v-tree-select',
   props: {
     ...VTreeviewNodeProps,
+    allowSelectParents: {
+      type: Boolean,
+      default: false
+    },
     toolbarCommands: {
       type: Array,
       default: function () {
@@ -27,12 +31,14 @@ export default commonSelect.extend({
     listData (): Object {
       const data = (commonSelect as any).options.computed.listData.call(this)
       mergeProps(data.props, this.$props, VTreeviewNodeProps)
-      data.props.toolbarCommands = this.computedToolbarCommands
+      data.props.allowSelectParents = this.$props.allowSelectParents
+      data.props.currentItem = this.$data.currentItem
       Object.assign(data.on, {
         select: (e: any[]) => {
           this.selectItems(e)
         },
         'update:open': (e: any[]) => {
+          (this.$refs.menu as any).updateDimensions()
           this.selectItems(e)
         },
         'update-dimensions': () => (this.$refs.menu as any).updateDimensions()
@@ -45,9 +51,6 @@ export default commonSelect.extend({
         consoleError('assert: staticList should not be called if slots are used')
       }
       return this.$createElement(VTreeSelectList, this.listData)
-    },
-    computedToolbarCommands (): Command[] {
-      return this.$props.toolbarCommands.length > 0 ? this.$props.toolbarCommands : openCloseCommands(this as any)
     }
   },
   methods: {
