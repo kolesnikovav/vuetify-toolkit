@@ -16,6 +16,10 @@ export default commonSelect.extend({
         return defaultDataGridSelectCommands(this as any)
       }
     },
+    useInternalItemFilter: {
+      type: Boolean,
+      default: true
+    },
     ...(VDataTableA as any).options.props
   },
   computed: {
@@ -24,6 +28,7 @@ export default commonSelect.extend({
       mergeProps(data.props, this.$props, (VDataTableA as any).options.props)
       data.props.selectable = true
       data.props.selectedItems = this.selectedItems
+      data.props.search = this.internalSearch
       Object.assign(data.on, {
         input: (e: any[]) => {
           (this as any).selectItems(e)

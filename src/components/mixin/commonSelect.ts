@@ -15,6 +15,10 @@ export default VAutocompleteA.extend({
       type: Boolean,
       default: false
     },
+    useInternalItemFilter: {
+      type: Boolean,
+      default: false
+    },
     foundedItemsLimit: {
       type: Number,
       default: 20
@@ -127,6 +131,7 @@ export default VAutocompleteA.extend({
       props.itemText = this.$props.itemText
       props.autocomplete = this.$props.autocomplete
       props.queryText = this.internalSearch ? this.internalSearch : ''
+      props.useInternalItemFilter = (this as any).useInternalItemFilter
 
       return this.$createElement(InternalMenu, {
         attrs: { role: undefined },

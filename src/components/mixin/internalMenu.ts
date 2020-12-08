@@ -68,7 +68,7 @@ export default VMenuA.extend({
         options.on.mouseleave = (this as any).mouseLeaveHandler
       }
       /* for fixed header or footer */
-      const searchResults = (this as any).genSearchResults()
+      const searchResults = !this.$props.useInternalItemFilter ? (this as any).genSearchResults() : undefined
       if (this.$props.useToolbar) {
         return this.$createElement('div', options, [
           ['top-left', 'top-right'].includes((this as any).toolbarPosition) ? (this as any).genToolbar() : undefined,

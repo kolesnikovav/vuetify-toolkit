@@ -57,7 +57,8 @@ export default commonSelectorCard.extend({
           customFilter: this.$props.customFilter,
           showSelect: true,
           singleSelect: !this.multiple,
-          value: this.selectedItems
+          value: this.selectedItems,
+          search: this.search
         },
         scopedSlots: tableScopedSlots(this.$scopedSlots),
         on: inputHandler

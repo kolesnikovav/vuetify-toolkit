@@ -30,6 +30,10 @@ export default Vue.extend({
     autocomplete: {
       type: Boolean,
       default: false
+    },
+    useInternalItemFilter: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {

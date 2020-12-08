@@ -1,5 +1,5 @@
 import { VNode, VNodeData, PropType } from 'vue'
-import { VTreeviewNodeProps, consoleError } from '../../vuetify-import'
+import { VTreeviewNodeProps, consoleError, getPropertyFromItem } from '../../vuetify-import'
 import VTreeSelectList from './VTreeSelectList'
 import treeviewScopedSlots from '../../utils/TreeviewScopedSlots'
 import commonSelect from '../mixin/commonSelect'
@@ -28,10 +28,22 @@ export default commonSelect.extend({
     }
   },
   computed: {
+    // filteredItems (): any[] {
+    //   if (!this.$props.autocomlete || !this.internalSearch || this.internalSearch === '' || this.internalSearch === undefined) {
+    //     return this.$props.items
+    //   }
+    //   const result: any[] = []
+    //   this.$props.items.map((v: any) => {
+    //     const chld = getPropertyFromItem(v, this.$props.itemChildren)
+    //     console.log(chld)
+    //   })
+    //   return result
+    // },
     listData (): Object {
       const data = (commonSelect as any).options.computed.listData.call(this)
       mergeProps(data.props, this.$props, VTreeviewNodeProps)
       data.props.allowSelectParents = this.$props.allowSelectParents
+      // data.props.items = this.filteredItems
       data.props.currentItem = this.$data.currentItem
       Object.assign(data.on, {
         select: (e: any[]) => {
