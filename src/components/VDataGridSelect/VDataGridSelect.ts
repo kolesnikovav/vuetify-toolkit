@@ -5,7 +5,7 @@ import commonSelect from '../mixin/commonSelect'
 import VDataGridSelectList from './VDataGridSelectList'
 import { VNodeChildren } from 'vue/types/vnode'
 import { mergeProps } from '../../utils/mergeProps'
-import { Command, defaultDataGridSelectCommands } from '../../utils/ToolbarCommand'
+import { defaultDataGridSelectCommands } from '../../utils/ToolbarCommand'
 
 export default commonSelect.extend({
   name: 'v-data-grid-select',
@@ -22,6 +22,28 @@ export default commonSelect.extend({
     },
     ...(VDataTableA as any).options.props
   },
+  watch: {
+    filteredItems: {
+      immediate: true,
+      handler (val) {
+        if (val) {
+          if (Array.isArray(val) && this.$props.autocomplete && val.length === 1) {
+            if (!this.$props.multiple) {
+              this.selectedItems = val
+              const inputRef = this.$refs.input as HTMLElement
+              if (inputRef) {
+                inputRef.blur()
+              }
+            } else if (this.selectedItems.indexOf(val[0]) === -1) {
+              this.selectedItems.push(val[0])
+            }
+            this.$data.isMenuActive = false
+            this.internalSearch = ''
+          }
+        }
+      }
+    }
+  },
   computed: {
     listData (): Object {
       const data = (commonSelect as any).options.computed.listData.call(this)
@@ -29,6 +51,7 @@ export default commonSelect.extend({
       data.props.selectable = true
       data.props.selectedItems = this.selectedItems
       data.props.search = this.internalSearch
+      data.ref = 'selectList'
       Object.assign(data.on, {
         input: (e: any[]) => {
           (this as any).selectItems(e)
