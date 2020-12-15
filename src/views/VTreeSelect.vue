@@ -1,36 +1,10 @@
 <template>
   <div>
-<v-tree-select
-      :expand-icon="'mdi-chevron-down'"
-      independent
-      autocomplete
-      dense
-      multiple
-      :selectable="false"
-      :items="items"
-      placeholder="Test"
-      outlined
-      hide-details="auto"
-      use-toolbar
-      toolbar-has-divider
-      :menu-props="{
-        bottom: true,
-        maxHeight: 200
-      }"
-      :toolbar-style="{
-        background: 'yellow'
-      }"
-      toolbar-height = 32
-      :append-icon="'mdi-chevron-down'"
-      color="grey darken-2"
-      selected-color="red"
-    >
-</v-tree-select>
     <h1>VTreeSelect</h1>
     <span></span>
     <p>
       VTreeSelect is the component that provide tree-like data selection. This combines original Vuetify components VAutocomplete and VTreeview in one.
-      You can use any nested data as item source.
+      You can use any nested data as item source. In autocomplete case, searching items is recursive.
     </p>
     <p>
       This component extends <a href = "https://vuetifyjs.com/en/components/autocompletes">VAutocomplete</a> component.

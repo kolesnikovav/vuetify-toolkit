@@ -16,10 +16,6 @@ export default commonSelect.extend({
         return defaultDataGridSelectCommands(this as any)
       }
     },
-    useInternalItemFilter: {
-      type: Boolean,
-      default: true
-    },
     ...(VDataTableA as any).options.props
   },
   watch: {
@@ -27,7 +23,7 @@ export default commonSelect.extend({
       immediate: true,
       handler (val) {
         if (val) {
-          if (Array.isArray(val) && this.$props.autocomplete && val.length === 1) {
+          if (Array.isArray(val) && this.$props.autocomplete && this.$props.autoSelectFirst && val.length === 1) {
             if (!this.$props.multiple) {
               this.selectedItems = val
               const inputRef = this.$refs.input as HTMLElement

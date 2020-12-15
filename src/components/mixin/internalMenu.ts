@@ -1,7 +1,6 @@
 import { VNode, VNodeData } from 'vue'
 import { VMenuA } from '../../shims-vuetify'
 import ComandToolbar from './comandToolbar'
-import SearchResults from './searchResults'
 
 /* This is headered menu.
 This menu can contains fixed header or footer and scrolled content the same as native v-menu
@@ -11,8 +10,7 @@ For best user expirience, in this component included no-scrolled search results
 export default VMenuA.extend({
   name: 'v-headered-menu',
   mixins: [
-    ComandToolbar,
-    SearchResults
+    ComandToolbar
   ],
   methods: {
     /* This method have been overriden for provide no-scroll header/footer and search results in menu */
@@ -68,15 +66,14 @@ export default VMenuA.extend({
         options.on.mouseleave = (this as any).mouseLeaveHandler
       }
       /* for fixed header or footer */
-      const searchResults = !this.$props.useInternalItemFilter ? (this as any).genSearchResults() : undefined
       if (this.$props.useToolbar) {
         return this.$createElement('div', options, [
           ['top-left', 'top-right'].includes((this as any).toolbarPosition) ? (this as any).genToolbar() : undefined,
-          this.$createElement('div', optionsInternal, [searchResults, (this as any).getContentSlot()]),
+          this.$createElement('div', optionsInternal, [(this as any).getContentSlot()]),
           ['bottom-left', 'bottom-right'].includes((this as any).toolbarPosition) ? (this as any).genToolbar() : undefined
         ])
       }
-      return this.$createElement('div', options, [searchResults, (this as any).getContentSlot()])
+      return this.$createElement('div', options, [(this as any).getContentSlot()])
     }
   }
 })

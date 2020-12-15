@@ -75,6 +75,7 @@
         <v-card-text>
           <v-row justify="space-around">
           <v-switch v-model="autocomplete" class="ma-2" label="autocomplete"></v-switch>
+          <v-switch v-if = "autocomplete" v-model="autoSelectFirst" class="ma-2" label="autoSelectFirst (used in autocomplete mode)"></v-switch>
           <v-switch v-model="multiple" class="ma-2" label="multiple"></v-switch>
           <v-switch v-model="chips" class="ma-2"    label="chips"></v-switch>
           <v-switch v-model="deletableChips" class="ma-2"    label="Deletable chips"></v-switch>
@@ -90,6 +91,7 @@
             :smallChips = "smallChips" :deletableChips = "deletableChips"
             :useToolbar = "useToolbar"
             toolbarHeader = "Press something"
+            :autoSelectFirst = "autoSelectFirst"
           >
           <template v-if="customSlots" v-slot:headerTable.fat>
             <v-icon color ="red">mdi-cake</v-icon>
@@ -188,6 +190,7 @@ export default Vue.extend({
     clearable: false,
     dark: false,
     autocomplete: false,
+    autoSelectFirst: false,
     customSlots: false,
     deletableChips: false,
     smallChips: false,
