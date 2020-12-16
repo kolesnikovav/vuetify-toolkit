@@ -78,6 +78,7 @@
         <v-row justify="space-around">
           <v-switch v-model="autocomplete" class="ma-2" label="autocomplete"></v-switch>
           <v-switch v-model="multiple" class="ma-2" label="multiple"></v-switch>
+          <v-switch v-model="allowSelectParents" class="ma-2" label="allowSelectParents"></v-switch>
           <v-switch v-model="chips" class="ma-2" label="chips"></v-switch>
           <v-switch v-model="deletableChips" class="ma-2"    label="Deletable chips"></v-switch>
           <v-switch v-model="smallChips" class="ma-2"    label="Small chips"></v-switch>
@@ -102,6 +103,7 @@
         <v-tree-select
           v-model = "selectedItems"
           :autocomplete="autocomplete"
+          :allowSelectParents = "allowSelectParents"
           :chips="chips"
           :dense="dense"
           :multiple="multiple"
@@ -194,6 +196,7 @@ const sandboxCode =
 export default Vue.extend({
   data: () => ({
     items: staticitems,
+    allowSelectParents: false,
     chips: false,
     multiple: false,
     dense: false,

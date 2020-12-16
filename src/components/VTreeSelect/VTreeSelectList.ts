@@ -1,6 +1,7 @@
 import { VNode, PropType } from 'vue'
 import { VTreeviewNodeProps, getObjectValueByPath } from '../../vuetify-import'
-import { VTreeviewA } from '../../shims-vuetify'
+import InternalTreeView from './InternalTreeView'
+// import { VTreeviewA } from '../../shims-vuetify'
 import commonSelectorCard from '../mixin/commonSelectorCard'
 import { mergeProps } from '../../utils/mergeProps'
 
@@ -15,6 +16,10 @@ export default commonSelectorCard.extend({
       type: String as PropType<'leaf' | 'independent'>,
       default: 'leaf',
       validator: (v: string) => ['leaf', 'independent'].includes(v)
+    },
+    allowSelectParents: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
@@ -68,7 +73,7 @@ export default commonSelectorCard.extend({
       treeviewProps.items = this.items
       treeviewProps.initialItem = this.$data.currentItem
       treeviewProps.allowSelectParents = this.$props.allowSelectParents
-      return (this as any).$createElement(VTreeviewA, {
+      return (this as any).$createElement(InternalTreeView, {
         ref: 'selectList',
         props: treeviewProps,
         scopedSlots: this.$scopedSlots,

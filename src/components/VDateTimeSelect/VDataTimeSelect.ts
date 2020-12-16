@@ -158,7 +158,6 @@ export default commonSelect.extend({
       this.date = dt.toISOString().slice(0, 10)
       this.time = dt.toTimeString().slice(0, 8)
       this.datetime = dt.toISOString()
-      console.log(this.datetime)
     }
   }
 })
