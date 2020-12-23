@@ -30,9 +30,29 @@
             <td>Switch between autocomplete/select behavior</td>
            </tr>
            <tr>
-            <td>selection-type</td> <td>boolean</td> <td>'leaf'</td>
+            <td>selection-type</td> <td>string</td> <td>'leaf'</td>
             <td>Controls how the treeview selects nodes. There are two modes available: 'leaf' and 'independent'</td>
            </tr>
+           <tr>
+            <td>allow-select-parents</td> <td>boolean</td> <td>false</td>
+            <td>User cannot select any parent node without this property</td>
+           </tr>
+           <tr>
+            <td>selected-node-style</td> <td>object</td> <td>undefined</td>
+            <td>Uses for highlight selected nodes and their parents</td>
+           </tr>
+           <tr>
+             <td>show-full-path</td>
+             <td>boolean</td>
+             <td>true</td>
+             <td>Show item with all parents in selection</td>
+            </tr>
+            <tr>
+              <td>delimeter</td>
+              <td>string</td>
+              <td>','</td>
+              <td>Delimeter between item and parent</td>
+            </tr>
         </tbody>
     </table>
     <span />
@@ -87,6 +107,8 @@
           <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
           <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
           <v-switch v-model="independent" class="ma-2" :label="getSelectionType()"></v-switch>
+          <v-switch v-model="showFullPath" class="ma-2" label="showFullPath"></v-switch>
+          <v-text-field v-if = "showFullPath" v-model="delimeter" class="ls-1" label="delimeter"></v-text-field>
           <v-switch v-model="useToolbar" class="ma-2" label="useToolbar"></v-switch>
         </v-row>
         <v-card outlined v-if = "useToolbar">
@@ -107,6 +129,8 @@
           :chips="chips"
           :dense="dense"
           :multiple="multiple"
+          :showFullPath = "showFullPath"
+          :delimeter = "delimeter"
           :items="items"
           :clearable="clearable"
           :dark="dark"
@@ -172,6 +196,9 @@ const sandboxTemplateHTML =
             :items="items"
             :clearable="clearable"
             :dark="dark"
+            :allow-select-parents="allowSelectParents"
+            :show-full-path="showFullPath"
+            :delimeter="delimeter"
           >
           <template v-if="customSlots" v-slot:prependTree="{ item, open }">
             <v-icon v-if = "item.children">{{ open ? "mdi-folder-open" : "mdi-folder" }}</v-icon>
@@ -189,7 +216,10 @@ const sandboxCode =
     clearable: false,
     dark: false,
     autocomplete: false,
-    customSlots: false
+    customSlots: false,
+    allowSelectParents: false,
+    showFullPath: false
+    delimeter: '/'
   })
 })`
 
@@ -208,6 +238,8 @@ export default Vue.extend({
     deletableChips: false,
     smallChips: false,
     selectedItems: [],
+    showFullPath: false,
+    delimeter: '/',
     useToolbar: false,
     toolbarPosition: 'top-left',
     toolbarFlat: false,

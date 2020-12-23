@@ -236,7 +236,7 @@ export default commonSelect.extend({
     textItem (itemkey: any): string {
       let txt = ''
       if (this.$props.showFullPath) {
-        const p = (this as any).retriveParents(itemkey)
+        const p = (this as any).retrieveParents(itemkey)
         p.map((v:any) => {
           txt += (this as any).getText(v) + this.$props.delimeter
         })
@@ -280,7 +280,7 @@ export default commonSelect.extend({
         })
       })
     },
-    retriveParents (itemKey: any): any[] {
+    retrieveParents (itemKey: any): any[] {
       const result: any[] = []
       let parentKey = this.$data.parents.get(itemKey)
       while (parentKey) {

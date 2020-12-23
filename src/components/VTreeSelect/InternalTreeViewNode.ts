@@ -1,9 +1,24 @@
-import { VNode } from 'vue'
+import { VNode, VNodeChildren } from 'vue'
 import { VTreeviewNodeA, VIconA } from '../../shims-vuetify'
 import { getObjectValueByPath } from '../../vuetify-import'
 
 const InternalTreeViewNode = VTreeviewNodeA.extend({
   name: 'internal-treeview-node',
+  // props: {
+  //   nodeKey: {
+  //     type: [String, Number],
+  //     default: null
+  //   }
+  // },
+  computed: {
+    // computedIcon (): string {
+    //   const status = (this as any).treeview.getSelectedStaus((this as any).key)
+    //   console.log(status)
+    //   if (status === 'indeterminate') return (this as any).treeview.$props.indeterminateIcon
+    //   else if (status === 'selected') return (this as any).treeview.$props.onIcon
+    //   else return (this as any).treeview.$props.offIcon
+    // }
+  },
   created () {
     (this as any).treeview.register(this)
   },
@@ -24,17 +39,12 @@ const InternalTreeViewNode = VTreeviewNodeA.extend({
         on: {
           click: (e: MouseEvent) => {
             e.stopPropagation()
-
             if ((this as any).isLoading) return
-
             (this as any).checkChildren().then(() => {
               // We nextTick here so that items watch in VTreeview has a chance to run first
               this.$nextTick(() => {
                 (this as any).isSelected = !(this as any).isSelected;
-                (this as any).isIndeterminate = false;
-
-                (this as any).treeview.updateSelected((this as any).key, (this as any).isSelected);
-                (this as any).treeview.emitSelected()
+                (this as any).treeview.updateSelected((this as any).key, (this as any).isSelected)
               })
             })
           }
@@ -104,6 +114,29 @@ const InternalTreeViewNode = VTreeviewNodeA.extend({
       })
     }
   }
+  // render (h): VNode {
+  //   const status = (this as any).treeview.getSelectedStaus((this as any).key)
+  //   console.log(status)
+  //   const children: VNodeChildren = [this.genNode()]
+
+  //   if ((this as any).transition) children.push((this as any).genTransition())
+  //   else children.push((this as any).genChildrenWrapper())
+
+  //   return h('div', {
+  //     staticClass: 'v-treeview-node',
+  //     class: {
+  //       'v-treeview-node--leaf': !(this as any).hasChildren,
+  //       'v-treeview-node--click': false, // this.openOnClick,
+  //       'v-treeview-node--disabled': this.$props.disabled,
+  //       'v-treeview-node--rounded': this.$props.rounded,
+  //       'v-treeview-node--shaped': this.$props.shaped,
+  //       'v-treeview-node--selected': (this as any).isSelected
+  //     },
+  //     attrs: {
+  //       'aria-expanded': String((this as any).isOpen)
+  //     }
+  //   }, children)
+  // }
 
 })
 

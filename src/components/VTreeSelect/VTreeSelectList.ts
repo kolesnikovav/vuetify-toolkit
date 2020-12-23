@@ -20,46 +20,58 @@ export default commonSelectorCard.extend({
     allowSelectParents: {
       type: Boolean,
       default: false
+    },
+    // itemCashe: {
+    //   type: Map,
+    //   default: new Map()
+    // },
+    selectedCashe: {
+      type: Map,
+      default: new Map()
     }
+    // parents: {
+    //   type: Map,
+    //   default: new Map()
+    // }
   },
   watch: {
-    selectedItems: {
-      immediate: true,
-      handler (val, oldVal) {
-        if (this.$refs.selectList) {
-          if (!val || val.length === 0) {
-            this.UnselectAll()
-          } else {
-            const iKey = this.$props.itemKey
-            const selected = [] as any[]
-            val.map((v: any) => {
-              const key = getObjectValueByPath(v, iKey)
-              selected.push(key);
-              (this.$refs.selectList as any).updateSelected(key, true, false)
-            })
-            oldVal.map((v: any) => {
-              const key = getObjectValueByPath(v, iKey)
-              if (selected.indexOf(key) === -1) {
-                (this.$refs.selectList as any).updateSelected(key, false, false)
-              }
-            })
-          }
-        }
-      }
-    },
-    currentItem: {
-      immediate: true,
-      handler (val) {
-        this.CollapseAll()
-        if (val && this.$refs.selectList) {
-          const key = getObjectValueByPath(val, this.$props.itemKey)
-          const parents = (this.$refs.selectList as any).getParents(key) as any[]
-          parents.map(v => {
-            (this.$refs.selectList as any).updateOpen(v, true)
-          })
-        }
-      }
-    }
+    // selectedItems: {
+    //   immediate: true,
+    //   handler (val, oldVal) {
+    //     if (this.$refs.selectList) {
+    //       if (!val || val.length === 0) {
+    //         this.UnselectAll()
+    //       } else {
+    //         const iKey = this.$props.itemKey
+    //         const selected = [] as any[]
+    //         val.map((v: any) => {
+    //           const key = getObjectValueByPath(v, iKey)
+    //           selected.push(key);
+    //           (this.$refs.selectList as any).updateSelected(key, true, false)
+    //         })
+    //         oldVal.map((v: any) => {
+    //           const key = getObjectValueByPath(v, iKey)
+    //           if (selected.indexOf(key) === -1) {
+    //             (this.$refs.selectList as any).updateSelected(key, false, false)
+    //           }
+    //         })
+    //       }
+    //     }
+    //   }
+    // },
+    // currentItem: {
+    //   immediate: true,
+    //   handler (val) {
+    //     this.CollapseAll()
+    //     if (val && this.$refs.selectList) {
+    //       const key = getObjectValueByPath(val, this.$props.itemKey)
+    //       const parents = (this.$refs.selectList as any).getParents(key) as any[]
+    //       parents.map(v => {
+    //         (this.$refs.selectList as any).updateOpen(v, true)
+    //       })
+    //     }
+    //   }
+    // }
   },
   methods: {
     genSelectList (): VNode {
@@ -68,29 +80,34 @@ export default commonSelectorCard.extend({
       treeviewProps.activatable = true
       treeviewProps.active = [this.currentItem]
       treeviewProps.selectable = true
-      treeviewProps.returnObject = true
+      treeviewProps.returnObject = false
       treeviewProps.selectedItems = this.selectedItems
       treeviewProps.items = this.items
+      treeviewProps.multiple = this.multiple
       treeviewProps.initialItem = this.$data.currentItem
       treeviewProps.allowSelectParents = this.$props.allowSelectParents
+      treeviewProps.selectedCashe = this.$props.selectedCashe
       return (this as any).$createElement(InternalTreeView, {
         ref: 'selectList',
         props: treeviewProps,
         scopedSlots: this.$scopedSlots,
         on: {
-          input: (e: any[]) => {
-            if (this.$props.multiple) {
-              this.$emit('select', e)
-            } else {
-            // select last added item
-              const lastAdded = e.filter(v => this.selectedItems.indexOf(v) === -1)
-              if (lastAdded.length > 0) {
-                this.$emit('select', lastAdded)
-              }
-            }
-          },
+          // input: (e: any[]) => {
+          //   if (this.$props.multiple) {
+          //     this.$emit('select', e)
+          //   } else {
+          //   // select last added item
+          //     const lastAdded = e.filter(v => this.selectedItems.indexOf(v) === -1)
+          //     if (lastAdded.length > 0) {
+          //       this.$emit('select', lastAdded)
+          //     }
+          //   }
+          // },
           'update:open': (e: any[]) => {
             this.$emit('update-dimensions')
+          },
+          'update:selected': (e: { key: string| number, isSelected: boolean}) => {
+            this.$emit('update:selected', e)
           }
         }
       })
