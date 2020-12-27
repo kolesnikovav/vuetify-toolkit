@@ -1,6 +1,6 @@
 import { VNode, VNodeData, PropType } from 'vue'
 import { VTreeviewNodeProps, consoleError, getPropertyFromItem, getObjectValueByPath } from '../../vuetify-import'
-import { VChipA } from '../../shims-vuetify'
+import { VChipA, VSelectA } from '../../shims-vuetify'
 import VTreeSelectList from './VTreeSelectList'
 import treeviewScopedSlots from '../../utils/TreeviewScopedSlots'
 import commonSelect from '../mixin/commonSelect'
@@ -41,15 +41,20 @@ export default commonSelect.extend({
       const items = this.buildTree(this.$props.items)
       return items
     },
+    itemKeys (): (string|number)[] {
+      return [...this.itemCashe.keys()]
+    },
     listData (): Object {
       const data = (commonSelect as any).options.computed.listData.call(this)
       mergeProps(data.props, this.$props, VTreeviewNodeProps)
+      data.ref = 'selectionList'
       data.props.allowSelectParents = this.$props.allowSelectParents
       data.props.items = this.filteredItems
       data.props.returnObject = false
       data.props.currentItem = this.$data.currentItem
-      data.props.itemCashe = this.itemCashe
-      data.props.selectedCashe = this.selectedCashe
+
+      data.props.itemKeys = this.itemKeys
+      data.props.selectedKeys = this.selectedKeys
       Object.assign(data.on, {
         'update:selected': (e: { key: string| number, isSelected: boolean}) => {
           this.updateSelectedItems(e)
@@ -73,7 +78,8 @@ export default commonSelect.extend({
   data: () => ({
     parents: new Map(),
     itemCashe: new Map(),
-    selectedCashe: new Map()
+    selectedKeys: [] as (string|number)[],
+    currentItemKey: '' as (string|number)
   }),
   watch: {
     items: {
@@ -86,16 +92,12 @@ export default commonSelect.extend({
         this.buildTree(this.$props.items)
       }
     },
-    showFullPath: {
+    currentItemKey: {
       immediate: true,
       handler (val) {
-        (this as any).updateSelectedPresentation()
-      }
-    },
-    delimeter: {
-      immediate: true,
-      handler (val) {
-        (this as any).updateSelectedPresentation()
+        if (this.$refs.selectionList && (this as any).$refs.selectionList.$refs.selectList) {
+          (this as any).$refs.selectionList.$refs.selectList.$data.currentItemKey = val
+        }
       }
     }
   },
@@ -147,7 +149,7 @@ export default commonSelect.extend({
     },
     genChipSelection (item: object, index: number) {
       const itemKey = getObjectValueByPath(item, this.$props.itemKey, [])
-      const s = this.textItem(itemKey)
+      const itemText = this.textItem(itemKey)
       const isDisabled = false // (
       //   !(this as any).isInteractive ||
       //   (this as any).getDisabled(item)
@@ -158,27 +160,29 @@ export default commonSelect.extend({
         props: {
           close: this.$props.deletableChips && !isDisabled,
           disabled: isDisabled,
-          inputValue: s,
+          inputValue: itemKey,
           small: this.$props.smallChips,
-          value: s // (item as any).text
+          value: itemText
         },
         on: {
           click: (e: MouseEvent) => {
             if (isDisabled) return
             this.currentItem = item as any
+            this.currentItemKey = itemKey;
             (this as any).selectedIndex = index
           },
           'click:close': () => {
-            this.selectedCashe.delete(getObjectValueByPath(item, this.$props.itemKey))
+            this.currentItemKey = ''
+            this.selectedKeys = this.selectedKeys.filter(v => v !== itemKey)
             this.updateSelectedItemsFromCashe()
-            // this.selectedItems = this.selectedItems.filter(v => v.key !== (item as any).key);
-            // (this as any).emitInput()
           }
         },
-        key: getObjectValueByPath(item, this.$props.itemKey)
-      }, this.textItem(getObjectValueByPath(item, this.$props.itemKey)))
+        key: itemKey
+      }, itemText)
     },
     genCommaSelection (item: object, index: number, last: boolean) {
+      const itemKey = getObjectValueByPath(item, this.$props.itemKey, [])
+      const itemText = this.textItem(itemKey)
       const color = index === (this as any).selectedIndex && (this as any).computedColor
       const isDisabled = false // (
       //   !(this as any).isInteractive ||
@@ -192,12 +196,13 @@ export default commonSelect.extend({
         on: {
           click: (e: MouseEvent) => {
             if (isDisabled) return
+            this.currentItemKey = itemKey
             this.currentItem = item as any
             (this as any).selectedIndex = index
           }
         },
-        key: getObjectValueByPath(item, this.$props.itemKey)
-      }), `${this.textItem(getObjectValueByPath(item, this.$props.itemKey))}${last ? '' : ', '}`)
+        key: itemKey
+      }), `${itemText}${last ? '' : ', '}`)
     },
     textItem (itemkey: any): string {
       let txt = ''
@@ -223,33 +228,37 @@ export default commonSelect.extend({
     updateSelectedItems (e: { key: string| number, isSelected: boolean}) {
       if (this.$props.selectionType === 'independent') {
         if (!this.$props.multiple) {
-          this.selectedCashe.clear()
+          this.selectedKeys = []
         }
-        e.isSelected === true ? this.selectedCashe.set(e.key, e.isSelected) : this.selectedCashe.delete(e.key)
+        if (e.isSelected && this.selectedKeys.indexOf(e.key) === -1) {
+          this.selectedKeys.push(e.key)
+        } else if (!e.isSelected && this.selectedKeys.indexOf(e.key) !== -1) {
+          this.selectedKeys = this.selectedKeys.filter(v => v !== e.key)
+        }
       } else {
         const descendants = this.getDescendantKeys(e.key)
         descendants.unshift(e.key)
         descendants.map(v => {
-          e.isSelected === true ? this.selectedCashe.set(v, e.isSelected) : this.selectedCashe.delete(v)
+          if (e.isSelected && this.selectedKeys.indexOf(v) === -1) {
+            this.selectedKeys.push(v)
+          } else if (!e.isSelected && this.selectedKeys.indexOf(v) !== -1) {
+            this.selectedKeys = this.selectedKeys.filter(a => a !== v)
+          }
         })
       }
       this.updateSelectedItemsFromCashe()
     },
     updateSelectedItemsFromCashe () {
-      const result = []
-      for (const key of this.selectedCashe.keys()) {
-        result.push(this.itemCashe.get(key))
-      }
+      const result = [] as any[]
+      this.selectedKeys.map(v => {
+        result.push(this.itemCashe.get(v))
+      })
       this.selectedItems = result
       this.$emit('input', this.selectedItems)
     },
-    updateSelectedPresentation () {
-      this.$nextTick(() => {
-        this.$data.selectedItems.map((v: any) => {
-          const key = getObjectValueByPath(v, this.$props.itemKey)
-          v.text = (this as any).textItem(key)
-        })
-      })
+    clearableCallback () {
+      (VSelectA as any).options.methods.clearableCallback.call(this)
+      this.selectedKeys = [] as (string|number)[]
     },
     genListWithSlot (): VNode {
       const slots = ['prepend-item', 'no-data', 'append-item']

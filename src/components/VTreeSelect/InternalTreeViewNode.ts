@@ -1,24 +1,9 @@
-import { VNode, VNodeChildren } from 'vue'
+import { VNode } from 'vue'
 import { VTreeviewNodeA, VIconA } from '../../shims-vuetify'
 import { getObjectValueByPath } from '../../vuetify-import'
 
 const InternalTreeViewNode = VTreeviewNodeA.extend({
   name: 'internal-treeview-node',
-  // props: {
-  //   nodeKey: {
-  //     type: [String, Number],
-  //     default: null
-  //   }
-  // },
-  computed: {
-    // computedIcon (): string {
-    //   const status = (this as any).treeview.getSelectedStaus((this as any).key)
-    //   console.log(status)
-    //   if (status === 'indeterminate') return (this as any).treeview.$props.indeterminateIcon
-    //   else if (status === 'selected') return (this as any).treeview.$props.onIcon
-    //   else return (this as any).treeview.$props.offIcon
-    // }
-  },
   created () {
     (this as any).treeview.register(this)
   },
@@ -71,13 +56,17 @@ const InternalTreeViewNode = VTreeviewNodeA.extend({
         },
         on: {
           click: () => {
-            if ((this as any).openOnClick && (this as any).hasChildren) {
-              (this as any).checkChildren().then((this as any).open)
-            } else if ((this as any).activatable && !(this as any).disabled) {
-              (this as any).isActive = !(this as any).isActive;
-              (this as any).treeview.updateActive((this as any).key, (this as any).isActive);
-              (this as any).treeview.emitActive()
-            }
+            this.$nextTick(() => {
+              // only one of items can be active!
+              (this as any).treeview.updateActive((this as any).key)
+            })
+            // if ((this as any).openOnClick && (this as any).hasChildren) {
+            //   (this as any).checkChildren().then((this as any).open)
+            // } else if ((this as any).activatable && !(this as any).disabled) {
+            //   (this as any).isActive = !(this as any).isActive;
+            //   (this as any).treeview.updateActive((this as any).key, (this as any).isActive);
+            //   (this as any).treeview.emitActive()
+            // }
           }
         }
       }), children)
@@ -114,30 +103,6 @@ const InternalTreeViewNode = VTreeviewNodeA.extend({
       })
     }
   }
-  // render (h): VNode {
-  //   const status = (this as any).treeview.getSelectedStaus((this as any).key)
-  //   console.log(status)
-  //   const children: VNodeChildren = [this.genNode()]
-
-  //   if ((this as any).transition) children.push((this as any).genTransition())
-  //   else children.push((this as any).genChildrenWrapper())
-
-  //   return h('div', {
-  //     staticClass: 'v-treeview-node',
-  //     class: {
-  //       'v-treeview-node--leaf': !(this as any).hasChildren,
-  //       'v-treeview-node--click': false, // this.openOnClick,
-  //       'v-treeview-node--disabled': this.$props.disabled,
-  //       'v-treeview-node--rounded': this.$props.rounded,
-  //       'v-treeview-node--shaped': this.$props.shaped,
-  //       'v-treeview-node--selected': (this as any).isSelected
-  //     },
-  //     attrs: {
-  //       'aria-expanded': String((this as any).isOpen)
-  //     }
-  //   }, children)
-  // }
-
 })
 
 export default InternalTreeViewNode

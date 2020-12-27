@@ -27,23 +27,59 @@ export default VTreeviewA.extend({
       type: Boolean,
       default: false
     },
-    selectedCashe: {
+    selectedKeys: {
+      type: Array,
+      default: () => [] as (string|number)[]
+    },
+    parentKeys: {
       type: Map,
-      default: new Map()
+      default: undefined
+    },
+    currentItem: {
+      type: [String, Number],
+      default: undefined
     }
   },
   data: () => ({
-    nodes: {} as Record<string | number, NodeStateInternal>
+    nodes: new Map<(string|number), VTreeviewNodeInternalInstance>(),
+    currentItemKey: '' as (string|number)
   }),
+  watch: {
+    selectedKeys: {
+      immediate: true,
+      handler (val) {
+        this.$nextTick(() => {
+          for (const [key, value] of this.nodes) {
+            value.$data.isSelected = this.selectedKeys.indexOf(key) !== -1
+          }
+        })
+      }
+    },
+    currentItemKey: {
+      immediate: true,
+      handler (val) {
+        this.$nextTick(() => {
+          for (const [key, value] of this.nodes) {
+            value.$data.isActive = key === val
+          }
+        })
+      }
+    }
+  },
   created () {
   },
-
   mounted () {
   },
   methods: {
     register (node: VTreeviewNodeInternalInstance) {
+      if (node.$vnode.key) {
+        this.nodes.set(node.$vnode.key, node)
+      }
     },
     unregister (node: VTreeviewNodeInternalInstance) {
+      if (node.$vnode.key) {
+        this.nodes.delete(node.$vnode.key)
+      }
     },
     buildTree (items: any[], parent: (string | number | null) = null) {
     },
@@ -51,10 +87,27 @@ export default VTreeviewA.extend({
     },
     updateSelected (key: string | number, isSelected: boolean, isForced = false) {
       this.$emit('update:selected', { key, isSelected })
+      this.$nextTick(() => {
+        for (const [key, value] of this.nodes) {
+          value.$data.isSelected = this.selectedKeys.indexOf(key) !== -1
+        }
+      })
     },
-    getSelectedStaus (key: string|number): string {
-      if (this.selectedCashe.has(key)) return 'selected'
-      return 'unselected'
+    updateActive (keyItem: string|number) {
+      this.$emit('update:active', { keyItem })
+      this.$nextTick(() => {
+        for (const [key, value] of this.nodes) {
+          value.$data.isActive = this.selectedKeys.indexOf(key) !== -1 && key === keyItem
+        }
+      })
+    },
+    updateVnodeState (key: string | number) {
+      console.log('wsrwrwea')
+      if (this.$data.nodes.has(key) && this.selectedKeys.indexOf(key) !== -1) {
+        this.$data.nodes[key].isSelected = true
+      } else if (this.$data.nodes.has(key)) {
+        this.$data.nodes[key].isSelected = false
+      }
     }
   },
   render (h): VNode {
@@ -63,8 +116,8 @@ export default VTreeviewA.extend({
         return !(this as any).isExcluded(getObjectValueByPath(item, (this as any).itemKey))
       }).map((item: any) => {
         const genChild = (InternalTreeViewNode as any).options.methods.genChild.bind(this)
-
-        return genChild(item, getObjectValueByPath(item, (this as any).itemDisabled))
+        const node = genChild(item, getObjectValueByPath(item, (this as any).itemDisabled))
+        return node
       })
       /* istanbul ignore next */
       : this.$slots.default! // TODO: remove type annotation with TS 3.2
