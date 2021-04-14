@@ -1,22 +1,19 @@
 import { VNode, PropType } from 'vue'
 import { VTreeviewNodeProps, getObjectValueByPath } from '../../vuetify-import'
 import { VTreeviewA } from '../../shims-vuetify'
-import { Command, defaultTreeSelectCommands } from '../../utils/ToolbarCommand'
 import commonSelectorCard from '../mixin/commonSelectorCard'
+import { mergeProps } from '../../utils/mergeProps'
+import { TreeviewItemFunction } from 'vuetify/types'
 
 export default commonSelectorCard.extend({
   name: 'v-tree-select-list',
   props: {
     ...VTreeviewNodeProps,
+    filter: Function as PropType<TreeviewItemFunction>,
     selectionType: {
       type: String as PropType<'leaf' | 'independent'>,
       default: 'leaf',
       validator: (v: string) => ['leaf', 'independent'].includes(v)
-    }
-  },
-  computed: {
-    computedToolbarCommands (): Command[] {
-      return this.$props.toolbarCommands.length > 0 ? this.$props.toolbarCommands : defaultTreeSelectCommands(this as any)
     }
   },
   watch: {
@@ -25,7 +22,7 @@ export default commonSelectorCard.extend({
       handler (val, oldVal) {
         if (this.$refs.selectList) {
           if (!val || val.length === 0) {
-            this.UnselectAll()
+
           } else {
             const iKey = this.$props.itemKey
             const selected = [] as any[]
@@ -43,45 +40,19 @@ export default commonSelectorCard.extend({
           }
         }
       }
-    },
-    currentItem: {
-      immediate: true,
-      handler (val) {
-        this.CollapseAll()
-        if (val && this.$refs.selectList) {
-          const key = getObjectValueByPath(val, this.$props.itemKey)
-          const parents = (this.$refs.selectList as any).getParents(key) as any[]
-          parents.map(v => {
-            (this.$refs.selectList as any).updateOpen(v, true)
-          })
-        }
-      }
     }
   },
   methods: {
     genSelectList (): VNode {
+      const props = {}
+      mergeProps(props, this.$props, (VTreeviewA as any).options.props);
+      (props as any).selectable = true;
+      (props as any).selectOnly = true;
+      (props as any).value = this.selectedItems;
+      (props as any).returnObject = true
       return (this as any).$createElement(VTreeviewA, {
         ref: 'selectList',
-        props: {
-          activatable: true,
-          active: [this.currentItem],
-          dense: this.$props.dense,
-          items: this.items,
-          toolbarCommands: this.computedToolbarCommands,
-          itemDisabled: this.$props.itemDisabled,
-          itemText: this.$props.itemText,
-          itemKey: this.$props.itemKey,
-          itemChildren: this.$props.itemChildren,
-          loadChildren: this.$props.loadChildren,
-          selectable: true,
-          returnObject: true,
-          selectOnly: true,
-          selectedItems: this.selectedItems,
-          // openAll: this.openAll,
-          // shaped: this.shaped,
-          // rounded: this.rounded,
-          selectionType: this.$props.selectionType
-        },
+        props,
         scopedSlots: this.$scopedSlots,
         on: {
           input: (e: any[]) => {
@@ -94,39 +65,12 @@ export default commonSelectorCard.extend({
                 this.$emit('select', lastAdded)
               }
             }
+          },
+          'update:open': () => {
+            this.$emit('update-dimensions')
           }
         }
       })
-    },
-    ExpandAll () {
-      if (this.$refs.selectList) {
-        (this.$refs.selectList as any).updateAll(true)
-        this.$emit('update-dimensions')
-      }
-    },
-    CollapseAll () {
-      if (this.$refs.selectList) {
-        (this.$refs.selectList as any).updateAll(false)
-        this.$emit('update-dimensions')
-      }
-    },
-    SelectAll () {
-      const keys = (this.$refs.selectList as any).getKeys(this.items)
-      keys.map((v: any) => {
-        (this.$refs.selectList as any).updateSelected(v, true, false)
-      })
-    },
-    UnselectAll () {
-      const keys = (this.$refs.selectList as any).getKeys(this.items)
-      keys.map((v: any) => {
-        (this.$refs.selectList as any).updateSelected(v, false, false);
-        (this.$refs.selectList as any).updateActive(v, false, false)
-      })
-    },
-    InvertSelection () {
-      for (var node in (this.$refs.selectList as any).nodes) {
-        (this.$refs.selectList as any).nodes[node].isSelected = !(this.$refs.selectList as any).nodes[node].isSelected
-      }
     }
   }
 })

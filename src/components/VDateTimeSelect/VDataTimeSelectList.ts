@@ -26,6 +26,9 @@ export default commonSelectorCard.extend({
       type: [String, Date],
       default: () => DEFAULT_DATE
     },
+    date: String,
+    time: String,
+    datetime: String,
     maxDate: String,
     minDate: String,
     maxTime: String,
@@ -97,7 +100,7 @@ export default commonSelectorCard.extend({
               yearFormat: this.$props.yearFormat,
               yearIcon: this.$props.yearIcon,
               noTitle: true,
-              value: this.selectedDate
+              value: this.$props.date
             },
             style: {
               'padding-right': this.$props.selectionType === 'datetime' ? 0 : 15
@@ -131,7 +134,7 @@ export default commonSelectorCard.extend({
               readonly: this.$props.readonlyTime,
               scrollable: this.$props.scrollableTime,
               useSeconds: this.$props.useSeconds,
-              value: this.selectedTime,
+              value: this.$props.time,
               ampmInTitle: this.$props.ampmInTitle,
               noTitle: true
             },
@@ -165,12 +168,6 @@ export default commonSelectorCard.extend({
       } else if (this.$props.selectionType === 'date') {
         this.$emit('input', this.selectedDate)
       } else this.$emit('input', this.selectedTime)
-    },
-    Now () {
-      const dt = new Date()
-      this.selectedDate = dt.toISOString().slice(0, 10)
-      this.selectedTime = dt.toTimeString().slice(0, 8)
-      this.EmitInput()
     }
   }
 })

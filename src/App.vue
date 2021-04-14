@@ -1,9 +1,9 @@
 <template>
   <v-app>
-    <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" app v-model="drawer">
-      <v-list>
-        <v-list-item>
-          <v-list-item-action>
+    <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" app v-model="drawer" dense>
+      <v-list dense>
+        <v-list-item dense>
+          <v-list-item-action dense>
             <v-btn text :to="{path: '/'}">Quick Start</v-btn>
           </v-list-item-action>
         </v-list-item>
@@ -44,6 +44,13 @@
             <v-btn text :to="{path: '/tooltipbtn'}">VTooltipBtn</v-btn>
           </v-list-item-action>
         </v-list-item>
+        <v-divider />
+        <v-subheader>Commonly used component parts</v-subheader>
+        <v-list-item dense>
+          <v-list-item-action>
+            <v-btn text :to="{path: '/toolbar'}">Toolbar</v-btn>
+          </v-list-item-action>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app>
@@ -57,9 +64,9 @@
       </v-btn>
     </v-app-bar>
 
-    <v-content>
+    <v-main>
       <router-view />
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

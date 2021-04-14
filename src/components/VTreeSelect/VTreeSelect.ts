@@ -1,50 +1,53 @@
 import { VNode, VNodeData, PropType } from 'vue'
-import { VTreeviewNodeProps, consoleError } from '../../vuetify-import'
+import { VTreeviewNodeProps, consoleError, getObjectValueByPath, getPropertyFromItem } from '../../vuetify-import'
 import VTreeSelectList from './VTreeSelectList'
 import treeviewScopedSlots from '../../utils/TreeviewScopedSlots'
 import commonSelect from '../mixin/commonSelect'
+import { mergeProps } from '../../utils/mergeProps'
+import { openCloseCommands } from '../../utils/ToolbarCommand'
 
 export default commonSelect.extend({
   name: 'v-tree-select',
   props: {
     ...VTreeviewNodeProps,
+    allowSelectParents: {
+      type: Boolean,
+      default: false
+    },
+    showFullPath: {
+      type: Boolean,
+      default: true
+    },
+    delimeter: {
+      type: [String],
+      default: ','
+    },
     openAll: Boolean,
     selectionType: {
       type: String as PropType<'leaf' | 'independent'>,
       default: 'leaf',
       validator: (v: string) => ['leaf', 'independent'].includes(v)
+    },
+    toolbarCommands: {
+      type: Array,
+      default: function () {
+        return openCloseCommands(this as any)
+      }
     }
   },
+  data: () => ({
+    parents: new Map(),
+    itemCashe: new Map()
+  }),
   computed: {
+    filteredItems (): any[] {
+      const items = this.buildTree(this.$props.items)
+      return items
+    },
     listData (): Object {
       const data = (commonSelect as any).options.computed.listData.call(this)
-      Object.assign(data.props, { ...VTreeviewNodeProps })
-      /* to remove console warns and type conflicts */
-      Object.assign(data.props, {
-        activatable: true,
-        activeClass: this.$props.activeClass,
-        color: this.$props.color,
-        chips: this.$props.chips,
-        dark: this.$props.dark,
-        selectable: true,
-        selectedColor: this.$props.selectedColor,
-        indeterminateIcon: this.$props.indeterminateIcon,
-        onIcon: this.$props.onIcon,
-        offIcon: this.$props.offIcon,
-        expandIcon: this.$props.expandIcon,
-        loadingIcon: this.$props.loadingIcon,
-        loadChildren: this.$props.loadChildren,
-        itemKey: this.$props.itemKey,
-        itemText: this.$props.itemText,
-        itemChildren: this.$props.itemChildren,
-        itemDisabled: this.$props.itemDisabled,
-        selectionType: this.$props.selectionType,
-        shaped: this.$props.shaped,
-        rounded: this.$props.rounded,
-        openAll: this.$props.openAll,
-        openOnClick: this.$props.openOnClick,
-        transition: this.$props.transition
-      })
+      mergeProps(data.props, this.$props, VTreeviewNodeProps)
+      data.props.items = this.filteredItems
       Object.assign(data.on, {
         select: (e: any[]) => {
           this.selectItems(e)
@@ -72,6 +75,39 @@ export default commonSelect.extend({
       // modifying the `on` property when passed
       // as a referenced object
       return this.$createElement(VTreeSelectList, ({ ...this.listData }) as VNodeData, slots)
+    },
+    itemMatchFilter (item: any): boolean {
+      if (this.internalSearch && this.internalSearch != null) {
+        const comparedVal = getPropertyFromItem(item, this.$props.itemText)
+        return this.$props.filter(item, this.internalSearch, comparedVal)
+      } else return true
+    },
+    buildTree (items: any, parentkey?: string|number|undefined, forceInclude?: false): any[] {
+      const newItems: any[] = []
+      const pk = parentkey
+      items.map((item: any) => {
+        const localChildren = getObjectValueByPath(item, this.$props.itemChildren, [])
+        const itemKey = getObjectValueByPath(item, this.$props.itemKey, [])
+        this.itemCashe.set(itemKey, item)
+        const itemForceInclude = forceInclude || this.itemMatchFilter(item)
+        if (localChildren.length > 0) {
+          const newChildren = (this as any).buildTree(localChildren, itemKey, itemForceInclude)
+          if (newChildren.length > 0) {
+            const clone = Object.assign({}, item)
+            clone[this.$props.itemChildren] = newChildren
+            clone.hasChildren = true
+            newItems.push(clone)
+            this.parents.set(itemKey, pk)
+          }
+        } else {
+          this.parents.set(itemKey, pk)
+          if (itemForceInclude) {
+            const clone = Object.assign({}, item)
+            newItems.push(clone)
+          }
+        }
+      })
+      return newItems
     }
   }
 })
