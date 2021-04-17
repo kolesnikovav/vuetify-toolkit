@@ -61,6 +61,7 @@ export default commonSelect.extend({
       mergeProps(data.props, this.$props, VTreeviewNodeProps)
       data.props.items = this.filteredItems
       data.props.selectedKeys = this.selectedKeys
+      data.props.openCache = this.openCache
       data.props.allowSelectParents = this.$props.allowSelectParents
       Object.assign(data.on, {
         'update-dimensions': () => (this.$refs.menu as any).updateDimensions(),
@@ -154,11 +155,17 @@ export default commonSelect.extend({
       }
     },
     updateOpen (key: string | number, isOpen: boolean) {
-      console.log(this.getParentKeys(key))
       if (isOpen && this.openCache.indexOf(key) === -1) {
         this.openCache.push(key)
       } else if (!isOpen && this.openCache.indexOf(key) > -1) {
         this.openCache = this.openCache.filter(() => !this.openCache.includes(key))
+      }
+      if (this.$props.openOnePath && isOpen) {
+        /* close all anover nodes  */
+        const parentKeys = this.getParentKeys(key)
+        this.openCache = this.openCache.filter((k) => {
+          return k === key || parentKeys.includes(k)
+        })
       }
     },
     buildTree (items: any, parentkey?: string|number|undefined, forceInclude?: false): any[] {

@@ -31,6 +31,10 @@ export default VTreeviewA.extend({
       type: Array,
       default: () => [] as (string|number)[]
     },
+    openKeys: {
+      type: Array,
+      default: () => [] as (string|number)[]
+    },
     parentKeys: {
       type: Map,
       default: undefined
@@ -50,7 +54,17 @@ export default VTreeviewA.extend({
       handler (val) {
         this.$nextTick(() => {
           for (const [key, value] of this.nodes) {
-            value.$data.isSelected = this.selectedKeys.indexOf(key) !== -1
+            value.$data.isSelected = val.indexOf(key) !== -1
+          }
+        })
+      }
+    },
+    openKeys: {
+      immediate: true,
+      handler (val) {
+        this.$nextTick(() => {
+          for (const [key, value] of this.nodes) {
+            value.$data.isOpen = val.indexOf(key) !== -1
           }
         })
       }
