@@ -78,6 +78,7 @@
         <v-row justify="space-around">
           <v-switch v-model="autocomplete" class="ma-2" label="autocomplete"></v-switch>
           <v-switch v-model="multiple" class="ma-2" label="multiple"></v-switch>
+          <v-switch v-model="allowSelectParents" class="ma-2" label="allowSelectParents"></v-switch>
           <v-switch v-model="chips" class="ma-2" label="chips"></v-switch>
           <v-switch v-model="deletableChips" class="ma-2"    label="Deletable chips"></v-switch>
           <v-switch v-model="smallChips" class="ma-2"    label="Small chips"></v-switch>
@@ -104,6 +105,7 @@
           :autocomplete="autocomplete"
           :chips="chips"
           :dense="dense"
+          :allowSelectParents = "allowSelectParents"
           :multiple="multiple"
           :items="items"
           :clearable="clearable"
@@ -217,7 +219,8 @@ export default Vue.extend({
     codeSandbox: false,
     sandboxTemplate: sandboxTemplateHTML,
     sandboxCode: sandboxCode,
-    dataSource: staticitems
+    dataSource: staticitems,
+    allowSelectParents: false
   }),
   methods: {
     getSelectionType () { return (this.independent) ? 'independent' : 'leaf' },

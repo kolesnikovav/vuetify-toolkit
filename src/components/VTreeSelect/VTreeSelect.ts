@@ -37,22 +37,30 @@ export default commonSelect.extend({
   },
   data: () => ({
     parents: new Map(),
-    itemCashe: new Map()
+    itemCashe: new Map(),
+    openCache: [] as (string|number)[]
   }),
   computed: {
     filteredItems (): any[] {
       const items = this.buildTree(this.$props.items)
       return items
     },
+    selectedKeys (): string|number[] {
+      const keys: string|number[] = []
+      this.selectedItems.map((v: any) => {
+        keys.push(getObjectValueByPath(v, this.$props.itemKey, []))
+      })
+      return keys
+    },
     listData (): Object {
       const data = (commonSelect as any).options.computed.listData.call(this)
       mergeProps(data.props, this.$props, VTreeviewNodeProps)
       data.props.items = this.filteredItems
+      data.props.selectedKeys = this.selectedKeys
+      data.props.allowSelectParents = this.$props.allowSelectParents
       Object.assign(data.on, {
-        select: (e: any[]) => {
-          this.selectItems(e)
-        },
-        'update-dimensions': () => (this.$refs.menu as any).updateDimensions()
+        'update-dimensions': () => (this.$refs.menu as any).updateDimensions(),
+        'update:selected': (key: string | number, isSelected: boolean) => this.updateSelected(key, isSelected)
       })
       Object.assign(data.scopedSlots, treeviewScopedSlots(this.$scopedSlots))
       return data
@@ -81,6 +89,54 @@ export default commonSelect.extend({
         const comparedVal = getPropertyFromItem(item, this.$props.itemText)
         return this.$props.filter(item, this.internalSearch, comparedVal)
       } else return true
+    },
+    getDescendantsKeys (key: string | number, descendants: (string|number)[] = []) {
+      const item = this.itemCashe.get(key)
+      if (item) {
+        const children = this.itemCashe.get(key).children
+        if (children) {
+          for (let i = 0; i < children.length; i++) {
+            const itemKey = getObjectValueByPath(children[i], this.$props.itemKey, [])
+            descendants.push(itemKey)
+            descendants = this.getDescendantsKeys(itemKey, descendants)
+          }
+        }
+      }
+      return descendants
+    },
+    updateSelected (key: string | number, isSelected: boolean) {
+      // const items = this.selectedItems
+      let recalculateKeys: (string|number)[] = []
+      const curItem = this.itemCashe.get(key)
+      if (curItem && this.selectedItems.indexOf(curItem) === -1 && isSelected) {
+        recalculateKeys.push(key)
+        if (this.$props.selectionType === 'leaf' && this.$props.allowSelectParents && this.$props.multiple) {
+          recalculateKeys = this.getDescendantsKeys(key, recalculateKeys)
+        }
+      } else if (curItem && this.selectedItems.indexOf(curItem) > -1 && !isSelected) {
+        recalculateKeys.push(key)
+        if (this.$props.selectionType === 'leaf' && this.$props.allowSelectParents && this.$props.multiple) {
+          recalculateKeys = this.getDescendantsKeys(key, recalculateKeys)
+        }
+      }
+      if (recalculateKeys.length === 0) return
+
+      if (!isSelected) {
+        const a = this.selectedItems.filter((v) => {
+          const itemKey = getObjectValueByPath(v, this.$props.itemKey, [])
+          return !recalculateKeys.includes(itemKey)
+        })
+        this.selectItems(a)
+      } else {
+        const a = this.$props.multiple ? this.selectedItems : []
+        recalculateKeys.map(k => {
+          const item = this.itemCashe.get(k)
+          if (a.indexOf(item) === -1) {
+            a.push(item)
+          }
+        })
+        this.selectItems(a)
+      }
     },
     buildTree (items: any, parentkey?: string|number|undefined, forceInclude?: false): any[] {
       const newItems: any[] = []

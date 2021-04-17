@@ -1,6 +1,6 @@
 import { VNode, PropType } from 'vue'
 import { VTreeviewNodeProps, getObjectValueByPath } from '../../vuetify-import'
-import { VTreeviewA } from '../../shims-vuetify'
+import InternalTreeview from './InternalTreeView'
 import commonSelectorCard from '../mixin/commonSelectorCard'
 import { mergeProps } from '../../utils/mergeProps'
 import { TreeviewItemFunction } from 'vuetify/types'
@@ -10,10 +10,18 @@ export default commonSelectorCard.extend({
   props: {
     ...VTreeviewNodeProps,
     filter: Function as PropType<TreeviewItemFunction>,
+    allowSelectParents: {
+      type: Boolean,
+      default: false
+    },
     selectionType: {
       type: String as PropType<'leaf' | 'independent'>,
       default: 'leaf',
       validator: (v: string) => ['leaf', 'independent'].includes(v)
+    },
+    selectedKeys: {
+      type: Array,
+      default: () => [] as (string|number)[]
     }
   },
   watch: {
@@ -45,29 +53,21 @@ export default commonSelectorCard.extend({
   methods: {
     genSelectList (): VNode {
       const props = {}
-      mergeProps(props, this.$props, (VTreeviewA as any).options.props);
+      mergeProps(props, this.$props, (InternalTreeview as any).options.props);
       (props as any).selectable = true;
       (props as any).selectOnly = true;
       (props as any).value = this.selectedItems;
       (props as any).returnObject = true
-      return (this as any).$createElement(VTreeviewA, {
+      return (this as any).$createElement(InternalTreeview, {
         ref: 'selectList',
         props,
         scopedSlots: this.$scopedSlots,
         on: {
-          input: (e: any[]) => {
-            if (this.$props.multiple) {
-              this.$emit('select', e)
-            } else {
-            // select last added item
-              const lastAdded = e.filter(v => this.selectedItems.indexOf(v) === -1)
-              if (lastAdded.length > 0) {
-                this.$emit('select', lastAdded)
-              }
-            }
-          },
           'update:open': () => {
             this.$emit('update-dimensions')
+          },
+          'update:selected': (key: string|number, isSelected: boolean) => {
+            this.$emit('update:selected', key, isSelected)
           }
         }
       })
