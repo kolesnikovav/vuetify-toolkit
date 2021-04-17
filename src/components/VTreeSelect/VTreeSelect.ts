@@ -14,6 +14,10 @@ export default commonSelect.extend({
       type: Boolean,
       default: false
     },
+    openOnePath: {
+      type: Boolean,
+      default: false
+    },
     showFullPath: {
       type: Boolean,
       default: true
@@ -60,7 +64,8 @@ export default commonSelect.extend({
       data.props.allowSelectParents = this.$props.allowSelectParents
       Object.assign(data.on, {
         'update-dimensions': () => (this.$refs.menu as any).updateDimensions(),
-        'update:selected': (key: string | number, isSelected: boolean) => this.updateSelected(key, isSelected)
+        'update:selected': (key: string | number, isSelected: boolean) => this.updateSelected(key, isSelected),
+        'update:open': (key: string | number, isOpen: boolean) => this.updateOpen(key, isOpen)
       })
       Object.assign(data.scopedSlots, treeviewScopedSlots(this.$scopedSlots))
       return data
@@ -104,8 +109,18 @@ export default commonSelect.extend({
       }
       return descendants
     },
+    getParentKeys (key: string | number):(string | number)[] {
+      const res:(string | number)[] = []
+      let k = key
+      while (this.parents.has(k)) {
+        k = this.parents.get(k)
+        if (k) {
+          res.unshift(k)
+        }
+      }
+      return res
+    },
     updateSelected (key: string | number, isSelected: boolean) {
-      // const items = this.selectedItems
       let recalculateKeys: (string|number)[] = []
       const curItem = this.itemCashe.get(key)
       if (curItem && this.selectedItems.indexOf(curItem) === -1 && isSelected) {
@@ -136,6 +151,14 @@ export default commonSelect.extend({
           }
         })
         this.selectItems(a)
+      }
+    },
+    updateOpen (key: string | number, isOpen: boolean) {
+      console.log(this.getParentKeys(key))
+      if (isOpen && this.openCache.indexOf(key) === -1) {
+        this.openCache.push(key)
+      } else if (!isOpen && this.openCache.indexOf(key) > -1) {
+        this.openCache = this.openCache.filter(() => !this.openCache.includes(key))
       }
     },
     buildTree (items: any, parentkey?: string|number|undefined, forceInclude?: false): any[] {

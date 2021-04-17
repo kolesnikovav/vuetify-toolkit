@@ -84,17 +84,13 @@ export default VTreeviewA.extend({
     updateSelected (key: string | number, isSelected: boolean, isForced = false) {
       this.$emit('update:selected', key, isSelected)
     },
-    // updateVnodeState (key: string | number) {
-    //   const node = this.$data.nodes[key]
-
-    //   if (node && node.vnode) {
-    //     console.log(node)
-    //     // node.vnode.isSelected = node.isSelected
-    //     // node.vnode.isIndeterminate = node.isIndeterminate
-    //     // node.vnode.isActive = node.isActive
-    //     node.vnode.isOpen = node.isOpen
-    //   }
-    // },
+    updateOpen (key: string | number, isOpen: boolean, isForced = false) {
+      this.$emit('update:open', key, isOpen)
+    },
+    emitOpen () {
+    },
+    emitSelected () {
+    },
     updateActive (keyItem: string|number) {
       this.$emit('update:active', { keyItem })
       this.$nextTick(() => {

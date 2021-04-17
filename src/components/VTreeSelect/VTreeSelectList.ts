@@ -63,7 +63,8 @@ export default commonSelectorCard.extend({
         props,
         scopedSlots: this.$scopedSlots,
         on: {
-          'update:open': () => {
+          'update:open': (key: string|number, isOpen: boolean) => {
+            this.$emit('update:open', key, isOpen)
             this.$emit('update-dimensions')
           },
           'update:selected': (key: string|number, isSelected: boolean) => {
