@@ -1,6 +1,6 @@
 import { VNodeData, VNode, VNodeChildren } from 'vue'
 import { VChipA } from '../../shims-vuetify'
-import { getObjectValueByPath } from '../../vuetify-import'
+import { getObjectValueByPath, getPropertyFromItem } from '../../vuetify-import'
 import VCascaderSelectList from './VCascaderSelectList'
 import commonSelect from '../mixin/commonSelect'
 
@@ -117,6 +117,12 @@ export default commonSelect.extend({
         (this as any).buildTree(val, undefined)
       }
     },
+    internalSearch: {
+      immediate: true,
+      handler (val) {
+        (this as any).buildTree(val, undefined)
+      }
+    },
     showFullPath: {
       immediate: true,
       handler (val) {
@@ -131,15 +137,22 @@ export default commonSelect.extend({
     }
   },
   methods: {
-    buildTree (items: any, parentkey?: any): any[] {
+    itemMatchFilter (item: any): boolean {
+      if (this.internalSearch && this.internalSearch != null) {
+        const comparedVal = getPropertyFromItem(item, this.$props.itemText)
+        return this.$props.filter(item, this.internalSearch, comparedVal)
+      } else return true
+    },
+    buildTree (items: any, parentkey?: any, forceInclude?: false): any[] {
       if (this.$data.childNodes.has(parentkey)) return this.$data.childNodes.get(parentkey)
       const newItems: any[] = []
       items.map((item: any) => {
         const localChildren = getObjectValueByPath(item, this.$props.itemChildren, [])
         const itemKey = getObjectValueByPath(item, this.$props.itemKey, []);
         (this as any).$data.itemCashe.set(itemKey, item)
+        const itemForceInclude = forceInclude || (this as any).itemMatchFilter(item)
         if (localChildren.length > 0) {
-          const newChildren = (this as any).buildTree(localChildren, itemKey)
+          const newChildren = (this as any).buildTree(localChildren, itemKey, itemForceInclude)
           const clone = Object.assign({}, item)
           clone[this.$props.itemChildren] = newChildren
           clone.hasChildren = true

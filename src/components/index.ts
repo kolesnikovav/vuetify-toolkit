@@ -23,7 +23,7 @@ const defaultComponents = {
   'v-context-menu': VContextMenu
 }
 
-function install (v: VueConstructor, args?: VuetifyToolkitUseOptions): VueConstructor<Vue> {
+function VuetifyToolkit (v: VueConstructor, args?: VuetifyToolkitUseOptions): VueConstructor<Vue> {
   const components = args ? args.components : defaultComponents
   for (const key in components) {
     const component = components[key]
@@ -34,7 +34,7 @@ function install (v: VueConstructor, args?: VuetifyToolkitUseOptions): VueConstr
   return v
 }
 
-export default install
+export default VuetifyToolkit
 
 export {
   VTreeSelect,
@@ -47,4 +47,4 @@ export {
   VContextMenu
 }
 
-Vue.use(install)
+Vue.use(VuetifyToolkit)

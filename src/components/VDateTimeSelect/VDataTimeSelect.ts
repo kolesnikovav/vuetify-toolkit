@@ -2,6 +2,7 @@ import { VNode, VNodeChildren } from 'vue'
 import { VDatePickerA, VTimePickerA, VSelectA } from '../../shims-vuetify'
 import VDateTimeSelectList from './VDataTimeSelectList'
 import commonSelect from '../mixin/commonSelect'
+import { defaultDateTimeSelectCommands } from '../../utils/ToolbarCommand'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const VDatePickerProps = ((VDatePickerA as any).options as any).props
@@ -28,6 +29,12 @@ const DEFAULT_TIME_FORMAT = 'HH:mm:ss'
 export default commonSelect.extend({
   name: 'v-date-time-select',
   props: {
+    toolbarCommands: {
+      type: Array,
+      default: function () {
+        return defaultDateTimeSelectCommands(this as any)
+      }
+    },
     ...VDatePickerProps,
     ...VTimePickerProps,
     menuProps: {
@@ -105,7 +112,10 @@ export default commonSelect.extend({
         toolbarHeader: this.formatedDate,
         selectionType: this.$props.selectionType,
         locale: this.$props.locale,
-        value: selectorValue
+        value: selectorValue,
+        date: this.date,
+        time: this.time,
+        datetime: this.datetime
       })
       Object.assign(data.on, {
         input: (e: string) => this.handleInput(e)
@@ -147,6 +157,21 @@ export default commonSelect.extend({
       if (this.$props.selectionType === 'time') this.time = e
       else this.datetime = e
       this.selectedItems = [e]
+    },
+    Now () {
+      const dt = new Date()
+      if (this.$props.selectionType === 'date') {
+        this.date = dt.toISOString().slice(0, 10)
+        this.handleInput(this.date)
+      } else if (this.$props.selectionType === 'time') {
+        this.time = dt.toTimeString().slice(0, 8)
+        this.handleInput(this.time)
+      } else {
+        this.datetime = dt.toISOString()
+        this.date = this.datetime.slice(0, 10)
+        this.time = dt.toTimeString().slice(0, 8)
+        this.handleInput(this.datetime)
+      }
     }
   }
 })
