@@ -14,6 +14,7 @@ export default VAutocompleteA.extend({
       type: Boolean,
       default: false
     },
+    highlightClass: String,
     menuProps: {
       type: [String, Array, Object],
       default: () => DefaultMenuProps
@@ -50,6 +51,7 @@ export default VAutocompleteA.extend({
     listData (): Object {
       const data = (VSelectA as any).options.computed.listData.call(this)
       mergeProps(data.props, this.$props, (CommandToolbar as any).options.props)
+      data.props.highlightClass = this.$props.highlightClass
       data.props.multiple = this.$props.multiple
       Object.assign(data.on, {
         'close-menu': () => { this.$data.isMenuActive = false },

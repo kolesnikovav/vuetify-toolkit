@@ -23,6 +23,7 @@ export default commonSelectorCard.extend({
       type: Array,
       default: () => [] as (string|number)[]
     },
+    searchText: String,
     openCache: {
       type: Array,
       default: () => [] as (string|number)[]

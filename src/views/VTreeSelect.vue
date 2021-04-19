@@ -120,6 +120,7 @@
           :toolbarButtonTextVisible = "toolbarButtonTextVisible"
           :useToolbar = "useToolbar"
           toolbarHeader = "Press something"
+          highlightClass = "hightlight-text"
         >
           <template v-if="customSlots" v-slot:prependTree="{ item, open }">
             <v-icon v-if = "item.children">{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
@@ -257,3 +258,10 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style>
+ .hightlight-text {
+   color: red;
+   font-weight: bold
+ }
+</style>

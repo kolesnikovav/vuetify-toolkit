@@ -35,6 +35,8 @@ export default VTreeviewA.extend({
       type: Array,
       default: () => [] as (string|number)[]
     },
+    searchText: String,
+    highlightClass: String,
     parentKeys: {
       type: Map,
       default: undefined

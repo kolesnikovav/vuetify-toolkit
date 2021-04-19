@@ -1,6 +1,7 @@
 import { VNode } from 'vue'
-import { VTreeviewNodeA, VIconA } from '../../shims-vuetify'
+import { VTreeviewNodeA, VIconA, VListItemContentA, VListItemTitleA } from '../../shims-vuetify'
 import { getObjectValueByPath } from '../../vuetify-import'
+import getMaskedCharacters from '../mixin/highlightedItem'
 
 const InternalTreeViewNode = VTreeviewNodeA.extend({
   name: 'internal-treeview-node',
@@ -44,6 +45,25 @@ const InternalTreeViewNode = VTreeviewNodeA.extend({
         }
       }, [(this as any).computedIcon])
     },
+    genLabel () {
+      const children = []
+      const txt = String((this as any).treeview.$props.searchText)
+
+      if (this.$scopedSlots.label) children.push(this.$scopedSlots.label((this as any).scopedProps))
+      else {
+        const { start, middle, end } = getMaskedCharacters((this as any).text, txt)
+        const highlightClass = String((this as any).treeview.$props.highlightClass)
+        children.push(start)
+        children.push(this.$createElement('span', {
+          class: highlightClass
+        }, middle))
+        children.push(end)
+      }
+      return this.$createElement('div', {
+        slot: 'label',
+        staticClass: 'v-treeview-node__label'
+      }, children)
+    },
     genNode (): VNode {
       const children = [(this as any).genContent()]
 
@@ -68,13 +88,6 @@ const InternalTreeViewNode = VTreeviewNodeA.extend({
               // only one of items can be active!
               (this as any).treeview.updateActive((this as any).key)
             })
-            // if ((this as any).openOnClick && (this as any).hasChildren) {
-            //   (this as any).checkChildren().then((this as any).open)
-            // } else if ((this as any).activatable && !(this as any).disabled) {
-            //   (this as any).isActive = !(this as any).isActive;
-            //   (this as any).treeview.updateActive((this as any).key, (this as any).isActive);
-            //   (this as any).treeview.emitActive()
-            // }
           }
         }
       }), children)

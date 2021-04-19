@@ -63,6 +63,7 @@ export default commonSelect.extend({
       data.props.selectedKeys = this.selectedKeys
       data.props.openCache = this.openCache
       data.props.allowSelectParents = this.$props.allowSelectParents
+      data.props.searchText = this.internalSearch
       Object.assign(data.on, {
         'update-dimensions': () => (this.$refs.menu as any).updateDimensions(),
         'update:selected': (key: string | number, isSelected: boolean) => this.updateSelected(key, isSelected),
