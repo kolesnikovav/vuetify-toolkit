@@ -56,7 +56,7 @@ export default VTreeviewA.extend({
       handler (val) {
         this.$nextTick(() => {
           for (const [key, value] of this.nodes) {
-            value.$data.isSelected = val.indexOf(key) !== -1
+            value.$data.isSelected = val.includes(key)
           }
         })
       }
@@ -102,6 +102,12 @@ export default VTreeviewA.extend({
     },
     updateOpen (key: string | number, isOpen: boolean, isForced = false) {
       this.$emit('update:open', key, isOpen)
+      /* update selected state of open nodes */
+      this.$nextTick(() => {
+        for (const [key, value] of this.nodes) {
+          value.$data.isSelected = this.selectedKeys.includes(key)
+        }
+      })
     },
     emitOpen () {
     },

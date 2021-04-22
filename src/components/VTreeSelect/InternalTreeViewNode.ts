@@ -1,5 +1,5 @@
 import { VNode } from 'vue'
-import { VTreeviewNodeA, VIconA, VListItemContentA, VListItemTitleA } from '../../shims-vuetify'
+import { VTreeviewNodeA, VIconA } from '../../shims-vuetify'
 import { getObjectValueByPath } from '../../vuetify-import'
 import getMaskedCharacters from '../mixin/highlightedItem'
 
@@ -93,8 +93,9 @@ const InternalTreeViewNode = VTreeviewNodeA.extend({
       }), children)
     },
     genChild (item: any, parentIsDisabled: boolean): VNode {
-      return this.$createElement(InternalTreeViewNode, {
-        key: getObjectValueByPath(item, (this as any).itemKey),
+      const key = getObjectValueByPath(item, (this as any).itemKey)
+      const node = this.$createElement(InternalTreeViewNode, {
+        key,
         props: {
           activatable: this.$props.activatable,
           activeClass: this.$props.activeClass,
@@ -122,6 +123,7 @@ const InternalTreeViewNode = VTreeviewNodeA.extend({
         },
         scopedSlots: this.$scopedSlots
       })
+      return node
     }
   }
 })

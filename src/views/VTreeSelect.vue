@@ -30,9 +30,29 @@
             <td>Switch between autocomplete/select behavior</td>
            </tr>
            <tr>
-            <td>selection-type</td> <td>boolean</td> <td>'leaf'</td>
+            <td>selection-type</td> <td>string</td> <td>'leaf'</td>
             <td>Controls how the treeview selects nodes. There are two modes available: 'leaf' and 'independent'</td>
            </tr>
+           <tr>
+            <td>allow-select-parents</td> <td>boolean</td> <td>false</td>
+            <td>User cannot select any parent node without this property</td>
+           </tr>
+           <tr>
+            <td>selected-node-style</td> <td>object</td> <td>undefined</td>
+            <td>Uses for highlight selected nodes and their parents</td>
+           </tr>
+           <tr>
+             <td>open-one-path</td>
+             <td>boolean</td>
+             <td>false</td>
+             <td>Close all open nodes except current. Uses for reduce open items.</td>
+            </tr>
+            <tr>
+              <td>highlight-class</td>
+              <td>string</td>
+              <td>undefined</td>
+              <td>You can define css class for highlight path of item text that match filter. Uses in autocomplete mode</td>
+            </tr>
         </tbody>
     </table>
     <span />

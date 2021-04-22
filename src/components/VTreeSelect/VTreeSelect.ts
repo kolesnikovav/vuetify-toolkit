@@ -169,7 +169,7 @@ export default commonSelect.extend({
         })
       }
     },
-    buildTree (items: any, parentkey?: string|number|undefined, forceInclude?: false): any[] {
+    buildTree (items: any[], parentkey?: string|number|undefined, forceInclude?: false): any[] {
       const newItems: any[] = []
       const pk = parentkey
       items.map((item: any) => {
