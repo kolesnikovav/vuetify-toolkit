@@ -258,6 +258,9 @@ export default commonSelect.extend({
             const pK = this.getParentKeys(itemKey)
             this.$nextTick(() => {
               this.openCache = pK
+              if (this.$data.isMenuActive) {
+                (this.$refs.menu as any).updateDimensions()
+              }
             })
           },
           'click:close': () => {
@@ -285,13 +288,15 @@ export default commonSelect.extend({
           'v-select__selection--disabled': isDisabled
         },
         on: {
-          // click: (e: MouseEvent) => {
-          //   // if (isDisabled) return
-          //   // // this.currentItem = item as any
-          //   // // const currentKey = (item as any).key;
-          //   // // (this as any).updateParents(currentKey);
-          //   // // (this as any).selectedIndex = index
-          // }
+          click: (e: MouseEvent) => {
+            const pK = this.getParentKeys(itemKey)
+            this.$nextTick(() => {
+              this.openCache = pK
+              if (this.$data.isMenuActive) {
+                (this.$refs.menu as any).updateDimensions()
+              }
+            })
+          }
         },
         key: itemKey
       }), `${this.textItem(itemKey)}${last ? '' : ', '}`)
