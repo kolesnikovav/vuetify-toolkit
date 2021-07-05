@@ -71,6 +71,7 @@ export default commonSelect.extend({
       data.props.items = this.filteredItems
       data.props.selectedKeys = this.selectedKeys
       data.props.openCache = this.openCache
+      data.props.itemCache = this.itemCashe
       data.props.allowSelectParents = this.$props.allowSelectParents
       data.props.searchText = this.internalSearch
       Object.assign(data.on, {

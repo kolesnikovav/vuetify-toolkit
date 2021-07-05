@@ -1,10 +1,22 @@
-import { VNode } from 'vue'
+import { VNode, VNodeChildren, PropType } from 'vue'
 import { VTreeviewNodeA, VIconA } from '../../shims-vuetify'
 import { getObjectValueByPath } from '../../vuetify-import'
 import getMaskedCharacters from '../mixin/highlightedItem'
 
 const InternalTreeViewNode = VTreeviewNodeA.extend({
   name: 'internal-treeview-node',
+  props: {
+    itemOpen: {
+      type: Boolean,
+      default: false
+    },
+    itemSelected: {
+      type: Boolean,
+      default: false
+    },
+    parentIsDisabled: Boolean,
+    loadChildren: Function as PropType<(item: any) => Promise<void>>
+  },
   data: () => ({
     hasLoaded: false,
     isActive: false, // Node is selected (row)
@@ -13,6 +25,26 @@ const InternalTreeViewNode = VTreeviewNodeA.extend({
     isOpen: false, // Node is open/expanded
     isSelected: false // Node is selected (checkbox)
   }),
+  computed: {
+    disabled (): boolean {
+      return (
+        getObjectValueByPath(this.$props.item, this.$props.itemDisabled) ||
+        (this.parentIsDisabled && this.$props.selectionType === 'leaf')
+      )
+    },
+    children (): any[] | null {
+      const children = getObjectValueByPath(this.$props.item, this.$props.itemChildren)
+      return children && children.filter((child: any) => !(this as any).treeview.isExcluded(getObjectValueByPath(child, this.$props.itemKey)))
+    },
+    hasChildren (): boolean {
+      return !!this.children && (!!this.children.length || !!this.loadChildren)
+    },
+    computedIcon (): string {
+      if (this.isIndeterminate) return this.$props.indeterminateIcon
+      else if (this.itemSelected) return this.$props.onIcon
+      else return this.$props.offIcon
+    }
+  },
   created () {
     (this as any).treeview.register(this)
   },
@@ -20,6 +52,38 @@ const InternalTreeViewNode = VTreeviewNodeA.extend({
     (this as any).treeview.unregister(this)
   },
   methods: {
+    checkChildren (): Promise<void> {
+      return new Promise<void>(resolve => {
+        // TODO: Potential issue with always trying
+        // to load children if response is empty?
+        if (!this.children || this.children.length || !this.loadChildren || this.hasLoaded) return resolve()
+
+        this.isLoading = true
+        resolve(this.loadChildren(this.$props.item))
+      }).then(() => {
+        this.isLoading = false
+        this.hasLoaded = true
+      })
+    },
+    genToggle (): VNode {
+      return this.$createElement(VIconA, {
+        staticClass: 'v-treeview-node__toggle',
+        class: {
+          'v-treeview-node__toggle--open': this.itemOpen,
+          'v-treeview-node__toggle--loading': this.isLoading
+        },
+        slot: 'prepend',
+        on: {
+          click: (e: MouseEvent) => {
+            e.stopPropagation()
+
+            if (this.isLoading) return
+
+            this.checkChildren().then(() => (this as any).open())
+          }
+        }
+      }, [this.isLoading ? this.$props.loadingIcon : this.$props.expandIcon])
+    },
     genCheckbox (): VNode|undefined {
       if (!(this as any).treeview.$props.allowSelectParents && this.$props.item.hasChildren) {
         return undefined
@@ -27,8 +91,8 @@ const InternalTreeViewNode = VTreeviewNodeA.extend({
       return this.$createElement(VIconA, {
         staticClass: 'v-treeview-node__checkbox',
         props: {
-          color: (this as any).isSelected || (this as any).isIndeterminate ? (this as any).selectedColor : undefined,
-          disabled: (this as any).disabled
+          color: this.itemSelected || (this as any).isIndeterminate ? (this as any).selectedColor : undefined,
+          disabled: this.disabled
         },
         on: {
           click: (e: MouseEvent) => {
@@ -92,39 +156,39 @@ const InternalTreeViewNode = VTreeviewNodeA.extend({
         }
       }), children)
     },
-    genChild (item: any, parentIsDisabled: boolean): VNode {
-      const key = getObjectValueByPath(item, (this as any).itemKey)
-      const node = this.$createElement(InternalTreeViewNode, {
-        key,
-        props: {
-          activatable: this.$props.activatable,
-          activeClass: this.$props.activeClass,
-          item,
-          selectable: (this as any).selectable,
-          selectedColor: this.$props.selectedColor,
-          color: this.$props.color,
-          expandIcon: this.$props.expandIcon,
-          indeterminateIcon: this.$props.indeterminateIcon,
-          offIcon: this.$props.offIcon,
-          onIcon: this.$props.onIcon,
-          loadingIcon: this.$props.loadingIcon,
-          itemKey: this.$props.itemKey,
-          itemText: this.$props.itemText,
-          itemDisabled: this.$props.itemDisabled,
-          itemChildren: this.$props.itemChildren,
-          loadChildren: this.$props.loadChildren,
-          transition: (this as any).transition,
-          openOnClick: this.$props.openOnClick,
-          rounded: this.$props.rounded,
-          shaped: this.$props.shaped,
-          level: (this as any).level + 1,
-          selectionType: this.$props.selectionType,
-          parentIsDisabled
-        },
-        scopedSlots: this.$scopedSlots
-      })
-      return node
+    genChild (item: any, parentIsDisabled: boolean): any {
+      return ((this as any).treeview.genChildNode(item, parentIsDisabled, (this as any).level + 1))
+    },
+    genChildrenWrapper (): VNode|null {
+      if (!this.itemOpen || !this.children) return null
+
+      const children = [this.children.map(c => this.genChild(c, this.disabled))]
+
+      return this.$createElement('div', {
+        staticClass: 'v-treeview-node__children'
+      }, children)
     }
+  },
+  render (h): VNode {
+    const children: VNodeChildren = [this.genNode()]
+
+    if (this.$props.transition) children.push((this as any).genTransition())
+    else children.push(this.genChildrenWrapper())
+
+    return h('div', {
+      staticClass: 'v-treeview-node',
+      class: {
+        'v-treeview-node--leaf': !this.hasChildren,
+        'v-treeview-node--click': this.$props.openOnClick,
+        'v-treeview-node--disabled': this.disabled,
+        'v-treeview-node--rounded': this.$props.rounded,
+        'v-treeview-node--shaped': this.$props.shaped,
+        'v-treeview-node--selected': this.isSelected
+      },
+      attrs: {
+        'aria-expanded': String(this.itemOpen)
+      }
+    }, children)
   }
 })
 
