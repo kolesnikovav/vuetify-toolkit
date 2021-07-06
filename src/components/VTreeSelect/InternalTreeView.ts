@@ -40,46 +40,17 @@ export default VTreeviewA.extend({
     }
   },
   data: () => ({
-    nodes: null,
+    nodes: [],
     currentItemKey: '' as (string|number)
   }),
   watch: {
     items: {
+      immediate: true,
       handler () {
         // do nothing here!
       },
       deep: true
-    },
-    // selectedKeys: {
-    //   immediate: true,
-    //   handler (val) {
-    //     this.$nextTick(() => {
-    //       for (const [key, value] of this.nodes) {
-    //         value.$data.isSelected = val.includes(key)
-    //       }
-    //     })
-    //   }
-    // },
-    openKeys: {
-      immediate: true,
-      handler (val) {
-        this.$nextTick(() => {
-          // for (const [key, value] of this.$props.items) {
-          //   value.$data.isOpen = val.indexOf(key) !== -1
-          // }
-        })
-      }
     }
-    // currentItemKey: {
-    //   immediate: true,
-    //   handler (val) {
-    //     this.$nextTick(() => {
-    //       for (const [key, value] of this.nodes) {
-    //         value.$data.isActive = key === val
-    //       }
-    //     })
-    //   }
-    // }
   },
   created () {
   },
@@ -136,7 +107,6 @@ export default VTreeviewA.extend({
       })
       const chldNodes: VNode[] = []
       if (chldKeys.length > 0) {
-        console.log(chldKeys)
         chldKeys.map((k: (string|number)) => {
           const chldItem = this.getItemByKey(k)
           chldNodes.push(this.genChildNode(chldItem, parentIsDisabled, level + 1))
