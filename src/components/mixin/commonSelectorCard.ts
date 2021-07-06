@@ -16,6 +16,7 @@ export default Vue.extend({
       type: [Number, String, Object],
       default: undefined
     },
+    highlightClass: String,
     noDataText: String,
     dense: Boolean,
     multiple: Boolean,

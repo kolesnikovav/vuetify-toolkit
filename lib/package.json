@@ -1,6 +1,6 @@
 {
   "name": "vuetify-toolkit",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "Vuetify.js Additional components set",
   "author": {
     "name": "Aleksandr Kolesnikov",
@@ -47,8 +47,8 @@
     "typescript": "~4.1.5",
     "vue-cli-plugin-vuetify": "~2.3.1",
     "vue-template-compiler": "^2.6.10",
-    "vuetify-loader": "^1.4.3"
-  },
+    "vuetify-loader": "^1.7.2"
+   },
   "peerDependencies": {
     "core-js": "^3.6.4",
     "vue": "^2.6.10",

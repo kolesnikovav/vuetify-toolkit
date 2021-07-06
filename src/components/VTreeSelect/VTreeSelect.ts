@@ -1,5 +1,6 @@
 import { VNode, VNodeData, PropType } from 'vue'
 import { VTreeviewNodeProps, consoleError, getObjectValueByPath, getPropertyFromItem } from '../../vuetify-import'
+import { VChipA } from '../../shims-vuetify'
 import VTreeSelectList from './VTreeSelectList'
 import treeviewScopedSlots from '../../utils/TreeviewScopedSlots'
 import commonSelect from '../mixin/commonSelect'
@@ -20,11 +21,11 @@ export default commonSelect.extend({
     },
     showFullPath: {
       type: Boolean,
-      default: true
+      default: false
     },
     delimeter: {
-      type: [String],
-      default: ','
+      type: String,
+      default: '/'
     },
     openAll: Boolean,
     selectionType: {
@@ -37,6 +38,14 @@ export default commonSelect.extend({
       default: function () {
         return openCloseCommands(this as any)
       }
+    },
+    openKeys: {
+      type: Array,
+      default: undefined
+    },
+    value: {
+      type: Array,
+      default: undefined
     }
   },
   data: () => ({
@@ -62,7 +71,9 @@ export default commonSelect.extend({
       data.props.items = this.filteredItems
       data.props.selectedKeys = this.selectedKeys
       data.props.openCache = this.openCache
+      data.props.itemCache = this.itemCashe
       data.props.allowSelectParents = this.$props.allowSelectParents
+      data.props.searchText = this.internalSearch
       Object.assign(data.on, {
         'update-dimensions': () => (this.$refs.menu as any).updateDimensions(),
         'update:selected': (key: string | number, isSelected: boolean) => this.updateSelected(key, isSelected),
@@ -78,6 +89,26 @@ export default commonSelect.extend({
       return this.$createElement(VTreeSelectList, this.listData)
     }
   },
+  watch: {
+    openKeys: {
+      immediate: true,
+      handler (val) {
+        if (val) {
+          this.openCache = val
+        }
+      }
+    },
+    value: {
+      immediate: true,
+      handler (val) {
+        if (val && Array.isArray(val) && val.length > 0) {
+          this.selectedItems = this.$props.multiple ? val : [val[0]]
+        } else {
+          this.selectedItems = []
+        }
+      }
+    }
+  },
   methods: {
     genListWithSlot (): VNode {
       const slots = ['prepend-item', 'no-data', 'append-item']
@@ -85,9 +116,6 @@ export default commonSelect.extend({
         .map(slotName => this.$createElement('template', {
           slot: slotName
         }, this.$slots[slotName]))
-      // Requires destructuring due to Vue
-      // modifying the `on` property when passed
-      // as a referenced object
       return this.$createElement(VTreeSelectList, ({ ...this.listData }) as VNodeData, slots)
     },
     itemMatchFilter (item: any): boolean {
@@ -167,8 +195,9 @@ export default commonSelect.extend({
           return k === key || parentKeys.includes(k)
         })
       }
+      this.$emit('update:open', this.openCache)
     },
-    buildTree (items: any, parentkey?: string|number|undefined, forceInclude?: false): any[] {
+    buildTree (items: any[], parentkey?: string|number|undefined, forceInclude?: false): any[] {
       const newItems: any[] = []
       const pk = parentkey
       items.map((item: any) => {
@@ -194,6 +223,84 @@ export default commonSelect.extend({
         }
       })
       return newItems
+    },
+    textItem (itemkey: (string|number)): string {
+      let txt = ''
+      if (this.$props.showFullPath) {
+        const p = this.getParentKeys(itemkey)
+        p.map((v:(string|number)) => {
+          txt += (this as any).getText(this.itemCashe.get(v)) + this.$props.delimeter
+        })
+      }
+      txt += (this as any).getText(this.itemCashe.get(itemkey))
+      return txt
+    },
+    genChipSelection (item: object, index: number) {
+      const itemKey: (string|number|undefined) = getObjectValueByPath(item, this.$props.itemKey, undefined)
+      if (!itemKey) return
+      const isDisabled = false // (
+      //   !(this as any).isInteractive ||
+      //   (this as any).getDisabled(item)
+      // )
+      return this.$createElement(VChipA, {
+        staticClass: 'v-chip--select',
+        attrs: { tabindex: -1 },
+        key: itemKey,
+        props: {
+          close: this.$props.deletableChips && !isDisabled,
+          disabled: isDisabled,
+          inputValue: itemKey,
+          small: this.$props.smallChips,
+          value: this.textItem(itemKey)
+        },
+        on: {
+          click: (e: MouseEvent) => {
+            if (isDisabled) return
+            const pK = this.getParentKeys(itemKey)
+            this.$nextTick(() => {
+              this.openCache = pK
+              if (this.$data.isMenuActive) {
+                (this.$refs.menu as any).updateDimensions()
+              }
+            })
+          },
+          'click:close': () => {
+            this.selectedItems = this.selectedItems.filter(v => {
+              const vKey: (string|number|undefined) = getObjectValueByPath(v, this.$props.itemKey, undefined)
+              return vKey !== itemKey
+            })
+            this.$emit('input', this.selectedItems)
+          }
+        }
+      }, this.textItem(itemKey))
+    },
+    genCommaSelection (item: object, index: number, last: boolean) {
+      const itemKey: (string|number|undefined) = getObjectValueByPath(item, this.$props.itemKey, undefined)
+      if (!itemKey) return
+
+      const color = index === (this as any).selectedIndex && (this as any).computedColor
+      const isDisabled = false // (
+      //   !(this as any).isInteractive ||
+      //   (this as any).getDisabled(item)
+      // )
+      return this.$createElement('div', (this as any).setTextColor(color, {
+        staticClass: 'v-select__selection v-select__selection--comma',
+        class: {
+          'v-select__selection--disabled': isDisabled
+        },
+        on: {
+          click: (e: MouseEvent) => {
+            const pK = this.getParentKeys(itemKey)
+            this.$nextTick(() => {
+              this.openCache = pK
+              if (this.$data.isMenuActive) {
+                (this.$refs.menu as any).updateDimensions()
+              }
+            })
+          }
+        },
+        key: itemKey
+      }), `${this.textItem(itemKey)}${last ? '' : ', '}`)
     }
   }
 })

@@ -9,6 +9,7 @@ export default Vue.extend({
     Themeable, Colorable
   ],
   props: {
+    dense: Boolean,
     // custom commands
     useToolbar: {
       type: Boolean,

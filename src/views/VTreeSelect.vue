@@ -30,9 +30,47 @@
             <td>Switch between autocomplete/select behavior</td>
            </tr>
            <tr>
-            <td>selection-type</td> <td>boolean</td> <td>'leaf'</td>
+            <td>selection-type</td> <td>string</td> <td>'leaf'</td>
             <td>Controls how the treeview selects nodes. There are two modes available: 'leaf' and 'independent'</td>
            </tr>
+           <tr>
+            <td>allow-select-parents</td> <td>boolean</td> <td>false</td>
+            <td>User cannot select any parent node without this property</td>
+           </tr>
+           <tr>
+            <td>selected-node-style</td> <td>object</td> <td>undefined</td>
+            <td>Uses for highlight selected nodes and their parents</td>
+           </tr>
+           <tr>
+             <td>open-one-path</td>
+             <td>boolean</td>
+             <td>false</td>
+             <td>Close all open nodes except current. Uses for reduce open items.</td>
+            </tr>
+            <tr>
+              <td>highlight-class</td>
+              <td>string</td>
+              <td>undefined</td>
+              <td>You can define css class for highlight path of item text that match filter. Uses in autocomplete mode</td>
+            </tr>
+        <tr>
+          <td>show-full-path</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>Show item with all parents in selection</td>
+        </tr>
+        <tr>
+          <td>delimeter</td>
+          <td>string</td>
+          <td>'/'</td>
+          <td>Delimeter between item and parent</td>
+        </tr>
+        <tr>
+          <td>openKeys</td>
+          <td>Array</td>
+          <td>undefined</td>
+          <td>Item keys, that should be open. Is used for external control of node state</td>
+        </tr>
         </tbody>
     </table>
     <span />
@@ -87,6 +125,8 @@
           <v-switch v-model="clearable" class="ma-2" label="clearable"></v-switch>
           <v-switch v-model="dark" class="ma-2" label="dark"></v-switch>
           <v-switch v-model="customSlots" class="ma-2" label="Custom slots"></v-switch>
+          <v-switch v-model="showFullPath" class="ma-2" label="showFullPath"></v-switch>
+          <v-text-field v-if = "showFullPath" v-model="delimeter" class="ls-1" label="delimeter"></v-text-field>
           <v-switch v-model="independent" class="ma-2" :label="getSelectionType()"></v-switch>
           <v-switch v-model="useToolbar" class="ma-2" label="useToolbar"></v-switch>
         </v-row>
@@ -120,6 +160,9 @@
           :toolbarButtonTextVisible = "toolbarButtonTextVisible"
           :useToolbar = "useToolbar"
           toolbarHeader = "Press something"
+          :showFullPath = "showFullPath"
+          :delimeter = "delimeter"
+          highlightClass = "hightlight-text"
         >
           <template v-if="customSlots" v-slot:prependTree="{ item, open }">
             <v-icon v-if = "item.children">{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
@@ -165,8 +208,7 @@
 import Vue from 'vue'
 import { staticitems } from '../example-data'
 
-const sandboxTemplateHTML =
-`<v-tree-select
+const sandboxTemplateHTML = `<v-tree-select
             :autocomplete="autocomplete"
             :chips="chips"
             :dense="dense"
@@ -181,8 +223,7 @@ const sandboxTemplateHTML =
           </template>
 </v-tree-select>`
 
-const sandboxCode =
-`export default ({
+const sandboxCode = `export default ({
   data: () => ({
     items: staticitems, // see data source
     chips: false,
@@ -209,6 +250,8 @@ export default Vue.extend({
     deletableChips: false,
     smallChips: false,
     selectedItems: [],
+    showFullPath: false,
+    delimeter: '/',
     useToolbar: false,
     toolbarPosition: 'top-left',
     toolbarFlat: false,
@@ -226,7 +269,9 @@ export default Vue.extend({
     openOnePath: false
   }),
   methods: {
-    getSelectionType () { return (this.independent) ? 'independent' : 'leaf' },
+    getSelectionType () {
+      return this.independent ? 'independent' : 'leaf'
+    },
     SetToolbar (position: string) {
       this.toolbarPosition = position
       if (position === 'top-left') {
@@ -257,3 +302,10 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style>
+.hightlight-text {
+  color: red;
+  font-weight: bold;
+}
+</style>

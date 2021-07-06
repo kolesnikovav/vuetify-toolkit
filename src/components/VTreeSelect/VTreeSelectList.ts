@@ -23,9 +23,14 @@ export default commonSelectorCard.extend({
       type: Array,
       default: () => [] as (string|number)[]
     },
+    searchText: String,
     openCache: {
       type: Array,
       default: () => [] as (string|number)[]
+    },
+    itemCache: {
+      type: Map,
+      default: null
     }
   },
   watch: {
@@ -62,7 +67,8 @@ export default commonSelectorCard.extend({
       (props as any).selectOnly = true;
       (props as any).value = this.selectedItems;
       (props as any).returnObject = true;
-      (props as any).openKeys = this.$props.openCache
+      (props as any).openKeys = this.$props.openCache;
+      (props as any).itemCache = this.$props.itemCache
       return (this as any).$createElement(InternalTreeview, {
         ref: 'selectList',
         props,
