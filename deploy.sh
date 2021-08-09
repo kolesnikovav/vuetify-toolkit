@@ -4,7 +4,7 @@ set -e
 
 npm run build
 
-cd dist
+cd dist/lib
 
 git init
 git add -A
