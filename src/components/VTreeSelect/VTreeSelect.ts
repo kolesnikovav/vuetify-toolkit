@@ -51,7 +51,8 @@ export default commonSelect.extend({
   data: () => ({
     parents: new Map(),
     itemCashe: new Map(),
-    openCache: [] as (string|number)[]
+    openCache: [] as (string|number)[],
+    filteredKeys: new Set<string|number>()
   }),
   computed: {
     filteredItems (): any[] {
@@ -90,6 +91,27 @@ export default commonSelect.extend({
     }
   },
   watch: {
+    internalSearch: {
+      immediate: true,
+      handler (val, oldVal) {
+        if (this.$props.autocomplete && val && val !== '') {
+          this.filteredKeys.clear()
+          this.itemCashe.forEach((item, k) => {
+            const comparedVal = getPropertyFromItem(item, this.$props.itemText)
+            const matchFilter = (typeof (comparedVal) === 'string' && this.itemMatchFilter(item))
+            if (matchFilter) {
+              this.filteredKeys.add(k)
+            }
+          })
+          this.filteredKeys.forEach((v) => {
+            this.getParentKeys(v).flatMap(pKey => this.updateOpen(pKey, true))
+          })
+        } else if (oldVal && oldVal !== '' && val === '') {
+          // close all open nodes
+          this.itemCashe.forEach((item, k) => { this.updateOpen(k, false) })
+        }
+      }
+    },
     openKeys: {
       immediate: true,
       handler (val) {
@@ -121,7 +143,8 @@ export default commonSelect.extend({
     itemMatchFilter (item: any): boolean {
       if (this.internalSearch && this.internalSearch != null) {
         const comparedVal = getPropertyFromItem(item, this.$props.itemText)
-        return this.$props.filter(item, this.internalSearch, comparedVal)
+        const a = this.$props.filter(item, this.internalSearch, comparedVal) as boolean
+        return a
       } else return true
     },
     getDescendantsKeys (key: string | number, descendants: (string|number)[] = []) {
