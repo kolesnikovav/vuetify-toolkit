@@ -4,7 +4,7 @@ export const staticitems = [
     name: 'Applications :',
     locked: true,
     children: [
-      { id: 2, name: 'Calendar : app' },
+      { id: 2, name: 'Calendar : app', disabled: true },
       { id: 3, name: 'Chrome : app' },
       { id: 4, name: 'Webstorm : app' }
     ]

@@ -187,7 +187,11 @@ export default commonSelect.extend({
         }
       }
       if (recalculateKeys.length === 0) return
-
+      // exclude disabled items
+      recalculateKeys = recalculateKeys.filter(v => {
+        const item = this.itemCashe.get(v)
+        return !getObjectValueByPath(item, this.$props.itemDisabled, false)
+      })
       if (!isSelected) {
         const a = this.selectedItems.filter((v) => {
           const itemKey = getObjectValueByPath(v, this.$props.itemKey, [])
